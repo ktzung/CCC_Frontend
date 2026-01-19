@@ -1,4 +1,4 @@
-# 🎓 DNU WEB FRONTEND
+# 🎓 CCC WEB FRONTEND
 # **Tài liệu học tập: Nền tảng Phát triển Web**
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
@@ -11,7 +11,7 @@
 
 ## 📖 Giới thiệu
 
-Đây là **tài liệu học tập đầy đủ** cho môn **Nền tảng Phát triển Web (CSE441)**, được xây dựng theo phong cách "cầm tay chỉ việc" với:
+Đây là **tài liệu học tập đầy đủ** cho môn **Nền tảng Phát triển Web (CSE391)**, được xây dựng theo phong cách "cầm tay chỉ việc" với:
 
 - ✅ Lý thuyết giải thích dễ hiểu với ví dụ thực tế
 - ✅ Code mẫu có chú thích chi tiết từng dòng
@@ -588,3 +588,4 @@ DNU_Web_Frontend/
 ---
 
 # KẾT THÚC README
+
