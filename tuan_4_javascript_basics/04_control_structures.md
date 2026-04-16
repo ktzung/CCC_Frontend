@@ -1,117 +1,142 @@
 # 🟨 PART II - CHƯƠNG 04
-# **CONTROL STRUCTURES**
+# **CONTROL STRUCTURES — Điều Kiện & Vòng Lặp**
 
-Nếu không có cấu trúc điều khiển, code sẽ chạy tuồn tuột từ trên xuống dưới. Control Structures giúp code biết rẽ nhánh (Nếu...thì...) và lặp lại (Làm A 100 lần).
+## 🎬 "Todo App Logic" — Nếu hoàn thành → Gạch ngang
 
----
+*Minh cần logic cho Todo App: "Nếu todo.completed = true → hiện text gạch ngang. Lặp qua danh sách todos → render HTML cho từng item."*
 
-# 🎯 MỤC TIÊU HỌC TẬP
-
-Sau chương này, bạn sẽ:
-- Sử dụng `if`, `else`, `switch` để điều hướng logic.
-- Sử dụng vòng lặp `for`, `while` để xử lý công việc lặp lại.
-- Hiểu sự khác biệt giữa `==` và `===`.
+*Đây là lúc if/else và for loop phát huy sức mạnh.*
 
 ---
 
-# 1. **CONDITIONAL STATEMENTS (CÂU LỆNH ĐIỀU KIỆN)**
+## 🎯 Mục tiêu
+- if/else, switch, ternary operator
+- for, while, for...of, for...in loops
+- Kết hợp: Loop + Condition = render dynamic content
 
-## 1.1. If...Else (Nếu...Thì...Còn không thì...)
+---
+
+## 🔀 Conditional Statements
+
+### if/else — "Ngã ba đường"
 
 ```javascript
-const age = 18;
+const score = 85;
 
-if (age >= 18) {
-  console.log("Bạn đủ tuổi đi xem phim kinh dị.");
-} else if (age >= 13) {
-  console.log("Bạn chỉ được xem phim hoạt hình.");
+if (score >= 90) {
+    console.log("Xuất sắc! 🌟");
+} else if (score >= 70) {
+    console.log("Khá! 👍");       // ← Chạy dòng này
+} else if (score >= 50) {
+    console.log("Trung bình");
 } else {
-  console.log("Mời bạn về uống sữa.");
+    console.log("Yếu — cần cải thiện");
 }
 ```
 
-## 1.2. Truthy & Falsy
-Trong JS, không chỉ `true/false`, mà mọi giá trị đều có tính đúng/sai khi đưa vào if.
-- **Falsy (Coi là sai):** `false`, `0`, `""` (chuỗi rỗng), `null`, `undefined`, `NaN`.
-- **Truthy (Coi là đúng):** Tất cả những thứ còn lại (kể cả `"0"`, `"false"`, `[]`, `{}`).
-
-## 1.3. Switch Case
-Dùng khi check 1 biến với NHIỀU giá trị cụ thể.
+### Ternary Operator — "if/else 1 dòng" ⭐
 
 ```javascript
-const role = "admin";
+const status = score >= 50 ? "Đạt" : "Không đạt";
+const greeting = isLoggedIn ? `Chào ${user.name}` : "Vui lòng đăng nhập";
 
-switch (role) {
-  case "admin":
-    console.log("Toàn quyền hệ thống");
-    break; // Quên break là nó chạy trượt xuống dưới đấy!
-  case "editor":
-    console.log("Được sửa bài viết");
-    break;
-  default:
-    console.log("Chỉ được xem thôi");
-}
+// Hay dùng trong React/Vue:
+// <span className={todo.completed ? "done" : "pending"}>
 ```
 
-## 1.4. Comparison Operators (Toán tử so sánh)
-- `>` (Lớn hơn), `<` (Nhỏ hơn), `>=` (Lớn bằng).
-- `!` (Not/Phủ định): `!true` = `false`.
-- `&&` (And/Và): Cả 2 cùng đúng mới đúng.
-- `||` (Or/Hoặc): Chỉ cần 1 cái đúng là đúng.
-
-> [!EXPERT TIP]
-> **Luôn dùng `===` (Strict/Ba dấu bằng)**
-> - `==` (Hai dấu): So sánh giá trị logic (JS tự ép kiểu). Ví dụ: `5 == "5"` -> True. (Rất dễ bug!).
-> - `===` (Ba dấu): So sánh cả giá trị VÀ kiểu dữ liệu. Ví dụ: `5 === "5"` -> False. (An toàn).
-> -> **Luôn dùng `===` và `!==`.**
-
----
-
-# 2. **LOOPS (VÒNG LẶP)**
-
-Để máy tính làm việc chán nản thay cho bạn.
-
-## 2.1. Vòng lặp `for` (Biết trước số lần lặp)
-Cấu trúc: `for (khởi tạo; điều kiện; bước nhảy)`
+### Switch — "Nhiều nhánh rẽ"
 
 ```javascript
-// In ra từ 0 đến 4
-for (let i = 0; i < 5; i++) {
-  console.log("Lần lặp thứ: " + i);
-}
-```
+const day = new Date().getDay();
 
-## 2.2. Vòng lặp `while` (Lặp khi điều kiện còn đúng)
-Dùng khi không biết rõ sẽ lặp bao nhiêu lần (VD: Lặp cho đến khi người dùng nhập đúng pass).
-
-```javascript
-let count = 0;
-while (count < 3) {
-  console.log("Chạy ngay đi!");
-  count++;
-}
-```
-
-## 2.3. Break & Continue
-- **break:** Thoát ngay lập tức khỏi vòng lặp.
-- **continue:** Bỏ qua lần này, nhảy sang lần lặp kế tiếp.
-
-```javascript
-for (let i = 0; i < 10; i++) {
-  if (i === 5) break; // Gặp 5 là dừng luôn.
-  if (i % 2 === 0) continue; // Số chẵn thì bỏ qua, không in.
-  console.log(i); // In số lẻ: 1, 3
+switch (day) {
+    case 0: console.log("Chủ Nhật 🌞"); break;
+    case 1: console.log("Thứ Hai 😴"); break;
+    case 5: console.log("Thứ Sáu 🎉"); break;
+    case 6: console.log("Thứ Bảy 🎮"); break;
+    default: console.log("Ngày thường"); break;
 }
 ```
 
 ---
 
-# 3. **TỔNG KẾT**
+## 🔄 Loops — "Lặp đi lặp lại"
 
-- Dùng **If/Else** cho logic phức tạp, **Switch** cho liệt kê giá trị.
-- Luôn dùng **`===`** để so sánh.
-- Dùng **For** khi lặp mảng hoặc đếm số, **While** khi đợi điều kiện.
+### for — "Lặp biết trước số lần"
+
+```javascript
+const todos = ["Học HTML", "Học CSS", "Học JS", "Làm BTL"];
+
+for (let i = 0; i < todos.length; i++) {
+    console.log(`${i + 1}. ${todos[i]}`);
+}
+// 1. Học HTML
+// 2. Học CSS
+// 3. Học JS
+// 4. Làm BTL
+```
+
+### for...of — "Lặp qua từng phần tử" ⭐ (hay dùng!)
+
+```javascript
+for (const todo of todos) {
+    console.log(`📌 ${todo}`);
+}
+```
+
+### Array Methods — "Loop hiện đại" (dùng NHIỀU NHẤT!)
+
+```javascript
+const prices = [39000, 45000, 55000, 29000];
+
+// forEach — Lặp (không trả giá trị)
+prices.forEach(price => console.log(`${price.toLocaleString()}đ`));
+
+// map — Biến đổi → mảng mới ⭐
+const doubled = prices.map(p => p * 2);
+
+// filter — Lọc ⭐
+const expensive = prices.filter(p => p > 40000);
+
+// reduce — Tổng hợp ⭐
+const total = prices.reduce((sum, p) => sum + p, 0);
+
+// find — Tìm 1 phần tử
+const found = prices.find(p => p > 50000);
+```
+
+> **Anh Hùng:** *"Trong React, `map` dùng để render list. `filter` dùng để lọc. `reduce` dùng để tính tổng. Ba methods này bạn sẽ dùng HÀNG NGÀY."*
 
 ---
 
-**Chương tiếp theo:** Đóng gói code để tái sử dụng nhiều lần (Functions).
+## 🎯 Thực hành: Todo App Logic
+
+```javascript
+const todos = [
+    { text: "Học HTML", completed: true },
+    { text: "Học CSS", completed: true },
+    { text: "Học JS", completed: false },
+    { text: "Làm BTL", completed: false }
+];
+
+// Render todos
+todos.forEach((todo, index) => {
+    const status = todo.completed ? "✅" : "⬜";
+    const style = todo.completed ? "text-decoration: line-through" : "";
+    console.log(`${status} ${index + 1}. ${todo.text}`);
+});
+
+// Đếm hoàn thành
+const completed = todos.filter(t => t.completed).length;
+console.log(`Hoàn thành: ${completed}/${todos.length}`);
+```
+
+---
+
+## ➡️ Chương tiếp theo...
+
+*Minh viết logic render todos thành công. Nhưng code lặp lại nhiều — mỗi lần cần render, viết lại `forEach`.*
+
+*"Em cần đóng gói logic vào FUNCTION," anh Hùng nói. "Viết một lần, gọi nhiều lần."*
+
+**Chương tiếp theo:** Functions — Viết 1 lần, dùng N lần.

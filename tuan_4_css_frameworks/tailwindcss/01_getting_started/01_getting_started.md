@@ -1,6 +1,12 @@
 # 🟩 BÀI 01: TAILWINDCSS - GETTING STARTED
 
-TailwindCSS là một CSS Framework theo phong cách **Utility-First** - thay vì components có sẵn, nó cung cấp hàng nghìn utility classes nhỏ để bạn tự xây dựng design.
+## 🎬 "Viết CSS Mà Không Mở File CSS" — Triết Lý Điên Rồ Của Tailwind
+
+*Minh nhìn Tailwind code lần đầu: `class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"`. "Gì mà nhiều class thế?!"*
+
+*3 ngày sau: Minh không muốn mở file CSS nữa. Style ngay trong HTML. Mỗi class = 1 CSS property. Không conflict, không naming, không context-switching.*
+
+> **Chị Hà:** *"Tailwind lúc đầu xấu xí. Nhưng khi quen = nhanh hơn BẤT KỲ cách nào. Apple.com, Netflix, GitHub — đều dùng Tailwind."*
 
 ---
 

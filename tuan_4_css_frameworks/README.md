@@ -1,7 +1,13 @@
 # 🎯 CSS FRAMEWORKS
-# **Lựa chọn Framework phù hợp**
+# **"Bootstrap Hay TailwindCSS?" — Trận Tranh Luận Kinh Điển**
 
-Sau khi học xong CSS Advanced và Sass/SCSS, bạn sẽ chọn một trong hai CSS Framework phổ biến nhất để học:
+## 🎬 Hook
+
+*Minh hỏi: "Em nên học Bootstrap hay TailwindCSS?"*
+
+*Anh Hùng: "Giống như hỏi 'ăn cơm bình dân hay tự nấu?' Bootstrap = cơm bình dân: sẵn, nhanh, no bụng. Tailwind = đi chợ tự nấu: tốn thời gian hơn nhưng Ý MUỐN GÌ CŨNG ĐƯỢC. Không có cái nào 'tốt hơn'. Chỉ có cái nào PHÙ HỢP hơn."*
+
+> 💡 **Chỉ cần học 1 framework.** Sau khi giỏi 1 cái, học cái còn lại chỉ mất 1-2 ngày.
 
 ---
 

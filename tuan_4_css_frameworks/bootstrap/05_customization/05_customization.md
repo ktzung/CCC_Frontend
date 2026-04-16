@@ -1,6 +1,10 @@
 # 🟦 BÀI 05: BOOTSTRAP 5 - CUSTOMIZATION
 
-Khi làm dự án thật, bạn sẽ cần customize Bootstrap để phù hợp với brand của mình. Bài này hướng dẫn cách customize Bootstrap với SASS.
+## 🎬 "Trang Web Nào Cũng Giống Nhau" — Lời Nguyền Bootstrap
+
+*Khách hàng: "Sao trang web của mình giống Tiki, Lazada, và 500 trang khác vậy?" Vì tất cả dùng Bootstrap MẶC ĐỊNH.*
+
+*Anh Hùng: "$primary: #ff6600 — Một dòng SASS, toàn bộ website đổi từ xanh Bootstrap sang cam brand của em. Đó là sức mạnh của customization."*
 
 ---
 

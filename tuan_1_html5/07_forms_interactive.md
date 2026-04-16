@@ -1,171 +1,141 @@
 # 🟦 CHƯƠNG 07
-# **HTML FORMS & INTERACTIVE ELEMENTS**
+# **FORMS & INTERACTIVE ELEMENTS**
 
-Forms (Biểu mẫu) là cách chính để người dùng "nói chuyện" với Website. Từ đăng nhập, tìm kiếm, đến mua hàng, tất cả đều qua Form.
+## 🎬 "Form Đăng Ký Đầu Tiên" — Bài tập sống còn
 
----
+*Thầy giao BTL: "Tạo trang web e-commerce có form đăng ký, đăng nhập, và đặt hàng. Tuần sau nộp."*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*Minh: "Form phải validate email, password mạnh, số điện thoại... HTML có hỗ trợ validate không hay phải viết JS hết?"*
 
-Sau chương này, bạn sẽ:
-- Tạo Form đầy đủ chức năng (`<form>`).
-- Sử dụng thành thạo các loại **Input** (Text, Password, Email, Date...).
-- Hiểu các **Attributes** quan trọng (name, required, placeholder).
-- Tạo Dropdown (`<select>`) và Checkbox/Radio.
-- Hiểu cơ chế gửi dữ liệu đi (Button submit).
+*Anh Hùng: "HTML5 có validation built-in! `required`, `type="email"`, `pattern`... chỉ cần dùng đúng attribute. JS chỉ cần bổ sung cho các case phức tạp."*
 
 ---
 
-# 1. **DEFINING A SPACE FOR FORMS**
+## 🎯 Mục tiêu
+- Tạo form với các input types
+- HTML5 validation không cần JS
+- Accessibility cho forms
+- Best practices form design
 
-Để bắt đầu, ta cần một "container" để gói các ô nhập liệu lại.
+---
+
+## 📝 Form cơ bản — Anatomy
 
 ```html
-<form action="/submit-login" method="POST">
-    <!-- Các ô nhập liệu nằm ở đây -->
+<form action="/api/register" method="POST" id="registerForm">
+    
+    <!-- Text input với label (accessibility!) -->
+    <label for="fullname">Họ và tên:</label>
+    <input type="text" id="fullname" name="fullname" 
+           required minlength="2" maxlength="50"
+           placeholder="Nguyễn Văn Minh">
+    
+    <!-- Email — tự validate format -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" 
+           required placeholder="minh@email.com">
+    
+    <!-- Password — ẩn ký tự -->
+    <label for="password">Mật khẩu:</label>
+    <input type="password" id="password" name="password"
+           required minlength="8"
+           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+           title="Ít nhất 8 ký tự, gồm chữ hoa, thường, và số">
+    
+    <!-- Phone -->
+    <label for="phone">Số điện thoại:</label>
+    <input type="tel" id="phone" name="phone"
+           pattern="[0-9]{10}" placeholder="0901234567">
+    
+    <!-- Select -->
+    <label for="city">Thành phố:</label>
+    <select id="city" name="city" required>
+        <option value="">-- Chọn thành phố --</option>
+        <option value="hanoi">Hà Nội</option>
+        <option value="hcm">TP. Hồ Chí Minh</option>
+        <option value="danang">Đà Nẵng</option>
+    </select>
+    
+    <!-- Textarea -->
+    <label for="address">Địa chỉ:</label>
+    <textarea id="address" name="address" rows="3"
+              placeholder="Số nhà, đường, phường/xã..."></textarea>
+    
+    <!-- Checkbox -->
+    <label>
+        <input type="checkbox" name="agree" required>
+        Tôi đồng ý với <a href="terms.html">điều khoản</a>
+    </label>
+    
+    <!-- Submit -->
+    <button type="submit">Đăng ký</button>
 </form>
 ```
 
-- **`action`:** Đường dẫn (URL) nơi dữ liệu sẽ được gửi đến (Server xử lý).
-- **`method`:** Cách gửi dữ liệu.
-    - **`GET`:** Gửi dữ liệu lên URL (ví dụ tìm kiếm google: `?q=hello`). Dữ liệu bị lộ, phù hợp để lấy thông tin.
-    - **`POST`:** Gửi ngầm bên trong (Bảo mật hơn). Dùng cho đăng nhập, đăng ký, gửi bài viết.
-
 ---
 
-# 2. **HTML INPUT FIELDS**
+## 🎯 Các Input Types HTML5
 
-Thẻ `<input>` là ngôi sao chính, nó biến hình thành nhiều loại tùy thuộc vào attribute `type`.
+| Type | Giao diện | Validation |
+|---|---|---|
+| `text` | Ô nhập text | minlength, maxlength, pattern |
+| `email` | + validate email format | Tự kiểm tra @ |
+| `password` | Ẩn ký tự | minlength, pattern |
+| `number` | + nút tăng/giảm | min, max, step |
+| `tel` | Bàn phím số (mobile) | pattern |
+| `date` | Date picker | min, max |
+| `color` | Color picker | - |
+| `range` | Slider | min, max, step |
+| `file` | Upload file | accept, multiple |
+| `url` | Validate URL | Tự kiểm tra http:// |
+| `search` | Ô tìm kiếm + nút X | - |
 
-## 2.1. Basic Text Inputs
-```html
-<!-- Nhập tên thường -->
-<label>Username:</label>
-<input type="text" name="username" placeholder="Nhập tên của bạn">
-
-<!-- Nhập mật khẩu (ẩn ký tự) -->
-<label>Password:</label>
-<input type="password" name="password">
-
-<!-- Nhập email (tự động kiểm tra @) -->
-<label>Email:</label>
-<input type="email" name="user_email">
-```
-
-> [!IMPORTANT]
-> **Attribute `name` là bắt buộc:** Nếu không có `name`, Server sẽ không biết dữ liệu nào là của ô nào khi gửi đi.
-
-## 2.2. Selection (Lựa chọn)
-
-### Radio Button (Chọn 1 trong nhiều - Độc nhất)
-Dùng chung `name` để nhóm chúng lại.
-```html
-<p>Giới tính:</p>
-<input type="radio" id="nam" name="gender" value="male" checked>
-<label for="nam">Nam</label>
-
-<input type="radio" id="nu" name="gender" value="female">
-<label for="nu">Nữ</label>
-```
-
-### Checkbox (Chọn nhiều)
-```html
-<p>Sở thích:</p>
-<input type="checkbox" id="game" name="hobby" value="game">
-<label for="game">Chơi game</label>
-
-<input type="checkbox" id="music" name="hobby" value="music">
-<label for="music">Nghe nhạc</label>
-```
-
-### Dropdown List (Danh sách thả xuống)
-```html
-<label>Thành phố:</label>
-<select name="city">
-    <option value="hn">Hà Nội</option>
-    <option value="hcm">TP. Hồ Chí Minh</option>
-    <option value="dn">Đà Nẵng</option>
-</select>
-```
-
-## 2.3. Buttons (Nút bấm)
-```html
-<button type="submit">Gửi đi</button>       <!-- Mặc định, gửi form -->
-<button type="button">Chỉ là nút bấm</button> <!-- Không làm gì (dùng JS) -->
-<button type="reset">Xóa hết nhập lại</button>
-```
-
----
-
-# 3. **SPECIAL TYPES OF INPUT FIELDS (HTML5)**
-
-HTML5 mang đến nhiều loại input thông minh, giúp trải nghiệm trên Mobile cực tốt (ví dụ `type="number"` sẽ hiện bàn phím số).
+### HTML5 Validation Attributes:
 
 ```html
-<!-- Chọn ngày tháng -->
-<input type="date" name="birthday">
-
-<!-- Chọn màu -->
-<input type="color" name="fav_color">
-
-<!-- Chọn số (có nút tăng giảm) -->
-<input type="number" name="age" min="1" max="100">
-
-<!-- Thanh trượt -->
-<input type="range" name="volume" min="0" max="100">
-
-<!-- Ô tìm kiếm -->
-<input type="search" name="keyword">
+required              <!-- Bắt buộc nhập -->
+minlength="8"         <!-- Tối thiểu 8 ký tự -->
+maxlength="50"        <!-- Tối đa 50 ký tự -->
+min="0" max="100"     <!-- Giá trị số min/max -->
+pattern="[A-Za-z]+"   <!-- Regex pattern -->
+placeholder="Gợi ý"   <!-- Text gợi ý (mờ) -->
+autofocus              <!-- Tự focus khi load trang -->
+disabled               <!-- Không cho nhập -->
+readonly               <!-- Chỉ đọc -->
 ```
 
----
-
-# 4. **ATTRIBUTES QUAN TRỌNG**
-
-- `required`: Bắt buộc nhập, không được để trống.
-- `placeholder`: Dòng chữ mờ gợi ý (biến mất khi gõ).
-- `readonly`: Chỉ đọc, không sửa được.
-- `disabled`: Vô hiệu hóa (xám đi, không click được).
-- `value`: Giá trị mặc định.
+> 💡 **HTML5 validation = Miễn phí!** Browser tự hiện thông báo lỗi. Không cần viết JS cho validation cơ bản.
 
 ---
 
-# 5. **SENDING FORM DATA (CƠ CHẾ GỬI)**
+## ♿ Accessibility — Form cho mọi người
 
-Khi người dùng bấm Submit:
-1. Trình duyệt thu thập tất cả `value` của các thẻ có `name`.
-2. Đóng gói lại (dạng `key=value`).
-3. Gửi đến URL trong `action` bằng phương thức `method`.
+```html
+<!-- ✅ LUÔN dùng <label> với for= -->
+<label for="email">Email:</label>
+<input type="email" id="email" name="email">
 
-**Ví dụ:**
-Bạn nhập `username` là "admin", `password` là "123".
-Nếu dùng `GET`, URL sẽ thành: `login.php?username=admin&password=123` (Lộ hết!).
-Nên dùng `POST` cho dữ liệu nhạy cảm.
+<!-- ✅ Fieldset + Legend cho nhóm liên quan -->
+<fieldset>
+    <legend>Thông tin giao hàng</legend>
+    <label for="addr">Địa chỉ:</label>
+    <input type="text" id="addr" name="addr">
+</fieldset>
 
----
+<!-- ✅ aria-label cho button icon -->
+<button type="submit" aria-label="Gửi đơn hàng">
+    🛒 Đặt hàng
+</button>
+```
 
-# 6. **BÀI TẬP THỰC HÀNH**
-
-Tạo trang **Đăng ký thành viên** gồm:
-1. Họ tên (`text`)
-2. Email (`email`)
-3. Mật khẩu (`password`)
-4. Ngày sinh (`date`)
-5. Giới tính (`radio`)
-6. Quốc gia (`select`)
-7. Điều khoản sử dụng (`checkbox` - "Tôi đồng ý...")
-8. Nút Đăng Ký.
+> **Anh Hùng:** *"Form không có `<label>` = người dùng screen reader không biết ô nhập gì. Accessibility không phải 'nice to have' — nhiều công ty bắt buộc. Apple, Google đều kiểm tra."*
 
 ---
 
-# 7. **TỔNG KẾT**
+## ➡️ Chương tiếp theo...
 
-- Form là cổng giao tiếp user-server.
-- **Input** có rất nhiều loại (`text`, `radio`, `checkbox`, `date`...).
-- Luôn nhớ đặt `name` cho input và dùng `label` để tăng Accessibility.
-- Dùng `POST` cho dữ liệu quan trọng, `GET` cho tìm kiếm.
+*Minh hoàn thành form đăng ký. Submit → data gửi lên server. Nhưng trang web vẫn xấu — text thẳng hàng, không layout, không color.*
 
----
+*"HTML xong. Giờ đến CSS — biến trang trắng thành sản phẩm đẹp!"*
 
-**Kết thúc phần HTML Cơ Bản!**
-Tuần tới chúng ta sẽ sang phần thú vị hơn: **CSS - Làm đẹp cho trang web.**
+**Tuần 2:** CSS Core — Từ Introduction đến Box Model, Selectors, và Positioning.

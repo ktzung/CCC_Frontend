@@ -1,7 +1,13 @@
 # 🔴 ANGULAR - BÀI 01
 # **GETTING STARTED WITH ANGULAR**
 
-Angular là một platform và framework mạnh mẽ để xây dựng single-page applications (SPA), được phát triển bởi Google. Angular sử dụng TypeScript làm ngôn ngữ chính và cung cấp một bộ công cụ đầy đủ cho phát triển ứng dụng web hiện đại.
+## 🎬 "Google Dùng Gì? Angular" — Framework Cho Dự Án 10 Năm
+
+*Minh: "Angular khó quá — TypeScript bắt buộc, DI, RxJS, Modules... 143KB bundle!"*
+
+*Chị Hà: "Đúng, Angular như XE TẢI — nặng, học lái lâu, nhưng chở được MỌI THỨ. Google dùng cho Gmail, YouTube. Microsoft dùng cho Office Online. Khi dự án có 50+ developers, 1000+ components — React/Vue bắt đầu hỗn loạn. Angular giữ trật tự bằng convention."*
+
+> 💡 **Angular ≠ cho beginner.** Angular = cho team enterprise cần structure cứng, convention rõ ràng, và TypeScript từ ngày 1.
 
 ---
 

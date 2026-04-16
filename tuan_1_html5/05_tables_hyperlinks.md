@@ -1,140 +1,117 @@
 # 🟦 CHƯƠNG 05
-# **TABLES AND HYPERLINKS**
+# **TABLES & HYPERLINKS**
 
-Hai thành phần cơ bản nhưng cực kỳ quan trọng của web: **Bảng** (để hiển thị dữ liệu structured) và **Liên kết** (cách chúng ta "lướt" web).
+## 🎬 "Bảng Giá Sản Phẩm Đầu Tiên" — Minh làm trang e-commerce
 
----
+*Linh hỏi: "Mình cần hiển thị danh sách sản phẩm dạng bảng — tên, giá, số lượng. HTML có thẻ nào không?"*
 
-# 🎯 MỤC TIÊU HỌC TẬP
-
-Sau chương này, bạn sẽ:
-- Tạo bảng dữ liệu phức tạp với việc gộp cột (`colspan`) và gộp hàng (`rowspan`).
-- Hiểu cấu trúc semantic của bảng: `thead`, `tbody`, `tfoot`.
-- Tạo liên kết (`<a>`) đến trang khác, file download, email, hoặc vị trí trong cùng trang.
+*"Có chứ! `<table>`," Minh trả lời. "Nhưng anh Hùng dặn: chỉ dùng table cho DATA tabular. Dùng table để layout trang = sai. Ngày xưa người ta làm thế, giờ dùng CSS Grid/Flexbox."*
 
 ---
 
-# 1. **STRUCTURING DATA IN A TABLE (BẢNG DỮ LIỆU)**
+## 🎯 Mục tiêu
+- Tạo bảng dữ liệu với `<table>`
+- Hyperlinks nâng cao
+- Navigation giữa các trang
 
-> [!WARNING]
-> **Lưu ý:** Ngày xưa người ta dùng Table để chia bố cục trang web (3 cột, header, footer...). **TUYỆT ĐỐI KHÔNG** làm vậy nữa. Hãy dùng Table chỉ để hiển thị dữ liệu dạng bảng (danh sách điểm, hóa đơn, lịch học).
+---
 
-## 1.1. Cấu trúc cơ bản
-- `<table>`: Thẻ bao ngoài.
-- `<tr>` (Table Row): Dòng.
-- `<th>` (Table Header): Ô tiêu đề (in đậm, căn giữa).
-- `<td>` (Table Data): Ô dữ liệu thường.
+## 📊 Table — Bảng dữ liệu
 
-```html
-<table border="1">
-  <tr>
-    <th>Họ tên</th>
-    <th>Tuổi</th>
-  </tr>
-  <tr>
-    <td>Nguyễn Văn A</td>
-    <td>20</td>
-  </tr>
-</table>
-```
-
-## 1.2. Nhóm ngữ nghĩa (Grouping)
-Để bảng rõ ràng hơn cho máy đọc, ta chia làm 3 phần:
-- `<thead>`: Phần đầu bảng (chứa tiêu đề cột).
-- `<tbody>`: Phần thân bảng (chứa dữ liệu).
-- `<tfoot>`: Phần chân bảng (chứa tổng kết).
-
-## 1.3. Gộp ô (Merging Cells)
-- **`colspan="n"`**: Gộp n cột thành 1.
-- **`rowspan="n"`**: Gộp n dòng thành 1.
-
-**Ví dụ bảng hóa đơn:**
+### Cấu trúc cơ bản:
 
 ```html
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>Sản phẩm</th>
-            <th>Số lượng</th>
             <th>Giá</th>
+            <th>Tồn kho</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>iPhone 15</td>
-            <td>1</td>
-            <td>$1000</td>
+            <td>25.990.000đ</td>
+            <td>15</td>
         </tr>
         <tr>
-            <td>Ốp lưng</td>
-            <td>2</td>
-            <td>$20</td>
+            <td>MacBook Air M3</td>
+            <td>32.990.000đ</td>
+            <td>8</td>
         </tr>
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2">Tổng cộng</td> <!-- Gộp 2 ô đầu -->
-            <td>$1040</td>
+            <td colspan="2">Tổng sản phẩm</td>
+            <td>23</td>
         </tr>
     </tfoot>
 </table>
 ```
 
----
+| Thẻ | Vai trò | Ghi nhớ |
+|---|---|---|
+| `<table>` | Container bảng | Bắt buộc |
+| `<thead>` | Header | Tiêu đề cột |
+| `<tbody>` | Body | Dữ liệu chính |
+| `<tfoot>` | Footer | Tổng kết |
+| `<tr>` | Table Row | Một hàng |
+| `<th>` | Table Header Cell | Ô tiêu đề (in đậm) |
+| `<td>` | Table Data Cell | Ô dữ liệu |
+| `colspan="2"` | Gộp cột | Ô chiếm 2 cột |
+| `rowspan="3"` | Gộp hàng | Ô chiếm 3 hàng |
 
-# 2. **ELECTRONIC REFERENCES (HYPERLINKS) USING `<a>`**
-
-Thẻ `<a>` (Anchor) là "cánh cửa thần kỳ" của Doremon, giúp bạn nhảy từ nơi này sang nơi khác.
-
-## 2.1. Cú pháp cơ bản
-```html
-<a href="URL đích">Nội dung hiển thị</a>
-```
-
-## 2.2. Các loại liên kết
-
-### a. Liên kết tuyệt đối (Absolute Links)
-Đến một website khác hoàn toàn.
-```html
-<a href="https://google.com">Đến Google</a>
-```
-
-### b. Liên kết tương đối (Relative Links)
-Đến một trang khác trong cùng website của bạn.
-```html
-<a href="contact.html">Liên hệ</a>
-<a href="../products/shoes.html">Giày</a>
-```
-
-### c. Liên kết trong trang (Anchor Links/Bookmarks)
-Nhảy đến một vị trí cụ thể trong cùng trang (ví dụ nút "Về đầu trang").
-
-1.  Đặt **ID** cho đích đến: `<h2 id="section1">Chương 1</h2>`
-2.  Tạo link với dấu **#**: `<a href="#section1">Xem Chương 1</a>`
-
-### d. Liên kết đặc biệt (Special Links)
-- **Email:** Mở phần mềm gửi mail.
-  ` <a href="mailto:admin@example.com">Gửi mail cho tôi</a>`
-- **Điện thoại:** Gọi điện trên mobile.
-  ` <a href="tel:+84988888888">Gọi hotline</a>`
-
-## 2.3. Attributes quan trọng
-- **`target="_blank"`**: Mở link trong tab mới (giữ chân người dùng ở lại trang cũ).
-- **`title="Mô tả"`**: Hiện tooltip khi di chuột vào link.
-
-```html
-<a href="https://facebook.com" target="_blank" title="Ghé thăm Fanpage">Facebook</a>
-```
+> ⚠️ **Quy tắc:** `<table>` chỉ dùng cho dữ liệu dạng bảng (danh sách, so sánh, thống kê). KHÔNG dùng cho layout trang web!
 
 ---
 
-# 3. **TỔNG KẾT**
+## 🔗 Hyperlinks Nâng cao
 
-- Dùng `<table>` với `thead`, `tbody`, `tfoot` để trình bày dữ liệu.
-- Dùng `colspan` và `rowspan` để tạo bảng phức tạp.
-- Thẻ `<a>` là cơ chế liên kết của web. Chú ý đường dẫn tương đối và tuyệt đối.
-- Dùng `target="_blank"` khi trỏ ra website ngoài.
+### Các loại liên kết:
+
+```html
+<!-- External link — mở tab mới -->
+<a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+
+<!-- Internal link — cùng website -->
+<a href="about.html">About</a>
+<a href="products/iphone.html">iPhone</a>
+
+<!-- Anchor link — nhảy trong trang -->
+<a href="#pricing">Xem bảng giá</a>
+...
+<section id="pricing">
+    <h2>Bảng giá</h2>
+</section>
+
+<!-- Download link -->
+<a href="brochure.pdf" download>Tải brochure</a>
+
+<!-- Email & Phone -->
+<a href="mailto:minh@tlu.edu.vn">Email</a>
+<a href="tel:+84912345678">Gọi ngay</a>
+```
+
+### Navigation bar:
+
+```html
+<nav>
+    <ul>
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="products.html">Sản phẩm</a></li>
+        <li><a href="about.html">Giới thiệu</a></li>
+        <li><a href="contact.html">Liên hệ</a></li>
+    </ul>
+</nav>
+```
+
+> 💡 **`target="_blank"` + `rel="noopener"`** — Luôn thêm `rel="noopener"` khi mở tab mới để tránh lỗ hổng bảo mật (tai tab can access window.opener).
 
 ---
 
-**Chương tiếp theo:** Làm cho trang web sống động với Hình ảnh và Video.
+## ➡️ Chương tiếp theo...
+
+*Minh đã có bảng sản phẩm và navigation. "Giờ mình cần thêm ảnh sản phẩm, video review, và có thể cả bản đồ Google Maps cho trang Contact."*
+
+**Chương tiếp theo:** Graphics & Multimedia — Ảnh, SVG, Canvas, và cách nhúng media phong phú vào trang web.

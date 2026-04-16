@@ -1,7 +1,13 @@
 # 🎯 JAVASCRIPT FRAMEWORKS
-# **Lựa chọn Framework phù hợp**
+# **"React, Vue Hay Angular?" — Chọn Vũ Khí Cho 5 Năm Tới**
 
-Sau khi học xong JavaScript cơ bản và DOM manipulation, bạn sẽ chọn một trong ba framework phổ biến nhất để học:
+## 🎬 Hook
+
+*Minh đã viết Todo App bằng Vanilla JS: DOM manipulation thủ công, state quản lý bằng biến global, event listeners khắp nơi. Code 500 dòng mà đã muốn điên.*
+
+*"Bây giờ hãy tưởng tượng app có 50 trang," chị Hà nói. "Vanilla JS cho app lớn = địa ngục. Đó là lý do frameworks ra đời: React, Vue, Angular — chúng QUẢN LÝ SỰ PHỨC TẠP."*
+
+> 💡 **Chỉ cần học 1 framework.** React = nhiều job nhất. Vue = dễ học nhất. Angular = enterprise.
 
 ---
 

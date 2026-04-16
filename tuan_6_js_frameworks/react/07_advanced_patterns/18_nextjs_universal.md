@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 18, 19, 20
 # **NEXT.JS & PERFORMANCE OPTIMIZATION**
 
-React thuần (Client-side Rendering/CSR) có nhược điểm lớn: **SEO kém** (Google khó đọc) và **Load lần đầu chậm**. Next.js sinh ra để giải quyết vấn đề này.
+## 🎬 "Google Không Đọc React" — Khi SPA Cần SEO
+
+*Minh deploy React app. Google tìm kiếm → thấy trang trắng. Vì React render ở browser — Google bot không chờ JS chạy. Chị Hà: "Next.js — render HTML trên SERVER trước, gửi cho Google. SEO + tốc độ + React. Đây là lý do Vercel trị giá 2.5 tỷ USD."*
 
 ---
 

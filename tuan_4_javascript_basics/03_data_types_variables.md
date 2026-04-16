@@ -1,120 +1,83 @@
 # 🟨 PART II - CHƯƠNG 03
-# **DATA TYPES AND VARIABLES**
+# **DATA TYPES & VARIABLES — CHI TIẾT**
 
-Lập trình về cơ bản là **xử lý dữ liệu**. Để xử lý được, ta cần **lưu trữ** nó vào các "hộp chứa" gọi là Biến (Variables).
+## 🎬 "Bug Vì Cộng String Với Number"
 
----
+*Minh viết: `"5" + 3`. Mong đợi kết quả `8`. Thực tế: `"53"`.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*"JavaScript tự chuyển 3 thành string rồi NỐI chuỗi!" Minh phát hiện.*
 
-Sau chương này, bạn sẽ:
-- Phân biệt rõ ràng `var`, `let`, `const`.
-- Hiểu các kiểu dữ liệu cơ bản: String, Number, Boolean, Undefined, Null.
-- Biết cách đặt tên biến chuẩn mực.
+> **Anh Hùng:** *"Đó là 'type coercion' — JavaScript tự ý chuyển type. Đây là nguồn gốc của vô số bug. Luôn kiểm tra type TRƯỚC khi tính toán."*
 
 ---
 
-# 1. **VARIABLES (BIẾN SỐ)**
-
-Biến giống như một cái bình đựng nước. Bạn dán nhãn cái bình là "nuoc_ngot" và đổ Coca vào.
-
-## 1.1. Khai báo biến (Declaration)
-Ngày xưa ta dùng `var`. Ngày nay (ES6+), hãy quên `var` đi và dùng `let` / `const`.
-
-### `var` (Cũ - Hạn chế dùng)
-- Phạm vi rộng (Function scope), dễ gây lỗi logic.
-- Bị Hoisting (có thể dùng trước khi khai báo -> Rất nguy hiểm).
-
-### `let` (Hiện đại - Dùng khi giá trị thay đổi)
-- Phạm vi hẹp (Block scope `{}`). An toàn.
-- Dùng cho: Biến đếm, điểm số, giá trị cần cập nhật.
-
-```javascript
-let score = 0;
-score = 10; // OK
-```
-
-### `const` (Hiện đại - Dùng mặc định)
-- Viết tắt của Constant (Hằng số).
-- Khai báo xong KHÔNG được gán lại giá trị khác.
-- Dùng cho: PI, cấu hình, tên, những thứ cố định.
-
-```javascript
-const PI = 3.14;
-PI = 3.15; // ❌ LỖI NGAY: Assignment to constant variable.
-```
-
-> [!TIP]
-> **Quy tắc vàng:** Luôn dùng `const`. Chỉ khi nào chắc chắn giá trị sẽ thay đổi thì mới đổi sang `let`. Tuyệt đối tránh `var`.
+## 🎯 Mục tiêu
+- Hiểu sâu về type coercion và cách phòng tránh
+- Truthy/Falsy values
+- Type checking và converting
 
 ---
 
-# 2. **DATA TYPES (KIỂU DỮ LIỆU)**
+## ⚠️ Type Coercion — "Tự ý chuyển kiểu"
 
-JS là ngôn ngữ **Dynamic Typing** (Kiểu động). Bạn không cần khai báo kiểu (`int`, `string`), máy tự hiểu.
-
-## 2.1. Basic Types (Nguyên thủy)
-
-1.  **String (Chuỗi):** Ký tự, văn bản. Bao quanh bởi `' '` hoặc `" "`.
-    ```javascript
-    const name = "Hung";
-    const message = 'Hello';
-    ```
-
-2.  **Number (Số):** Số nguyên, số thực dùng chung 1 kiểu.
-    ```javascript
-    const age = 25;
-    const price = 10.99;
-    ```
-
-3.  **Boolean (Logic):** Chỉ có `true` (đúng) hoặc `false` (sai).
-    ```javascript
-    const isOnline = true;
-    const isFinished = false;
-    ```
-
-4.  **Undefined (Không xác định):** Biến đã khai báo nhưng chưa gán giá trị.
-    ```javascript
-    let container; 
-    console.log(container); // undefined
-    ```
-
-5.  **Null (Rỗng):** Cố ý gán giá trị là "không có gì".
-    ```javascript
-    const wallet = null; // Ví rỗng
-    ```
-
-## 2.2. Kiểm tra kiểu (`typeof`)
 ```javascript
-typeof "Hello" // "string"
-typeof 100     // "number"
-typeof true    // "boolean"
+// JavaScript tự chuyển type — đôi khi BẤT NGỜ
+"5" + 3          // "53" (string concatenation!)
+"5" - 3          // 2 (number subtraction!)
+"5" * "2"        // 10 (number multiplication!)
+true + 1         // 2 (true = 1!)
+null + 5         // 5 (null = 0!)
+
+// ✅ Cách an toàn: Convert tường minh
+Number("5") + 3       // 8 ✅
+parseInt("5") + 3     // 8 ✅
+String(42)            // "42"
+Boolean(0)            // false
+Boolean("hello")      // true
 ```
 
 ---
 
-# 3. **NAMING CONVENTIONS (QUY TẮC ĐẶT TÊN)**
+## 🔍 Truthy & Falsy — "Đúng và Sai ẩn"
 
-Trong JS, chúng ta dùng quy tắc **camelCase** (lạc đà).
-- Bắt đầu viết thường.
-- Chữ cái đầu của từ tiếp theo viết hoa.
-- Không dùng dấu gạch ngang `-` (để dành cho phép trừ), không bắt đầu bằng số.
+```javascript
+// 6 giá trị FALSY (coi như false):
+false, 0, "", null, undefined, NaN
 
-**Ví dụ:**
-- `userName` (✅ Chuẩn)
-- `user_name` (❌ Kiểu Python/PHP)
-- `UserName` (❌ Thường dùng cho Class/Component)
-- `1stPlace` (❌ Lỗi cú pháp)
+// TẤT CẢ còn lại = TRUTHY (coi như true):
+true, 42, "hello", [], {}, -1, "0", "false"   // ⚠️ "0" là truthy!
+
+// Ứng dụng:
+const user = null;
+if (user) {
+    console.log("Đã đăng nhập");
+} else {
+    console.log("Chưa đăng nhập");  // ← Chạy dòng này!
+}
+
+// Short-circuit (hay dùng trong React):
+const name = user?.name || "Khách";     // user null → name = "Khách"
+const items = data?.items ?? [];        // Nullish coalescing
+```
 
 ---
 
-# 4. **TỔNG KẾT**
+## 🧮 Type Checking
 
-- **const**: Dùng cho hằng số (mặc định).
-- **let**: Dùng cho biến thay đổi.
-- **String, Number, Boolean**: 3 kiểu dữ liệu cốt lõi.
-- Đặt tên biến theo **camelCase** và có ý nghĩa rõ ràng (ví dụ `isLoggedIn` thay vì `x`).
+```javascript
+typeof "hello"      // "string"
+typeof 42           // "number"
+typeof true         // "boolean"
+typeof undefined    // "undefined"
+typeof null         // "object" ← ⚠️ Bug lịch sử, KHÔNG phải object!
+typeof []           // "object" ← ⚠️ Array cũng là object!
+Array.isArray([])   // true ← Cách đúng check array
+```
 
 ---
 
-**Chương tiếp theo:** Làm sao để máy tính ra quyết định? (If, Else, Loop).
+## ➡️ Chương tiếp theo...
+
+*Minh đã hiểu data types. Giờ cần logic: "if todo completed → strike through. Loop qua danh sách → render HTML."*
+
+**Chương tiếp theo:** Control Structures — if/else, switch, for, while, for...of.

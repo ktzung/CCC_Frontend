@@ -1,160 +1,126 @@
 # 🟩 CHƯƠNG 09
-# **THE SELECTORS OF CSS**
+# **CSS SELECTORS**
 
-Sức mạnh thực sự của CSS nằm ở **Selectors**. Nếu bạn không thể chọn đúng phần tử bạn muốn sửa, bạn không thể làm gì cả.
+## 🎬 "Tại Sao TẤT CẢ Nút Đều Đỏ?" — Bài học Selector đau thương
 
----
+*Minh viết CSS: `button { background: red; }`. Ý định: chỉ nút "Xóa" màu đỏ.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*Kết quả: TẤT CẢ nút trên trang đều đỏ — nút Submit, nút Cancel, nút Navigate...*
 
-Sau chương này, bạn sẽ:
-- Sử dụng thành thạo **Simple Selectors** (Tag, Class, ID).
-- Hiểu và dùng **Combinators** (Con, Cháu, Em liền kề).
-- Sử dụng **Pseudo-classes** (Hover, Focus, Nth-child).
-- Biết cách viết CSS hiệu quả và dễ bảo trì.
+*"CSS không biết nút nào là nút nào!" Minh than. Anh Hùng trả lời: "Vì em dùng tag selector — nhắm MỌI button. Muốn chỉ 1 nút → dùng class hoặc id selector."*
 
 ---
 
-# 1. **THE SIMPLE SELECTORS OF CSS**
+## 🎯 Mục tiêu
+- Phân biệt và sử dụng 5 loại selector chính
+- Kết hợp selectors (combinator)
+- Pseudo-classes và pseudo-elements
+- Tính specificity (độ ưu tiên)
 
-Đây là những selector cơ bản nhất, dùng 90% thời gian.
+---
 
-## 1.1. Element Selector (Chọn theo tên thẻ)
-Chọn TẤT CẢ thẻ có tên đó.
+## 🎯 5 Loại Selector — Từ rộng đến hẹp
 
+### 1. Universal Selector — "Nhắm TẤT CẢ"
 ```css
-p {
-  color: #333;
-}
+* { box-sizing: border-box; margin: 0; }
 ```
 
-## 1.2. Class Selector (Chọn theo lớp - `.`)
-Chọn các phần tử có cùng attribute `class`. Dùng dấu chấm `.` phía trước.
-
+### 2. Type (Tag) Selector — "Nhắm theo loại thẻ"
 ```css
-.highlight {
-  background-color: yellow;
-}
+h1 { color: #1e293b; }       /* MỌI h1 */
+p { line-height: 1.6; }      /* MỌI p */
 ```
 
-**HTML:**
+### 3. Class Selector — "Nhắm theo class" ⭐ (dùng nhiều nhất!)
+```css
+.btn-danger { background: #dc2626; }     /* class="btn-danger" */
+.btn-primary { background: #2563eb; }    /* class="btn-primary" */
+```
 ```html
-<p class="highlight">Tôi được tô nền vàng.</p>
-<span class="highlight">Tôi cũng vậy.</span>
+<button class="btn-danger">Xóa</button>     <!-- ✅ Đỏ -->
+<button class="btn-primary">Lưu</button>     <!-- ✅ Xanh -->
 ```
 
-## 1.3. ID Selector (Chọn theo định danh - `#`)
-Chọn MỘT phần tử duy nhất có `id` đó. Dùng dấu thăng `#` phía trước.
-
+### 4. ID Selector — "Nhắm theo ID" (unique, 1 per page)
 ```css
-#header {
-  height: 60px;
-}
+#main-header { background: #0f172a; }
 ```
 
-> [!WARNING]
-> **ID vs Class:**
-> - **ID:** Duy nhất (CMND). Mỗi trang chỉ có 1 element với ID `#header`.
-> - **Class:** Nhóm (Đồng phục). Nhiều người có thể mặc chung 1 class `.student`.
-> -> **Luôn ưu tiên dùng Class để style.** Dùng ID chủ yếu cho JS hoặc Anchor link.
-
-## 1.4. Universal Selector (`*`)
-Chọn tất cả mọi thứ.
-
+### 5. Attribute Selector — "Nhắm theo attribute"
 ```css
-* {
-  margin: 0;
-  padding: 0;
-}
-```
-
-## 1.5. Grouping Selector (Nhóm)
-Style giống nhau cho nhiều thẻ.
-
-```css
-h1, h2, h3 {
-  font-family: Arial, sans-serif;
-  color: navy;
-}
+input[type="email"] { border-color: blue; }
+a[target="_blank"]::after { content: " ↗"; }
 ```
 
 ---
 
-# 2. **COMBINATORS (CÁC BỘ CHỌN KẾT HỢP)**
+## 🔗 Combinator Selectors — "Chọn theo mối quan hệ"
 
-Mối quan hệ gia đình trong HTML.
-
-## 2.1. Descendant Selector (Con cháu - Khoảng trắng)
-Chọn tất cả `p` nằm trong `div` (bất kể sâu bao nhiêu).
 ```css
-div p { color: red; }
-```
+/* Descendant: TẤT CẢ p bên trong .card */
+.card p { color: #64748b; }
 
-## 2.2. Child Selector (Con trực tiếp - `>`)
-Chỉ chọn `p` là con ruột của `div` (không chọn cháu).
-```css
-div > p { color: blue; }
-```
+/* Child: Chỉ p là CON TRỰC TIẾP của .card */
+.card > p { font-weight: bold; }
 
-## 2.3. Adjacent Sibling Selector (Em liền kề - `+`)
-Chọn `p` nằm NGAY SAU `h1`.
-```css
-h1 + p { font-size: 1.2rem; }
+/* Adjacent Sibling: p NGAY SAU h2 */
+h2 + p { margin-top: 8px; }
+
+/* General Sibling: TẤT CẢ p sau h2 */
+h2 ~ p { color: #475569; }
 ```
 
 ---
 
-# 3. **PSEUDO-CLASSES (LỚP GIẢ)**
+## 🎭 Pseudo-classes & Pseudo-elements
 
-Chọn phần tử dựa trên **trạng thái** của nó. Dấu hai chấm `:`.
-
-## `3.1. :hover` (Khi di chuột vào)
+### Pseudo-classes — "Trạng thái đặc biệt"
 ```css
-a:hover {
-  text-decoration: underline;
-  color: orange;
-}
+a:hover { color: #2563eb; }             /* Khi hover chuột */
+a:visited { color: #7c3aed; }           /* Đã click */
+input:focus { border-color: #2563eb; }   /* Đang được click vào */
+li:first-child { font-weight: bold; }    /* Phần tử con đầu tiên */
+li:nth-child(odd) { background: #f1f5f9; } /* Dòng lẻ (zebra) */
+button:disabled { opacity: 0.5; }        /* Bị disable */
 ```
 
-## `3.2. :focus` (Khi đang nhập liệu)
+### Pseudo-elements — "Phần tử giả"
 ```css
-input:focus {
-  border-color: blue;
-  outline: none;
-}
-```
-
-## `3.3. :nth-child(n)` (Chọn đứa con thứ n)
-```css
-/* Chọn dòng chẵn trong bảng */
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
+p::first-letter { font-size: 2em; }     /* Chữ cái đầu tiên */
+p::first-line { font-weight: bold; }     /* Dòng đầu tiên */
+.required::after { content: " *"; color: red; } /* Thêm nội dung */
 ```
 
 ---
 
-# 4. **RECOMMENDATION: EFFICIENT & SIMPLE CSS**
+## ⚖️ Specificity — "Ai thắng khi xung đột?"
 
-Viết CSS cũng cần nghệ thuật để code không "bốc mùi".
+Khi nhiều rule nhắm cùng element → rule nào có **specificity cao hơn** thắng:
 
-1.  **Hạn chế dùng ID:** Vì ID có độ ưu tiên (Specificity) quá cao, sau này muốn sửa (override) rất khó.
-2.  **Đặt tên class có ý nghĩa (BEM):**
-    - Tốt: `.btn-primary`, `.card-header`.
-    - Xấu: `.red-text` (lỡ sau này đổi sang xanh thì sao?), `.box1`.
-3.  **Đừng viết selector quá dài:**
-    - Xấu: `div.container > ul.menu > li > a.link` (Quá cụ thể, trình duyệt đọc chậm).
-    - Tốt: `.menu-link`.
+| Selector | Specificity | Ví dụ |
+|---|---|---|
+| `!important` | ♾️ Vô cực (TRÁNH DÙNG!) | `color: red !important` |
+| Inline style | 1000 | `style="color: red"` |
+| ID `#id` | 100 | `#header { }` |
+| Class `.class` | 10 | `.btn { }` |
+| Tag `element` | 1 | `p { }` |
+| Universal `*` | 0 | `* { }` |
+
+```css
+p { color: blue; }              /* Specificity: 1 */
+.intro { color: green; }        /* Specificity: 10 ← THẮNG! */
+#main p.intro { color: red; }   /* Specificity: 111 ← THẮNG! */
+```
+
+> **Anh Hùng:** *"Khi CSS không hoạt động như mong đợi, 80% là do specificity. Mở DevTools → Elements → xem rule nào bị gạch ngang (strikethrough) = bị override."*
 
 ---
 
-# 5. **TỔNG KẾT**
+## ➡️ Chương tiếp theo...
 
-- **Class (.)** là bạn thân nhất của developer.
-- **Pseudo-classes (:)** giúp tạo tương tác (hover).
-- **Combinators** giúp chọn phần tử dựa trên vị trí.
-- Giữ selector ngắn gọn và dễ hiểu.
+*Minh đã chọn đúng element. Nhưng khi viết `.card .title` thì đôi khi title không đổi màu.*
 
----
+*"Đó là vì Cascade và Inheritance," anh Hùng giải thích. "Con thừa hưởng style từ cha. Rule sau ghi đè rule trước. Hiểu cascade = debug CSS chỉ mất 5 giây."*
 
-**Chương tiếp theo:** Tại sao tôi đặt màu đỏ mà nó lại hiện màu xanh? (Inheritance vs Cascading).
+**Chương tiếp theo:** Inheritance & Cascading — Bí mật của chữ "C" trong CSS.

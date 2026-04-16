@@ -1,7 +1,9 @@
 # 🟢 MODULE 3 - BÀI 09
 # **VUE ROUTER - ROUTING**
 
-Vue Router là routing library chính thức của Vue.js, giúp tạo Single Page Application (SPA) với client-side routing. Trong bài này, bạn sẽ học cách setup và sử dụng Vue Router.
+## 🎬 "SPA Chỉ Có 1 File HTML — Vậy /about Lấy Từ Đâu?" — Client-Side Routing
+
+*Minh: "Vue app chỉ có index.html. Vậy khi gõ /products, server lấy file nào?" Anh Hùng: "Không có file nào cả. JavaScript GIẢ LẬP URL bằng History API. Vue Router = bộ não điều phối: URL thay đổi → đổi component, browser KHÔNG hỏi server."*
 
 ---
 

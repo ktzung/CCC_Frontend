@@ -1,116 +1,190 @@
-# 🟨 PART II - CHƯƠNG 19
-# **CHANGING WEB PAGES DYNAMICALLY (DOM)**
+# 🟨 PART III - CHƯƠNG 19
+# **DOM MANIPULATION — JavaScript Giao Tiếp Với HTML**
 
-JavaScript rất hay, nhưng nếu nó chỉ chạy ngầm trong Console thì vô dụng. Sức mạnh thực sự của JS là khả năng **thao tác trực tiếp lên trang Web**: thay đổi chữ, đổi màu, thêm ảnh, xóa nút bấm... Cơ chế đó gọi là **DOM**.
+## 🎬 "Bấm Nút → Todo Xuất Hiện" — Khoảnh khắc WOW đầu tiên
 
----
+*Minh hoàn thành Todo App logic trong console. Nhưng user không dùng console.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*Anh cần: Gõ text vào input → Bấm nút "Thêm" → Todo hiện ra trên trang web. Real-time.*
 
-Sau chương này, bạn sẽ:
-- Hiểu **DOM Tree** là gì.
-- Biết cách **chọn phần tử** (Select) bằng `querySelector`.
-- Biết cách **thay đổi nội dung/Style** của phần tử.
-- Biết cách **bắt sự kiện** (Event Listener) như click, gõ phím.
+*Anh Hùng: "Đó là DOM Manipulation — JavaScript đọc, sửa, thêm, xóa HTML elements. JS nói chuyện với HTML thông qua DOM."*
 
 ---
 
-# 1. **DOM LÀ GÌ? (DOCUMENT OBJECT MODEL)**
-
-Khi trình duyệt tải trang HTML, nó sẽ vẽ ra một cây gia phả gọi là DOM Tree:
-- `document`: Gốc của cây (Toàn bộ trang web).
-- `html` -> `body` -> `h1`, `div`, `p`...
-
-JavaScript dùng `document` object để chọc vào cây này.
+## 🎯 Mục tiêu
+- Hiểu DOM là gì
+- Chọn elements (querySelector)
+- Sửa nội dung, style, attributes
+- Thêm/xóa elements
+- Event handling (click, submit, input)
 
 ---
 
-# 2. **ACCESSING DOM ELEMENTS (CHỌN PHẦN TỬ)**
+## 🌳 DOM là gì? — "Cây gia đình HTML"
 
-Có nhiều cách chọn, nhưng đây là những cách hiện đại nhất.
+**DOM (Document Object Model)** = Browser đọc HTML → tạo cây đối tượng → JS truy cập cây này.
 
-## 2.1. `querySelector` (Chọn 1 cái đầu tiên)
-Dùng selector giống hệt CSS!
-```javascript
-const title = document.querySelector('h1'); // Chọn thẻ h1
-const btn = document.querySelector('.btn-primary'); // Chọn class .btn-primary
-const header = document.querySelector('#main-header'); // Chọn id #main-header
 ```
-
-## 2.2. `querySelectorAll` (Chọn tất cả)
-Trả về 1 danh sách (NodeList).
-```javascript
-const allItems = document.querySelectorAll('li'); 
-// Chọn tất cả thẻ li
+document
+└── html
+    ├── head
+    │   └── title
+    └── body
+        ├── h1
+        ├── form
+        │   ├── input
+        │   └── button
+        └── ul
+            ├── li
+            └── li
 ```
 
 ---
 
-# 3. **MODIFYING CONTENT & STYLES (THAY ĐỔI NỘI DUNG)**
-
-Sau khi chọn xong, ta làm gì với nó?
-
-## 3.1. Thay đổi nội dung
-- `.textContent`: Lấy/Sửa văn bản thuần (An toàn, nhanh).
-- `.innerHTML`: Lấy/Sửa cả HTML bên trong (Mạnh nhưng coi chừng bảo mật XSS).
+## 🎯 Chọn Elements
 
 ```javascript
-const h1 = document.querySelector('h1');
-h1.textContent = "Xin chào Javascript!"; // Đổi chữ
-```
+// ⭐ querySelector — Chọn 1 element (CSS selector)
+const title = document.querySelector("h1");
+const btn = document.querySelector("#addBtn");
+const firstTodo = document.querySelector(".todo-item");
 
-## 3.2. Thay đổi Style
-Chọc vào `.style`. Lưu ý tên thuộc tính đổi sang **camelCase** (`background-color` -> `backgroundColor`).
+// querySelectorAll — Chọn TẤT CẢ
+const allTodos = document.querySelectorAll(".todo-item");
+allTodos.forEach(todo => console.log(todo.textContent));
 
-```javascript
-const box = document.querySelector('.box');
-box.style.backgroundColor = "red";
-box.style.fontSize = "20px";
-box.style.display = "none"; // Ẩn đi
-```
-
-## 3.3. Thay đổi Class (Best Practice)
-Thay vì sửa style thủ công, hãy thêm/xóa class CSS.
-```javascript
-box.classList.add('active'); // Thêm class
-box.classList.remove('hidden'); // Xóa class
-box.classList.toggle('dark-mode'); // Bật/Tắt
+// Cách cũ (vẫn hoạt động)
+document.getElementById("addBtn");
+document.getElementsByClassName("todo-item");
 ```
 
 ---
 
-# 4. **HANDLING EVENTS (BẮT SỰ KIỆN)**
-
-Làm sao để biết khi nào người dùng click chuột?
-
-## `addEventListener` (Tai nghe sự kiện)
+## ✏️ Sửa Elements
 
 ```javascript
-const btn = document.querySelector('button');
+const title = document.querySelector("h1");
 
-btn.addEventListener('click', function() {
-  alert("Bạn vừa bấm nút!");
-  
-  // Đổi màu nền body
-  document.body.style.backgroundColor = "gold";
+// Sửa text
+title.textContent = "📝 Todo App";        // Text thuần
+title.innerHTML = "<em>Todo</em> App";     // ⚠️ Có HTML (cẩn thận XSS)
+
+// Sửa style
+title.style.color = "#2563eb";
+title.style.fontSize = "32px";
+
+// Sửa class
+title.classList.add("active");
+title.classList.remove("hidden");
+title.classList.toggle("dark-mode");       // Thêm/xóa toggle
+
+// Sửa attributes
+const link = document.querySelector("a");
+link.setAttribute("href", "https://google.com");
+link.getAttribute("href");
+```
+
+---
+
+## ➕ Thêm & Xóa Elements
+
+```javascript
+// Tạo element mới
+const li = document.createElement("li");
+li.textContent = "Todo mới!";
+li.classList.add("todo-item");
+
+// Thêm vào DOM
+const list = document.querySelector("#todoList");
+list.appendChild(li);                      // Thêm cuối
+list.prepend(li);                          // Thêm đầu
+
+// Xóa element
+li.remove();                               // Xóa chính nó
+list.removeChild(li);                       // Cha xóa con
+```
+
+---
+
+## 🎪 Events — "Lắng nghe hành động user"
+
+```javascript
+// Click
+const btn = document.querySelector("#addBtn");
+btn.addEventListener("click", () => {
+    console.log("Nút được click!");
+});
+
+// Submit form (⚠️ preventDefault!)
+const form = document.querySelector("#todoForm");
+form.addEventListener("submit", (e) => {
+    e.preventDefault();                    // Ngăn reload trang
+    const input = document.querySelector("#todoInput");
+    addTodo(input.value);
+    input.value = "";                      // Clear input
+});
+
+// Input real-time
+const searchInput = document.querySelector("#search");
+searchInput.addEventListener("input", (e) => {
+    filterTodos(e.target.value);           // Lọc khi gõ
+});
+
+// Keyboard
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+    if (e.key === "Enter" && e.ctrlKey) submitForm();
 });
 ```
 
-Các sự kiện phổ biến:
-- `click`: Bấm chuột.
-- `submit`: Gửi form.
-- `keydown` / `keyup`: Gõ phím.
-- `mouseenter` / `mouseleave`: Di chuột vào/ra.
+---
+
+## 🎯 Thực hành: Todo App hoàn chỉnh
+
+```javascript
+// Todo App - DOM Manipulation
+const form = document.querySelector("#todoForm");
+const input = document.querySelector("#todoInput");
+const list = document.querySelector("#todoList");
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    if (!input.value.trim()) return;     // Không thêm todo trống
+    
+    // Tạo todo element
+    const li = document.createElement("li");
+    li.innerHTML = `
+        <span>${input.value}</span>
+        <button class="delete-btn">❌</button>
+    `;
+    
+    // Click vào text → toggle completed
+    li.querySelector("span").addEventListener("click", () => {
+        li.classList.toggle("completed");
+    });
+    
+    // Click nút xóa → remove
+    li.querySelector(".delete-btn").addEventListener("click", () => {
+        li.remove();
+    });
+    
+    list.appendChild(li);
+    input.value = "";
+    input.focus();
+});
+```
+
+*Minh chạy code. Gõ "Học DOM" → Click "Thêm" → Todo hiện ra trên trang! Click lần nữa → gạch ngang! Click ❌ → biến mất!*
+
+*"ĐÂY MỚI LÀ WEB APP!" Minh hào hứng.* 🎉
 
 ---
 
-# 5. **TỔNG KẾT**
+## ➡️ Chương tiếp theo...
 
-Quy trình làm việc chuẩn với DOM:
-1.  **Select:** `document.querySelector('...')` để tìm phần tử.
-2.  **Listen:** `.addEventListener(...)` để đợi hành động.
-3.  **Manipulate:** Thay đổi `.textContent`, `.style`, hoặc `.classList` để phản hồi.
+*Todo App hoạt động. Nhưng refresh trang → mất hết todos. "Mình cần lưu data ở đâu đó," Minh nghĩ.*
 
----
+*Và khi muốn lấy dữ liệu từ server: danh sách sản phẩm, thông tin user... Minh cần gọi API.*
 
-**Chương tiếp theo:** Làm việc với Server và dữ liệu bên ngoài (Ajax & Async).
+**Chương tiếp theo:** AJAX & Async — Gọi API, fetch data, xử lý bất đồng bộ.

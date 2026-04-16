@@ -1,98 +1,153 @@
-# 🟨 PART II - CHƯƠNG 20
-# **AN INTRODUCTION TO AJAX & ASYNC**
+# 🟨 PART III - CHƯƠNG 20
+# **AJAX & ASYNC — Gọi API Từ Frontend**
 
-Lập trình web hiện đại không thể thiếu kết nối Server (API). Bạn cần lấy dữ liệu thời tiết, load danh sách comment, gửi tin nhắn... mà không làm đơ trình duyệt. Đó là nhiệm vụ của **Asynchronous JavaScript** (Bất đồng bộ).
+## 🎬 "Trang Thời Tiết" — Từ Data Cứng Đến Data Live
 
----
+*Minh muốn thêm widget thời tiết vào Todo App. Nhưng nhiệt độ thay đổi mỗi giờ — không thể code cứng `27°C` vào HTML.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
-
-Sau chương này, bạn sẽ:
-- Hiểu **Sync** (Đồng bộ) vs **Async** (Bất đồng bộ).
-- Làm quen với **JSON** - ngôn ngữ giao tiếp của Internet.
-- Sử dụng **Fetch API** để gọi dữ liệu từ Server.
-- Nắm vững **Async / Await** (Cú pháp hiện đại nhất).
+*"Em cần GỌI API," anh Hùng nói. "Frontend gửi request đến server, server trả về data JSON, frontend hiển thị. Đây gọi là AJAX — trang web cập nhật MÀ KHÔNG RELOAD."*
 
 ---
 
-# 1. **SYNC VS ASYNC**
-
-- **Synchronous (Đồng bộ):** Chạy tuần tự. Dòng 1 xong mới chạy dòng 2. Nếu dòng 1 lâu (tải file to), toàn bộ trang web bị **ĐƠ (Blocking)**.
-- **Asynchronous (Bất đồng bộ):** Chạy song song. Dặn máy: "Mày tải file đi, xong thì báo tao, tao làm việc khác đây". Web vẫn mượt.
+## 🎯 Mục tiêu
+- Hiểu Synchronous vs Asynchronous
+- Fetch API — cách gọi API chuẩn hiện đại
+- Async/Await — cú pháp đẹp nhất
+- Xử lý loading, error states
 
 ---
 
-# 2. **JSON (JAVASCRIPT OBJECT NOTATION)**
+## ⏳ Sync vs Async — "Xếp hàng vs Đặt số"
 
-Là định dạng dữ liệu nhẹ để trao đổi thông tin giữa Client và Server. Nó trông y hệt JavaScript Object nhưng key phải có dấu ngoặc kép.
+```
+Synchronous (Đồng bộ):
+Bước 1 → Chờ xong → Bước 2 → Chờ xong → Bước 3
+"Xếp hàng: phải chờ người trước xong mới đến lượt"
 
-**File: data.json**
-```json
-{
-  "name": "Hung",
-  "age": 25,
-  "skills": ["HTML", "CSS", "JS"]
+Asynchronous (Bất đồng bộ):
+Bước 1 → Bước 2 → Bước 3
+    ↳ Kết quả về sau →  →  → Xử lý khi xong
+"Đặt số: gọi xong làm việc khác, có kết quả thì báo"
+```
+
+---
+
+## 🌐 Fetch API — Gọi API chuẩn hiện đại
+
+### Cách 1: Fetch + .then() (callback-based)
+
+```javascript
+fetch("https://api.weatherapi.com/v1/current.json?key=xxx&q=Hanoi")
+    .then(response => response.json())            // Parse JSON
+    .then(data => {
+        console.log(`Hà Nội: ${data.current.temp_c}°C`);
+    })
+    .catch(error => {
+        console.error("Lỗi:", error);
+    });
+```
+
+### Cách 2: Async/Await ⭐ (đọc dễ hơn — KHUYÊN DÙNG)
+
+```javascript
+async function getWeather(city) {
+    try {
+        const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=xxx&q=${city}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data.current.temp_c;
+    } catch (error) {
+        console.error("Không lấy được thời tiết:", error);
+        return null;
+    }
+}
+
+// Sử dụng
+const temp = await getWeather("Hanoi");
+console.log(`Hà Nội: ${temp}°C`);
+```
+
+---
+
+## 📊 Gọi API CRUD cho Todo App
+
+```javascript
+const API = "https://jsonplaceholder.typicode.com/todos";
+
+// GET — Lấy danh sách todos
+async function getTodos() {
+    const res = await fetch(API);
+    const todos = await res.json();
+    return todos.slice(0, 10);           // Lấy 10 todos đầu
+}
+
+// POST — Thêm todo mới
+async function addTodo(title) {
+    const res = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, completed: false })
+    });
+    return await res.json();
+}
+
+// DELETE — Xóa todo
+async function deleteTodo(id) {
+    await fetch(`${API}/${id}`, { method: "DELETE" });
+}
+
+// PATCH — Cập nhật todo
+async function toggleTodo(id, completed) {
+    const res = await fetch(`${API}/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed })
+    });
+    return await res.json();
 }
 ```
 
-- **`JSON.stringify(obj)`**: Biến Object JS -> Chuỗi JSON (Để gửi đi).
-- **`JSON.parse(string)`**: Biến Chuỗi JSON -> Object JS (Để đọc).
-
 ---
 
-# 3. **FETCH API & PROMISES**
-
-Ngày xưa dùng `XMLHttpRequest` (Ajax cũ). Giờ ta dùng `fetch`.
-`fetch` trả về một **Promise** (Lời hứa): "Tôi hứa sẽ trả về dữ liệu (hoặc lỗi) trong tương lai".
+## ⏳ Loading & Error States
 
 ```javascript
-fetch('https://api.example.com/users')
-  .then(response => response.json()) // Chuyển data thô thành JSON
-  .then(data => {
-    console.log(data); // Xử lý dữ liệu ở đây
-  })
-  .catch(error => {
-    console.error("Lỗi rồi:", error); // Xử lý lỗi
-  });
-```
-
----
-
-# 4. **ASYNC / AWAIT (MODERN SYNTAX)**
-
-Dùng Promise `.then()` vẫn hơi rối (Callback Hell). ES8 sinh ra `async/await` giúp code bất đồng bộ nhìn "như là" đồng bộ. Dễ đọc hơn nhiều.
-
-```javascript
-async function getUsers() {
-  try {
-    // Await: Đợi fetch xong mới chạy dòng tiếp
-    const response = await fetch('https://api.example.com/users');
-    const data = await response.json();
+async function renderTodos() {
+    const list = document.querySelector("#todoList");
     
-    console.log(data);
-    // Render ra HTML...
-  } catch (error) {
-    console.log("Có biến:", error);
-  }
+    // Loading state
+    list.innerHTML = '<li class="loading">⏳ Đang tải...</li>';
+    
+    try {
+        const todos = await getTodos();
+        
+        if (todos.length === 0) {
+            list.innerHTML = '<li class="empty">Chưa có todo nào</li>';
+            return;
+        }
+        
+        list.innerHTML = todos.map(todo => `
+            <li class="${todo.completed ? 'completed' : ''}">
+                ${todo.title}
+            </li>
+        `).join("");
+        
+    } catch (error) {
+        list.innerHTML = '<li class="error">❌ Lỗi tải dữ liệu. Thử lại sau.</li>';
+    }
 }
-
-getUsers();
 ```
 
-> [!TIP]
-> **Quy tắc:**
-> 1. Hàm phải có từ khóa `async` ở đầu.
-> 2. Dùng `await` trước một hành động tốn thời gian (như fetch).
-> 3. Luôn bọc trong `try...catch` để bắt lỗi (mất mạng, server sập).
+> **Anh Hùng:** *"App chuyên nghiệp LUÔN có 3 states: Loading, Success, Error. Thiếu 1 trong 3 = UX tệ."*
 
 ---
 
-# 5. **TỔNG KẾT**
+## ➡️ Chương tiếp theo...
 
-- **Async** giúp web không bị đơ khi tải nặng.
-- **JSON** là định dạng dữ liệu chuẩn.
-- **Fetch API** kết hợp **Async/Await** là combo tiêu chuẩn để gọi API ngày nay.
+*"Todo App hoạt động, gọi API, hiển thị data!" Minh hào hứng. "Nhưng code đang lộn xộn — HTML lẫn JS lẫn CSS. Dự án lớn thì quản lý thế nào?"*
 
----
-
-**Chương tiếp theo:** Làm thế nào để làm việc chuyên nghiệp? (Tools, Git, Testing).
+**Chương tiếp theo:** Professional Development Process — Module, Webpack, Git workflow, và cách tổ chức dự án thực tế.

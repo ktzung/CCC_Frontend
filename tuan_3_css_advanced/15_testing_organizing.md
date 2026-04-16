@@ -1,99 +1,104 @@
 # 🟩 CHƯƠNG 15
-# **TESTING AND ORGANIZING CSS**
+# **TESTING & ORGANIZING CSS — Khi 1000 Dòng CSS Thành Spaghetti**
 
-Khi dự án lớn lên, file CSS của bạn sẽ dài hàng nghìn dòng. Nếu không tổ chức tốt, nó sẽ trở thành "đống rác spaghetti" không ai dám sửa.
+## 🎬 "Sửa 1 Dòng CSS, Vỡ 3 Trang Khác"
 
----
+*Minh sửa `.title { color: red; }` trong file `style.css`. Todo App title đổi màu — tốt. Nhưng title trang About, Contact cũng đỏ theo!*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*"CSS không có scope!" Minh nhận ra. ".title là MỌI thẻ có class title, không phải chỉ Todo page."*
 
-Sau chương này, bạn sẽ:
-- Biết cách tổ chức thư mục CSS chuyên nghiệp.
-- Nắm vững quy tắc đặt tên **BEM** (Block Element Modifier).
-- Sử dụng các công cụ **Linting** và **Validation** để bắt lỗi code.
+> **Chị Hà:** *"Đây là vấn đề #1 khi CSS đi sản xuất. 50.000 dòng CSS ở Shopee. Sửa 1 class → ảnh hưởng 20 trang. Giải pháp? BEM naming + modular structure."*
 
 ---
 
-# 1. **ORGANIZING CSS (TỔ CHỨC CODE)**
+## 🎯 Mục tiêu
+- Tổ chức CSS thành modules (không 1 file khổng lồ!)
+- BEM naming convention — đặt tên class chuẩn quốc tế
+- Debug CSS bằng DevTools
 
-## 1.1. Chia nhỏ file (Modular CSS)
-Đừng viết tất cả vào 1 file `style.css` dài 5000 dòng. Hãy chia nhỏ:
+---
 
-- `base.css`: Reset, typography, body, a, h1...
-- `layout.css`: Header, Footer, Grid system.
-- `components.css`: Button, Card, Navbar, Form.
-- `main.css`: File tổng hợp (dùng `@import` - nhưng cẩn thận hiệu năng, hoặc dùng SCSS).
+## 📁 Tổ chức CSS — Chia nhỏ file
 
-## 1.2. Commenting (Chú thích)
-Tạo mục lục trong code:
+### ❌ Cách tệ: 1 file `style.css` chứa mọi thứ
 
-```css
-/* =========================================
-   HEADER SECTION
-   ========================================= */
-.header { ... }
+### ✅ Cách tốt: Modular CSS
 
-/* -----------------------------------------
-   Navigation
-   ----------------------------------------- */
-.nav { ... }
+```
+styles/
+├── base.css          ← Reset, typography, body
+├── layout.css        ← Header, footer, grid
+├── components/
+│   ├── button.css    ← .btn, .btn--primary, .btn--danger
+│   ├── card.css      ← .card, .card__title, .card__body
+│   ├── navbar.css    ← .navbar, .navbar__logo
+│   └── form.css      ← .form, .form__input
+└── main.css          ← @import tất cả (hoặc dùng SCSS)
 ```
 
 ---
 
-# 2. **BEM METHODOLOGY (BLOCK - ELEMENT - MODIFIER)**
+## 🏗️ BEM — Block Element Modifier
 
-Quy tắc đặt tên class phổ biến nhất thế giới. Giúp code dễ hiểu và tránh trùng lặp.
+Quy tắc đặt tên class **phổ biến nhất thế giới**. Google, Shopee, Airbnb đều dùng.
 
-**Cấu trúc:** `block__element--modifier`
-
-### 1. Block (Khối)
-Thành phần độc lập, có ý nghĩa riêng (VD: `.card`, `.btn`, `.menu`).
-
-### 2. Element (Thành phần con)
-Thuộc về Block, không đứng một mình được. Ngăn cách bằng **2 dấu gạch dưới `__`**.
-(VD: `.card__image`, `.card__title`, `.menu__item`).
-
-### 3. Modifier (Biến thể)
-Trạng thái hoặc phiên bản khác của Block/Element. Ngăn cách bằng **2 dấu gạch ngang `--`**.
-(VD: `.btn--primary`, `.btn--large`, `.menu__item--active`).
-
-**Ví dụ thực tế:**
+### Cấu trúc: `block__element--modifier`
 
 ```html
+<!-- Block = .card -->
 <div class="card">
-  <img class="card__img" src="..." />
-  <h2 class="card__title">Tiêu đề</h2>
-  <p class="card__text">Nội dung...</p>
-  <button class="btn btn--danger">Xóa</button>
+    <!-- Element = .card__image, .card__title -->
+    <img class="card__image" src="product.jpg" alt="">
+    <h3 class="card__title">iPhone 15</h3>
+    <p class="card__price">25.990.000đ</p>
+    
+    <!-- Modifier = .btn--primary, .btn--danger -->
+    <button class="btn btn--primary">Mua ngay</button>
+    <button class="btn btn--danger">Xóa</button>
 </div>
 ```
 
----
+```css
+/* Block */
+.card { border-radius: 12px; overflow: hidden; }
 
-# 3. **TESTING & DEBUGGING**
+/* Elements (thuộc Block) */
+.card__image { width: 100%; }
+.card__title { font-size: 18px; font-weight: 600; }
+.card__price { color: #e53e3e; font-weight: bold; }
 
-## 3.1. Validators
-Dùng **W3C CSS Validator** để kiểm tra lỗi cú pháp (quên dấu chấm phẩy, viết sai tên property).
+/* Modifier (biến thể) */
+.btn--primary { background: #3182ce; color: white; }
+.btn--danger { background: #e53e3e; color: white; }
+.btn--large { padding: 16px 32px; font-size: 18px; }
+```
 
-## 3.2. Browser DevTools
-- F12 -> Elements -> Styles.
-- Tích/Bỏ tích để xem layout thay đổi.
-- Tab **Computed** để xem kích thước thật.
-- **Device Toolbar** (Ctrl+Shift+M) để test Responsive.
+### Tại sao BEM?
 
-## 3.3. Cross-Browser Testing
-Web của bạn đẹp trên Chrome, nhưng có thể vỡ nát trên Safari (iPhone) hoặc Firefox.
--> Luôn test trên ít nhất: Chrome (PC + Mobile), Firefox, Safari.
-
----
-
-# 4. **TỔNG KẾT**
-
-- **Chia nhỏ file** để dễ quản lý.
-- **Dùng BEM** để đặt tên class dễ hiểu, tránh conflict.
-- **Test responsive** và trên nhiều trình duyệt.
+| Không BEM | BEM |
+|---|---|
+| `.title` → ảnh hưởng MỌI title | `.card__title` → chỉ title trong card |
+| `.active` → trùng khắp nơi | `.navbar__item--active` → chỉ navbar item |
+| Sửa 1 class vỡ 3 trang | Sửa 1 class an toàn |
 
 ---
 
-**Chương tiếp theo:** Bạn thấy CSS rườm rà? Hãy dùng siêu năng lực của Preprocessor (Sass/SCSS).
+## 🔧 Debug CSS — Chrome DevTools
+
+1. **F12** → Tab Elements → Click element
+2. **Styles panel**: Thấy tất cả CSS rules
+3. ~~Gạch ngang~~ = rule bị override
+4. **Computed tab**: Kích thước thật (sau Box Model tính toán)
+5. **Ctrl+Shift+M**: Device toolbar → Test responsive
+
+> 💡 **Mẹo debug nhanh:** Thêm `border: 2px solid red` cho element → thấy ngay nó chiếm bao nhiêu không gian.
+
+---
+
+## ➡️ Chương tiếp theo...
+
+*CSS gọn gàng rồi. Nhưng Minh thấy viết CSS lặp lại nhiều: mỗi button đều set `display: flex; justify-content: center; align-items: center;`*
+
+*"Đó là lúc dùng SCSS," anh Hùng nói. "Biến, mixins, nesting — CSS có siêu năng lực."*
+
+**→ [Chương 16: Sass/SCSS](./16_sass_scss.md) — CSS preprocessor: Viết CSS như viết code.**

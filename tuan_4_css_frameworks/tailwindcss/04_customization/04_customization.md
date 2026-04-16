@@ -1,6 +1,10 @@
 # 🟩 BÀI 04: TAILWINDCSS - CUSTOMIZATION
 
-Customize TailwindCSS với config file để tạo design system riêng cho dự án. Đây là cách để TailwindCSS phù hợp hoàn toàn với brand của bạn.
+## 🎬 "tailwind.config.js = DNA Của Design System" — 1 File Quyết Định Tất Cả
+
+*Minh dùng Tailwind mặc định: `bg-blue-500` giống mọi trang web Tailwind khác. "Sao cũng xanh giống nhau?"*
+
+*Anh Hùng: "Vì em chưa customize. Mở `tailwind.config.js` → thêm `'brand-primary': '#ff6600'` → giờ dùng `bg-brand-primary`. Toàn bộ design system trong MỘT FILE."*
 
 ---
 

@@ -1,7 +1,9 @@
 # 🎯 PROJECT GUIDE
-# **HƯỚNG DẪN DỰ ÁN E-COMMERCE SPA**
+# **E-Commerce SPA — Từ Zero Đến Deploy**
 
-*Tài liệu hướng dẫn xây dựng dự án Mini E-Commerce Website từ A-Z*
+## 🎬 Hook: "Đây Không Phải Bài Tập. Đây Là Sản Phẩm Thật."
+
+*Chị Hà: "Khi phỏng vấn, tôi không hỏi 'em biết React không?' Tôi nói: 'Cho tôi xem SẢN PHẨM em đã làm.' Link GitHub gọn gàng, README rõ ràng, live demo chạy mượt — đây là thứ phân biệt ứng viên A với ứng viên B."*
 
 ---
 

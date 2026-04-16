@@ -1,7 +1,9 @@
 # 🟫 CHƯƠNG 12
 # **REACT — FUNDAMENTALS & HOOKS (SPA-Focused)**
 
-Phần này đã rút gọn để **tập trung vào SPA / developer workflow** (setup, cấu trúc dự án, code-splitting, troubleshooting).
+## 🎬 "HTML Viết Trong JavaScript?!" — Cú Sốc JSX
+
+*Minh mở file React đầu tiên: `return <h1>Hello</h1>` — bên trong một FUNCTION JavaScript. "HTML TRONG JS?!" Đúng. Đó là JSX. Và đây là lý do React thống trị: UI = f(state). Giao diện = hàm của dữ liệu.*
 
 Các phần cơ bản (JSX, Components, Props, `useState`, `useEffect`) đã được hợp nhất tại: [tuan_6_react_essentials/02_basic_principles.md](tuan_6_react_essentials/02_basic_principles.md).
 

@@ -1,144 +1,153 @@
 # 🟩 CHƯƠNG 14
-# **STYLING WITH CSS**
+# **STYLING WITH CSS — Gradient, Shadows & Animations**
 
-Layout chuẩn rồi thì phải đẹp. Chương này cung cấp "đồ nghề trang điểm" nâng cao để biến web từ "thường thường" thành "lung linh".
+## 🎬 "Trang Web Như Từ Năm 2005" — Khi Thiếu Hiệu Ứng
 
----
+*Minh so sánh Todo App (nền trắng, text đen, không shadow) với Apple.com (gradient tím-xanh, ảnh nổi 3D, chữ glow, parallax scroll).*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*"Cùng là HTML/CSS, sao Apple đẹp thế?" Minh hỏi.*
 
-Sau chương này, bạn sẽ:
-- Tạo màu nền chuyển sắc (**Gradients**) thời thượng.
-- Tạo chiều sâu với đổ bóng (**Shadows**).
-- Làm web chuyển động mượt mà với **Transitions** và **Transforms**.
-- Tạo hoạt hình phức tạp với **Keyframes Animation**.
+> **Anh Hùng:** *"Vì Apple dùng: Gradients (chuyển màu), Shadows (đổ bóng), Transitions (chuyển động mượt), và Animations (hoạt hình). Đây là 4 vũ khí biến web 'bình thường' thành web 'premium'."*
 
 ---
 
-# 1. **BACKGROUNDS & GRADIENTS**
+## 🎯 Mục tiêu
+- Gradients — nền chuyển sắc
+- Shadows — hiệu ứng nổi 3D
+- Transitions — hover mượt mà
+- Animations — hoạt hình @keyframes
 
-Không ai thích một màu trơn nhàm chán mãi.
+---
 
-## Linear Gradient (Chuyển màu thẳng)
+## 🌈 Gradients — "Goodbye nền trắng nhàm chán"
+
 ```css
+/* Linear: Chuyển màu thẳng */
 .hero {
-  /* Từ trái sang phải, tím sang xanh */
-  background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-```
 
-## Background Image Overlay (Phủ màu lên ảnh)
-```css
+/* Radial: Chuyển màu tròn */
+.spotlight {
+    background: radial-gradient(circle, #fff 0%, #000 100%);
+}
+
+/* Ảnh + overlay tối (hay dùng cho hero banner) */
 .banner {
-  background: 
-    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), /* Lớp phủ đen mờ */
-    url('image.jpg');
-  background-size: cover; /* Ảnh phủ kín */
-  background-position: center;
+    background: 
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('hero.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;    /* Text trắng trên nền tối */
 }
 ```
 
 ---
 
-# 2. **SHADOWS (ĐỔ BÓNG)**
+## 💎 Shadows — "Hiệu ứng nổi Material Design"
 
-Tạo hiệu ứng nổi (3D) cho phần tử.
-
-## Box Shadow
-Cú pháp: `offset-x offset-y blur-radius spread-radius color`
 ```css
+/* Card Shadow nhẹ (Material Design Level 1) */
 .card {
-  /* Bóng nhẹ, sang trọng (neumorphism/glassmorphism) */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Hover → nổi lên (Level 3) */
 .card:hover {
-  /* Nổi lên khi hover */
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);    /* Nhấc lên 4px */
+    transition: all 0.3s ease;
 }
-```
 
-## Text Shadow
-```css
+/* Text glow */
 h1 {
-  text-shadow: 2px 2px 4px #000000;
+    text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
 }
 ```
 
 ---
 
-# 3. **TRANSFORMS (BIẾN HÌNH)**
-
-Thay đổi hình dạng, vị trí mà không ảnh hưởng layout xung quanh.
-
-- `translate(x, y)`: Dịch chuyển.
-- `rotate(deg)`: Xoay.
-- `scale(x, y)`: Phóng to/Thu nhỏ.
-- `skew(deg)`: Nghiêng.
-
-```css
-.btn:hover {
-  transform: translateY(-5px); /* Nổi lên trên 5px */
-}
-```
-
----
-
-# 4. **TRANSITIONS (CHUYỂN ĐỔI MƯỢT MÀ)**
-
-Nếu không có transition, hover vào nó sẽ đổi cái "Bụp" -> Rất thô. Transition giúp thay đổi diễn ra từ từ.
+## ✨ Transitions — "Mượt mà thay vì 'bụp' một cái"
 
 ```css
 .btn {
-  background-color: blue;
-  transform: translateY(0);
-  
-  /* Áp dụng cho tất cả thuộc tính thay đổi, trong 0.3s, kiểu ease */
-  transition: all 0.3s ease;
+    background: #667eea;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    
+    /* ⭐ Transition: thuộc tính | thời gian | kiểu */
+    transition: all 0.3s ease;
 }
 
 .btn:hover {
-  background-color: darkblue;
-  transform: translateY(-5px);
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 ```
 
+> **Quy tắc:** MỌI element có `:hover` phải có `transition`. Không transition = thay đổi "bụp" một cái → thô.
+
 ---
 
-# 5. **ANIMATIONS (@KEYFRAMES)**
+## 🎬 Animations — "Tự chạy không cần click"
 
-Transition cần người dùng tác động (hover/click). Animation thì tự chạy (loading, slide ảnh).
+### Bước 1: Viết kịch bản phim
 
-## Bước 1: Định nghĩa kịch bản phim
 ```css
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 ```
 
-## Bước 2: Gán vào diễn viên
+### Bước 2: Gán cho diễn viên
+
 ```css
-.popup {
-  animation: slideIn 0.5s ease-out forwards;
+.hero-title {
+    animation: slideInUp 0.8s ease-out;
+}
+
+.notification-badge {
+    animation: pulse 2s ease-in-out infinite;  /* Lặp vô hạn */
+}
+```
+
+### Loading spinner:
+
+```css
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    width: 40px; height: 40px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
 ```
 
 ---
 
-# 6. **TỔNG KẾT**
+## ➡️ Chương tiếp theo...
 
-- **Gradients** làm nền đẹp hơn.
-- **Shadows** tạo chiều sâu (Material Design).
-- **Transitions** là bắt buộc cho mọi tương tác (Hover, Focus).
-- **Animations** dùng cho các hiệu ứng phức tạp (Loading...).
+*Todo App giờ có gradient, shadow, animations. Nhưng file CSS đã dài 500 dòng. "Code CSS bắt đầu rối," Minh than.*
 
----
-
-**Chương tiếp theo:** Viết CSS nhiều quá bị rối? Làm sao tổ chức cho gọn? (Testing & Organizing).
+**→ [Chương 15: Testing & Organizing CSS](./15_testing_organizing.md) — BEM naming, modular CSS, DevTools debugging.**

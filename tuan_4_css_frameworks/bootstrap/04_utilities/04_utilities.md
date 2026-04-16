@@ -1,6 +1,12 @@
 # 🟦 BÀI 04: BOOTSTRAP 5 - UTILITIES
 
-Utilities là các class nhỏ, mỗi class làm một việc cụ thể. Chúng giúp bạn style nhanh mà không cần viết CSS custom.
+## 🎬 "mt-3 Thay margin-top: 1rem" — Viết CSS Bằng Class Names
+
+*Minh viết CSS: `margin-top: 1rem; padding: 0.5rem; text-align: center; display: flex; justify-content: center;` — 5 dòng CSS.*
+
+*Linh viết Bootstrap: `class="mt-3 p-2 text-center d-flex justify-content-center"` — 1 dòng HTML. Không cần file CSS riêng.*
+
+> **Anh Hùng:** *"Utilities = 'viết CSS trong HTML'. Nhanh, nhưng cẩn thận HTML sẽ dài. Đây là triết lý giống TailwindCSS — và cũng là nhược điểm lớn nhất."*
 
 ---
 

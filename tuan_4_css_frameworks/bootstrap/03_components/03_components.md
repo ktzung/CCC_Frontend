@@ -1,6 +1,10 @@
 # 🟦 BÀI 03: BOOTSTRAP 5 - COMPONENTS
 
-Bootstrap cung cấp hơn 20 components có sẵn, giúp bạn xây dựng UI nhanh chóng mà không cần viết CSS từ đầu. Trong bài này, chúng ta sẽ học các components phổ biến nhất.
+## 🎬 "20 Components, 0 Dòng CSS" — Kho Vũ Khí Của Bootstrap
+
+*Minh cần: Navbar, Card sản phẩm, Modal popup, Form đăng nhập, Alert thông báo, Pagination. Viết CSS thuần? 2000+ dòng. Bootstrap? Copy-paste 20 components từ docs. Xong trong 1 buổi chiều.*
+
+> **Chị Hà:** *"Bootstrap giống IKEA — đồ đã lắp sẵn, em chỉ cần chọn đúng món và customize màu."*
 
 ---
 

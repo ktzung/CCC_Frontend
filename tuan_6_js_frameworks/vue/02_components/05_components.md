@@ -1,7 +1,9 @@
 # 🟢 MODULE 2 - BÀI 05
 # **COMPONENTS (SINGLE-FILE COMPONENTS)**
 
-Components là nền tảng của Vue.js. Mỗi component là một phần độc lập, có thể tái sử dụng. Trong bài này, bạn sẽ học cách tạo và sử dụng Single-File Components (SFC) - cách tổ chức code tốt nhất trong Vue.
+## 🎬 "1 File = 1 Component = Template + Logic + Style" — Sức Mạnh SFC
+
+*Minh viết React: component.jsx + component.css + component.test.js — 3 files. Vue: `ProductCard.vue` — MỘT file chứa HTML (template), JS (script), CSS (style). "Đóng gói hoàn chỉnh, mở 1 file = hiểu mọi thứ."*
 
 ---
 

@@ -1,5 +1,10 @@
-# 🎯 BÀI TẬP LỚN: HƯỚNG DẪN CHI TIẾT
-# **Mini E-Commerce Website SPA**
+# 🎯 BÀI TẬP LỚN: Mini E-Commerce Website SPA
+
+## 🎬 "BTL Này = CV Đầu Tiên Của Em" — Anh Hùng
+
+*"Đừng coi BTL là bài tập. Coi nó là SẢN PHẨM ĐẦU TIÊN. Link GitHub + link demo deploy — đây là thứ nhà tuyển dụng nhìn trước cả CV."*
+
+*E-commerce SPA: 4 trang, responsive, API integration, React/Vue — đủ để ghi vào portfolio.*
 
 ---
 

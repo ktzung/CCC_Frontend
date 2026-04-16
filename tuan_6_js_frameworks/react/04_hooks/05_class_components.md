@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 05
 # **CLASS COMPONENTS (LEGACY)**
 
-Trước năm 2019 (React 16.8), Class Component là cách duy nhất để dùng State. Hiện nay Functional Component + Hooks đã thay thế hoàn toàn. Tuy nhiên, bạn vẫn cần biết để **bảo trì code cũ** hoặc dùng cho **Error Boundaries**.
+## 🎬 "Tại Sao Code Cũ Viết 'this.state' Khắp Nơi?" — Di Sản Trước Hooks
+
+*Minh đọc codebase 2018: `class Counter extends Component`, `this.setState()`, `componentDidMount()`. "Sao dài dòng vậy?" Anh Hùng: "Đó là React TRƯỚC Hooks (2019). Em cần đọc hiểu, không cần viết mới. Nhưng Error Boundary vẫn cần class."*
 
 ---
 

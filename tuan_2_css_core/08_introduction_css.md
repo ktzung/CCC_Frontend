@@ -1,111 +1,135 @@
 # 🟩 CHƯƠNG 08
-# **INTRODUCTION TO CASCADING STYLE SHEETS**
+# **INTRODUCTION TO CSS**
 
-Nếu HTML là bộ khung xương, JavaScript là hệ thần kinh, thì **CSS (Cascading Style Sheets)** chính là lớp da, quần áo và lớp trang điểm làm nên vẻ đẹp của website.
+## 🎬 "HTML Trần Trụi" — Khi Minh Mở Trang Không Có CSS
 
----
+*Minh thử tắt CSS trên Facebook bằng DevTools. Kết quả:*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*Mọi layout biến mất. Text xếp hàng dọc. Ảnh chồng lên nhau. Nút bấm thành text xanh gạch chân. Facebook trở về năm 1995.*
 
-Sau chương này, bạn sẽ:
-- Hiểu CSS là gì và tại sao nó "Cascading" (Xếp chồng).
-- Nắm vững cú pháp cơ bản: `Selector { Property: Value }`.
-- Biết 3 cách nhúng CSS vào trang web (Inline, Internal, External).
-- Sử dụng Chrome DevTools để "soi" CSS của bất kỳ trang web nào.
+*"Ồ!" Minh thốt lên. "HTML chỉ là xương. CSS mới là da thịt, quần áo."*
+
+> **Anh Hùng:** *"CSS = Cascading Style Sheets. 'Cascading' nghĩa là 'thác nước' — style chảy từ trên xuống, từ cha đến con. Hiểu được cascade, bạn làm chủ CSS."*
 
 ---
 
-# 1. **THE STORY OF CSS (CÂU CHUYỆN CỦA CSS)**
-
-Trước khi có CSS, việc định dạng (màu sắc, phông chữ) được viết trực tiếp trong HTML.
-Ví dụ: `<font color="red">Hello</font>`.
-Điều này khiến code HTML trở nên rối rắm và khó sửa đổi (muốn đổi màu tất cả tiêu đề phải sửa từng thẻ).
-
-CSS ra đời để **tách biệt nội dung (HTML) và giao diện (Style)**.
-- Bạn sửa 1 dòng CSS -> Hàng nghìn trang HTML đổi màu theo.
-- Code gọn gàng, dễ quản lý.
+## 🎯 Mục tiêu
+- Hiểu CSS là gì và tại sao quan trọng
+- 3 cách thêm CSS vào HTML
+- Cú pháp CSS cơ bản
+- Thuộc tính CSS thường dùng nhất
 
 ---
 
-# 2. **THE BASIC PRINCIPLE (NGUYÊN TẮC CƠ BẢN)**
+## 🎨 3 cách thêm CSS
 
-## 2.1. Cú pháp (Syntax)
-Một câu lệnh CSS gọi là một **Rule Set**, bao gồm:
-
-```css
-Selector {
-  Property: Value;
-  Property: Value;
-}
+### 1. Inline CSS (trong thẻ) — ❌ Tránh dùng
+```html
+<h1 style="color: red; font-size: 24px;">Tiêu đề</h1>
 ```
 
-- **Selector (Bộ chọn):** Chọn phần tử HTML nào để áp dụng style (ví dụ `h1`, `p`).
-- **Declaration Block (Khối khai báo):** Nằm trong ngoặc nhọn `{}`.
-- **Property (Thuộc tính):** Cái bạn muốn đổi (màu, cỡ chữ...).
-- **Value (Giá trị):** Giá trị cụ thể (đỏ, 16px...).
+### 2. Internal CSS (trong `<style>`) — Chấp nhận được cho prototype
+```html
+<head>
+    <style>
+        h1 { color: red; font-size: 24px; }
+    </style>
+</head>
+```
 
-**Ví dụ:**
+### 3. External CSS (file riêng) — ✅ Chuẩn production
+```html
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+```
+
+> **Chị Hà:** *"Dự án thực tế 100% dùng External CSS. Inline CSS chỉ cho debug nhanh."*
+
+---
+
+## 📝 Cú pháp CSS
+
 ```css
+selector {
+    property: value;
+    property: value;
+}
+
+/* Ví dụ */
 h1 {
-  color: blue;
-  font-size: 24px;
+    color: #2563eb;           /* Màu chữ */
+    font-size: 32px;          /* Cỡ chữ */
+    font-family: 'Inter', sans-serif;  /* Font chữ */
+    text-align: center;       /* Căn giữa */
+    margin-bottom: 16px;      /* Khoảng cách dưới */
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;    /* Đổi màu khi hover */
 }
 ```
-*Dịch: Hãy tìm tất cả thẻ `<h1>` và tô màu xanh, chỉnh cỡ chữ 24px.*
-
-## 2.2. Ba cách nhúng CSS
-
-### Cách 1: Inline CSS (Trực tiếp - Ít dùng)
-Viết ngay trong thẻ HTML.
-```html
-<p style="color: red;">Đoạn văn này màu đỏ</p>
-```
-*Nhược điểm: Khó quản lý, không tái sử dụng được.*
-
-### Cách 2: Internal CSS (Nội bộ - Dùng cho trang đơn)
-Viết trong thẻ `<style>` đặt ở `<head>`.
-```html
-<head>
-  <style>
-    p { color: red; }
-  </style>
-</head>
-```
-
-### Cách 3: External CSS (Bên ngoài - Khuyên dùng)
-Viết ra file riêng `.css` rồi link vào.
-```html
-<head>
-  <link rel="stylesheet" href="style.css">
-</head>
-```
-*Ưu điểm: 1 file CSS quản lý giao diện cho cả ngàn trang HTML.*
 
 ---
 
-# 3. **ANALYZING CSS IN THE BROWSER**
+## 🎨 CSS Properties thường dùng nhất
 
-Làm sao biết tại sao cái nút này lại màu xanh? Hãy dùng **Developer Tools**.
-
-1. Chuột phải vào phần tử -> **Inspect (Kiểm tra)**.
-2. Nhìn cột **Styles** (bên phải hoặc dưới).
-3. Bạn sẽ thấy:
-    - Các rules CSS đang áp dụng.
-    - Dòng nào bị gạch ngang (bị ghi đè).
-    - Có thể sửa trực tiếp value để xem thử (không lưu vào file).
-
-> [!TIP]
-> **Computed Tab:** Nếu Styles quá rối, hãy qua tab **Computed** để xem thông số cuối cùng (màu gì, kích thước bao nhiêu) và click mũi tên để xem nó đến từ đâu.
+| Category | Properties | Ví dụ |
+|---|---|---|
+| **Text** | `color`, `font-size`, `font-family`, `text-align` | Màu, cỡ, font, căn chỉnh |
+| **Background** | `background-color`, `background-image` | Nền màu, nền ảnh |
+| **Spacing** | `margin`, `padding` | Khoảng cách ngoài/trong |
+| **Border** | `border`, `border-radius` | Viền, bo tròn góc |
+| **Size** | `width`, `height`, `max-width` | Chiều rộng, cao |
+| **Display** | `display`, `visibility` | Block, inline, flex, grid |
 
 ---
 
-# 4. **TỔNG KẾT**
+## 🎯 Thực hành: Style Todo App đầu tiên
 
-- CSS giúp tách biệt giao diện khỏi nội dung HTML.
-- Luôn ưu tiên dùng **External CSS** (`.css` file).
-- Cú pháp đơn giản: Chọn cái gì (`Selector`) -> Sửa cái gì (`Property: Value`).
-- Chrome DevTools là bạn thân nhất để debug CSS.
+```css
+/* Reset cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+```
+
+*Minh refresh. Trang web từ text đen-trắng trở thành card có shadow, bo tròn, font đẹp.* ✨
 
 ---
 
-**Chương tiếp theo:** Làm sao để chọn chính xác phần tử mình muốn? (Selectors).
+## ➡️ Chương tiếp theo...
+
+*"CSS hoạt động rồi," Minh nói. "Nhưng sao `h1` style ảnh hưởng tất cả h1? Mình chỉ muốn style h1 trong header thôi!"*
+
+*"Đó là lúc em cần Selectors," anh Hùng nói. "Selector = cách chọn chính xác element nào muốn style."*
+
+**Chương tiếp theo:** CSS Selectors — Nghệ thuật "chỉ đích danh" element cần style.

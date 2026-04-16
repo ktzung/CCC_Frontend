@@ -1,110 +1,168 @@
 # 🟦 CHƯƠNG 02
-# **BASIC STRUCTURE OF HTML & HTML DOCUMENTS**
+# **CẤU TRÚC CƠ BẢN HTML**
 
-Ở chương trước, bạn đã biết HTML là khung xương của trang web. Chương này sẽ hướng dẫn bạn cách lắp ráp những "viên gạch" đầu tiên để tạo nên bộ khung đó, từ cú pháp thẻ cơ bản đến cấu trúc chuẩn của một file HTML.
+## 🎬 "Dòng Code Đầu Tiên" — Minh viết `<!DOCTYPE html>`
 
----
+*Minh mở VS Code. Tạo file `index.html`. Con trỏ chuột nhấp nháy trên dòng trắng.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*"Bắt đầu từ đâu nhỉ?"*
 
-Sau chương này, bạn sẽ:
-- Hiểu rõ **Syntax (Cú pháp)** của thẻ HTML, Attribute và quy tắc Nesting.
-- Biết cấu trúc chuẩn một file HTML5 (`DOCTYPE`, `html`, `head`, `body`).
-- Tạo được trang web đơn giản đầu tiên.
+*Anh Hùng: "Gõ `!` rồi nhấn Tab."*
 
----
-
-# 1. **SYNTAX VÀ STRUCTURE (CÚ PHÁP & CẤU TRÚC)**
-
-## 1.1. Cấu trúc thẻ (Element)
-HTML được tạo thành từ các **Elements** (Phần tử).
+*Minh làm theo. VS Code auto-generate:*
 
 ```html
-  Attribute             Content
-     ↓                     ↓
-<p class="text-red">Hello World</p>
-↑                   ↑             ↑
-Opening Tag         Closing Tag
-```
-
-- **Opening Tag (Thẻ mở):** `<tên_thẻ>`. Ví dụ: `<p>`, `<h1>`.
-- **Content (Nội dung):** Thứ hiển thị lên màn hình.
-- **Closing Tag (Thẻ đóng):** `</tên_thẻ>`. Ví dụ: `</p>`, `</h1>`.
-- **Attribute (Thuộc tính):** Cung cấp thêm thông tin cho thẻ (màu sắc, ID, đường dẫn...), luôn nằm trong thẻ mở.
-
-> [!NOTE]
-> **Self-closing Tags (Thẻ tự đóng):** Một số thẻ không cần thẻ đóng vì chúng không chứa nội dung text.
-> Ví dụ: `<img>` (ảnh), `<br>` (xuống dòng), `<input>` (ô nhập liệu).
-
-## 1.2. Nesting (Lồng nhau)
-Quy tắc quan trọng nhất: **Mở sau thì phải Đóng trước** (First-In, Last-Out).
-
-```html
-<!-- ✅ ĐÚNG -->
-<div>
-    <p>Tôi nằm trong thẻ div.</p>
-</div>
-
-<!-- ❌ SAI (Lỗi chồng chéo) -->
-<div>
-    <p>Tôi bị lỗi rồi.</div>
-</p>
-```
-
-**Mẹo:** Luôn thụt lề (indent) code để dễ nhìn cấu trúc lồng nhau.
-
----
-
-# 2. **A SIMPLE HTML DOCUMENT FRAMEWORK (KHUNG TRANG WEB ĐƠN GIẢN)**
-
-Mọi trang web trên thế giới, từ Google đến Facebook, đều bắt đầu bằng khung cấu trúc này:
-
-```html
-<!DOCTYPE html>                 <!-- 1. Khai báo đây là HTML5 -->
-<html lang="vi">                <!-- 2. Thẻ gốc (Root element) -->
-
-<head>                          <!-- 3. Chứa thông tin cho trình duyệt (User không thấy) -->
-    <meta charset="UTF-8">      <!-- Hỗ trợ gõ tiếng Việt không bị lỗi font -->
-    <title>Trang Web Đầu Tiên</title> <!-- Tên hiển thị trên tab trình duyệt -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
-
-<body>                          <!-- 4. Chứa nội dung hiển thị (User nhìn thấy) -->
-    <h1>Xin chào thế giới!</h1>
-    <p>Tôi đang học HTML căn bản.</p>
+<body>
+    
 </body>
-
 </html>
 ```
 
-## Giải thích chi tiết:
-1.  **`<!DOCTYPE html>`:** Không phải là thẻ HTML, mà là lời "tuyên bố" với trình duyệt: *"Này, tôi đang dùng phiên bản HTML5 mới nhất!"*.
-2.  **`<html>`:** Thẻ gốc bao trùm tất cả mọi thứ.
-3.  **`<head>`:** "Bộ não" của trang web. Chứa các cài đặt: tiêu đề, bảng mã, link CSS... Người dùng lướt web sẽ không thấy nội dung trong này (trừ Title).
-4.  **`<body>`:** "Thân xác" của trang web. Tất cả văn bản, hình ảnh, video bạn muốn người dùng xem thì **PHẢI** đặt trong đây.
+*"Ồ! Có sẵn template!" Minh hào hứng.*
+
+*"Đó là bộ xương," anh Hùng giải thích. "Mọi trang web trên thế giới — Facebook, Google, Shopee — đều bắt đầu từ bộ xương này."*
 
 ---
 
-# 3. **VISUAL LAYOUT ANALYSIS (TƯ DUY BỐ CỤC)**
-
-Trước khi code, hãy học cách "nhìn" giao diện.
-
-Khi bạn nhìn vào một trang báo:
-- **Tiêu đề to nhất** -> Đó là `<h1>`.
-- **Tiêu đề các mục con** -> Đó là `<h2>` hoặc `<h3>`.
-- **Đoạn văn** -> Đó là `<p>`.
-- **Hình ảnh** -> Đó là `<img>`.
-- **Danh sách link** -> Đó là `<ul>` và `<li>`.
-
-Việc chọn đúng thẻ cho đúng nội dung gọi là **Semantic HTML** (sẽ học kỹ hơn ở chương 4).
+## 🎯 Mục tiêu
+Sau chương này, bạn sẽ:
+- Hiểu cấu trúc cơ bản của file HTML
+- Phân biệt `<head>` và `<body>`
+- Viết được trang HTML đầu tiên
+- Sử dụng các thẻ HTML cơ bản nhất
 
 ---
 
-# 4. **TỔNG KẾT**
+## 🏗️ Bộ Xương HTML — Giống xây nhà
 
-- Thẻ HTML có cấu trúc: `<tag>Nội dung</tag>`.
-- Cấu trúc file HTML chuẩn gồm 4 phần chính: `DOCTYPE`, `html`, `head`, `body`.
-- Nội dung hiển thị cho người xem phải đặt trong `<body>`.
+```
+<!DOCTYPE html>          ← "Giấy phép xây dựng" (báo browser: đây là HTML5)
+<html lang="vi">         ← "Ngôi nhà" (bao bọc tất cả)
+├── <head>               ← "Bộ não" (thông tin ẩn - SEO, CSS, meta)
+│   ├── <meta charset>   ← "Ngôn ngữ" (UTF-8 để hiện tiếng Việt)
+│   ├── <title>          ← "Biển tên nhà" (hiện trên tab browser)
+│   └── <link>           ← "Hợp đồng trang trí" (liên kết CSS)
+└── <body>               ← "Nội thất" (mọi thứ người dùng THẤY)
+    ├── <header>         ← "Sảnh đón" (logo, menu)
+    ├── <main>           ← "Phòng chính" (nội dung chính)
+    └── <footer>         ← "Tầng hầm" (copyright, liên hệ)
+```
+
+### Quy tắc vàng:
+- `<head>` = Thứ **browser đọc** (user không thấy trực tiếp)
+- `<body>` = Thứ **user thấy** (nội dung trang web)
 
 ---
 
-**Chương tiếp theo:** Chúng ta sẽ khám phá bí mật bên trong thẻ `<head>` - nơi điều khiển cách trang web hiển thị và tương tác với công cụ tìm kiếm.
+## 📝 Các thẻ cơ bản trong `<body>`
+
+### Headings — Tiêu đề (6 cấp)
+```html
+<h1>Trang chủ Todo App</h1>        <!-- H1: Tiêu đề chính — MỖI TRANG CHỈ 1 CÁI -->
+<h2>Danh sách công việc</h2>       <!-- H2: Tiêu đề phụ -->
+<h3>Hôm nay</h3>                   <!-- H3-H6: Chi tiết hơn -->
+```
+
+> ⚠️ **SEO Rule:** Mỗi trang chỉ 1 `<h1>`. Google đọc H1 để hiểu trang về gì.
+
+### Paragraphs & Text
+```html
+<p>Đây là đoạn văn. Mỗi <p> tự xuống dòng.</p>
+<strong>In đậm</strong> — Nhấn mạnh ngữ nghĩa (SEO đọc)
+<em>In nghiêng</em> — Nhấn mạnh
+<br> — Xuống dòng (không cần đóng thẻ)
+```
+
+### Links — Siêu liên kết
+```html
+<a href="https://google.com">Đến Google</a>
+<a href="about.html">Trang About</a>          <!-- Link nội bộ -->
+<a href="#section2">Nhảy đến Section 2</a>    <!-- Link trong trang -->
+<a href="mailto:minh@email.com">Email tôi</a>
+```
+
+### Images
+```html
+<img src="avatar.jpg" alt="Ảnh Minh" width="200">
+<!-- alt = mô tả ảnh (SEO + accessibility) -->
+```
+
+### Lists
+```html
+<!-- Danh sách không thứ tự -->
+<ul>
+    <li>Học HTML</li>
+    <li>Học CSS</li>
+    <li>Học JavaScript</li>
+</ul>
+
+<!-- Danh sách có thứ tự -->
+<ol>
+    <li>Mở VS Code</li>
+    <li>Tạo file index.html</li>
+    <li>Gõ ! → Tab</li>
+</ol>
+```
+
+### Div & Span — Container
+```html
+<div>Block container — chiếm cả dòng</div>
+<span>Inline container — chỉ chiếm nội dung</span>
+```
+
+---
+
+## 🎯 Thực hành: Trang đầu tiên của Minh
+
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - Minh | CSE391</title>
+</head>
+<body>
+    <header>
+        <h1>📝 Todo App</h1>
+        <p>Ứng dụng quản lý công việc - BTL CSE391</p>
+    </header>
+
+    <main>
+        <h2>Công việc hôm nay</h2>
+        <ul>
+            <li>Học HTML cơ bản</li>
+            <li>Làm bài tập CSS</li>
+            <li>Push code lên GitHub</li>
+        </ul>
+
+        <h2>Liên hệ nhóm</h2>
+        <p>Nhóm trưởng: <strong>Nguyễn Văn Minh</strong></p>
+        <p>Email: <a href="mailto:minh@tlu.edu.vn">minh@tlu.edu.vn</a></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - Nhóm BTL CSE391</p>
+    </footer>
+</body>
+</html>
+```
+
+*Minh mở Live Server → Trang hiện ra trên Chrome. Text đen trên nền trắng. Xấu — nhưng là trang web THẬT ĐẦU TIÊN của anh.* ✨
+
+---
+
+## ➡️ Chương tiếp theo...
+
+*"Trang chạy rồi," Minh nói. "Nhưng sao xấu quá? Text thẳng đuồn, không có màu, không layout..."*
+
+*"Đó là vì em chưa có CSS," anh Hùng cười. "HTML chỉ là xương. CSS mới là da thịt."*
+
+**Chương tiếp theo:** Tìm hiểu sâu hơn về `<head>` — metadata, SEO, và những thứ "vô hình" nhưng cực kỳ quan trọng.

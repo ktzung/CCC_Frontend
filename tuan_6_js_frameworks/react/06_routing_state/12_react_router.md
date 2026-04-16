@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 12
 # **NAVIGATING WITH REACT ROUTER**
 
-React là SPA (Single Page), nghĩa là thực chất chỉ có 1 file HTML. Vậy làm sao để có các đường dẫn `/about`, `/contact`? Đó là nhiệm vụ của **React Router**.
+## 🎬 "Dùng Thẻ `<a>` Trong React = Phá SPA" — React Router Ra Đời
+
+*Minh dùng `<a href="/about">About</a>`. Click → trang reload toàn bộ. Anh Hùng: "Em vừa phá SPA. Dùng `<Link to='/about'>` — React Router sẽ đổi content mà KHÔNG reload trang. Đó là bí mật của SPA routing."*
 
 ---
 

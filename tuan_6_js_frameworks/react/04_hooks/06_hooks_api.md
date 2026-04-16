@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 06
 # **THE HOOKS API OF REACT**
 
-Ngoài `useState` và `useEffect`, React còn cung cấp một bộ vũ khí hạng nặng để tối ưu hiệu năng và xử lý logic phức tạp.
+## 🎬 "useState + useEffect = Dao Phay. useRef + useMemo = Dao Mổ" — Vũ Khí Hạng Nặng
+
+*Minh dùng useState + useEffect cho mọi thứ. App chạy 60 lần render/giây. Chị Hà: "Em đang dùng dao phay chặt xương — cùi. useMemo cho tính toán nặng, useCallback cho hàm truyền xuống con, useReducer cho state phức tạp. Gọt từng lát, không phải chặt cả khúc."*
 
 ---
 

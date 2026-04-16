@@ -1,7 +1,13 @@
 # 🟢 MODULE 1 - BÀI 01
 # **GIỚI THIỆU VUE.JS**
 
-Chào mừng bạn đến với **Vue.js** - Progressive JavaScript Framework được yêu thích nhất thế giới! Vue.js được tạo ra bởi Evan You (cựu nhân viên Google) vào năm 2014 và hiện tại đã trở thành một trong 3 framework phổ biến nhất (cùng với React và Angular).
+## 🎬 "Framework Nào Dễ Nhất Cho Người Mới?" — Câu Hỏi $1 Triệu
+
+*Minh hỏi Google: "React vs Vue vs Angular cho beginner." 500 bài viết. Tranh cãi nảy lửa.*
+
+*Anh Hùng: "Vue.js — 3 lý do: (1) Template giống HTML, không cần học JSX. (2) Reactivity tự động, không cần setState. (3) Tài liệu tiếng Việt nhiều nhất. 30 phút từ zero đến Counter App."*
+
+> 💡 **Vue = 'Progressive Framework'** — bắt đầu nhỏ (thêm vào 1 trang), mở rộng lớn (SPA hoàn chỉnh). Không ép em all-in từ đầu.
 
 ---
 

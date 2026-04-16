@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 04
 # **BEHIND THE SCENES & ADVANCED TOPICS**
 
-Sau khi đã biết tạo component, ta cần hiểu nó "sống" như thế nào và làm sao để xử lý những việc phức tạp như gọi API hay truyền dữ liệu xuyên thấu.
+## 🎬 "Component Sống Rồi Chết Như Thế Nào?" — Lifecycle & Side Effects
+
+*Minh gọi API trong render — app loop vô hạn, gọi 1000 request/giây. Anh Hùng: "useEffect(fn, []) — dấu [] = 'chỉ chạy 1 lần khi component sinh ra'. Không có [] = chạy mãi mãi. Đây là lỗi #1 của React newbie."*
 
 ---
 

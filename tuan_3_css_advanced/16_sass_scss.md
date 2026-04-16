@@ -1,141 +1,164 @@
 # 🟩 CHƯƠNG 16
-# **THE CSS PREPROCESSOR: SASS & SCSS**
+# **SASS/SCSS — CSS Với Siêu Năng Lực**
 
-CSS thuần rất tuyệt, nhưng nó thiếu những tính năng của ngôn ngữ lập trình (Biến, Hàm, Vòng lặp). **Sass (Syntactically Awesome Style Sheets)** ra đời để lấp đầy khoảng trống đó.
+## 🎬 "Đổi Màu Chủ Đạo = Sửa 47 Chỗ" — Ác Mộng CSS Thuần
 
----
+*Linh yêu cầu đổi màu chủ đạo từ xanh (#3182ce) sang tím (#805ad5). Minh Ctrl+F → 47 kết quả. Phải sửa từng cái một. Bỏ sót 3 chỗ. Trang có chỗ xanh chỗ tím.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*"Giá mà CSS có BIẾN..." Minh ước.*
 
-Sau chương này, bạn sẽ:
-- Hiểu Preprocessor là gì.
-- Phân biệt Sass vs SCSS.
-- Sử dụng các tính năng mạnh mẽ: **Variables, Nesting, Mixins, Partials**.
-- Biết cách biên dịch (Compile) SCSS sang CSS.
+> **Anh Hùng:** *"Nó có. Gọi là SCSS — CSS preprocessor. Biến ($primary-color), hàm (@mixin), lồng nhau (nesting). Đổi 1 biến = 47 chỗ đổi theo."*
 
 ---
 
-# 1. **SASS LÀ GÌ?**
-
-Sass là một "ngôn ngữ mở rộng" của CSS. Trình duyệt không hiểu Sass, nên ta phải dùng tool để **Dịch (Compile)** file `.scss` thành file `.css` bình thường.
-
-## SCSS vs Sass
-- **Sass (Syntax cũ):** Không dùng ngoặc nhọn `{}`, không dấu chấm phẩy `;`. (Viết nhanh nhưng khó đọc).
-- **SCSS (Sassy CSS):** Cú pháp giống hệt CSS chuẩn, thêm tính năng mới. **Khuyên dùng SCSS.**
+## 🎯 Mục tiêu
+- Hiểu SCSS vs CSS
+- Variables, Nesting, Mixins, Partials
+- Compile SCSS → CSS
 
 ---
 
-# 2. **CÁC TÍNH NĂNG "BÁ ĐẠO"**
+## 🔄 SCSS là gì?
 
-## 2.1. Variables (Biến)
-Lưu mã màu, font-size vào biến để dùng lại. Sửa 1 chỗ, ăn cả làng.
+**SCSS (Sassy CSS)** = CSS + tính năng lập trình. Trình duyệt không đọc SCSS → cần **compile** thành CSS.
+
+```
+SCSS (code) → Compiler → CSS (browser đọc)
+```
+
+---
+
+## 💎 4 Tính Năng Thay Đổi Cuộc Đời
+
+### 1. Variables — "Sửa 1 chỗ, 47 chỗ tự đổi"
 
 ```scss
-$primary-color: #3498db;
-$font-stack: Helvetica, sans-serif;
+// Khai báo biến
+$primary: #805ad5;
+$danger: #e53e3e;
+$font-body: 'Inter', sans-serif;
+$radius: 8px;
 
-body {
-  font-family: $font-stack;
-  color: $primary-color;
+// Sử dụng
+.btn-primary {
+    background: $primary;
+    border-radius: $radius;
+    font-family: $font-body;
+}
+
+.header {
+    background: $primary;       // Đổi $primary = đổi tất cả!
 }
 ```
 
-## 2.2. Nesting (Lồng nhau)
-Viết CSS theo cấu trúc HTML. Cực gọn, đỡ phải viết lại selector cha.
+### 2. Nesting — "CSS theo cấu trúc HTML"
 
-**SCSS:**
 ```scss
+// SCSS gọn gàng:
 .navbar {
-  background: black;
-  
-  ul {
-    margin: 0;
+    background: #1a202c;
+    padding: 16px;
     
-    li {
-      display: inline-block;
-      
-      a {
-        color: white;
+    ul {
+        list-style: none;
+        display: flex;
         
-        &:hover { /* & là đại diện cho thẻ cha (a) */
-          color: yellow;
+        li {
+            margin-right: 24px;
+            
+            a {
+                color: white;
+                text-decoration: none;
+                
+                &:hover {    // & = thẻ cha (a)
+                    color: $primary;
+                }
+            }
         }
-      }
     }
-  }
 }
 ```
 
-**CSS sau khi dịch:**
-```css
-.navbar { background: black; }
-.navbar ul { margin: 0; }
-.navbar ul li { display: inline-block; }
-.navbar ul li a { color: white; }
-.navbar ul li a:hover { color: yellow; }
-```
+> ⚠️ **Quy tắc:** Không lồng quá **3 cấp**. Sâu hơn = selector quá dài, khó maintain.
 
-## 2.3. Mixins (Hàm dùng chung)
-Gói một cục CSS code lại và tái sử dụng.
+### 3. Mixins — "Hàm CSS dùng chung"
 
 ```scss
+// Định nghĩa mixin
 @mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.box {
-  width: 100px;
-  height: 100px;
-  @include flex-center; /* Gọi mixin */
+@mixin responsive($breakpoint) {
+    @if $breakpoint == tablet {
+        @media (min-width: 768px) { @content; }
+    } @else if $breakpoint == desktop {
+        @media (min-width: 1024px) { @content; }
+    }
+}
+
+// Sử dụng
+.hero { 
+    @include flex-center;
+    height: 100vh;
+}
+
+.grid {
+    grid-template-columns: 1fr;
+    
+    @include responsive(tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include responsive(desktop) {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 ```
 
-## 2.4. Partials & Import
-Chia code ra nhiều file nhỏ (`_header.scss`, `_variables.scss` - dấu gạch dưới để báo tool đừng dịch file này riêng lẻ).
+### 4. Partials & Import — "Chia file gọn gàng"
 
-**main.scss:**
+```
+styles/
+├── _variables.scss     ← Biến (dấu _ = đừng compile riêng)
+├── _mixins.scss        ← Hàm dùng chung
+├── _base.scss          ← Reset, typography
+├── _navbar.scss        ← Component navbar
+├── _card.scss          ← Component card
+└── main.scss           ← File tổng hợp
+```
+
 ```scss
+// main.scss — Import tất cả
 @import 'variables';
-@import 'header';
-@import 'footer';
+@import 'mixins';
+@import 'base';
+@import 'navbar';
+@import 'card';
 ```
--> Kết quả ra 1 file `main.css` duy nhất.
+→ Compile ra **1 file** `main.css` duy nhất.
 
 ---
 
-# 3. **CÁCH DÙNG (COMPILING)**
+## 🔧 Cách chạy SCSS
 
-Để chạy được code SCSS, bạn cần một Compiler.
+### VS Code: Cài extension **"Live Sass Compiler"** → Click **"Watch Sass"** → Tự compile!
 
-## Cách 1: VS Code Extension (Dễ nhất)
-1. Cài Extension **"Live Sass Compiler"**.
-2. Bấm nút **"Watch Sass"** dưới thanh status bar.
-3. Code file `.scss`, nó tự đẻ ra file `.css` bên cạnh.
-
-## Cách 2: NodeJS / NPM (Chuyên nghiệp)
-Dùng trong các dự án React/Vue (Webpack/Vite tự xử lý).
+### Dự án thực tế: Webpack/Vite tự xử lý (React/Vue đã tích hợp sẵn).
 
 ---
 
-# 4. **TỔNG KẾT**
+## ➡️ Hoàn thành CSS Advanced! 🎉
 
-- **SCSS** giúp viết CSS nhanh hơn, gọn hơn và có tổ chức hơn.
-- **Nesting** giúp code dễ đọc (nhưng đừng lồng sâu quá 3 cấp).
-- **Variables** giúp quản lý Theme (Dark/Light mode) dễ dàng.
+*Minh giờ có: Responsive layout, Gradients, Shadows, Animations, BEM naming, SCSS. Đủ vũ khí cho mọi UI.*
 
----
+*"Em có thể viết CSS từ đầu cho mọi design. Nhưng tốn thời gian," Minh nói. "Có cách nào NHANH hơn không?"*
 
-**Chúc mừng!** Bạn đã hoàn thành phần **Advanced CSS**. Bạn giờ đây đã có đủ vũ khí để "cân" mọi giao diện web.
+*"CSS Frameworks," anh Hùng trả lời. "Bootstrap hoặc TailwindCSS — components có sẵn, chỉ cần lắp ghép."*
 
----
-
-**Chương tiếp theo:** Học CSS Frameworks - Bootstrap 5 hoặc TailwindCSS (Chương 17)
+**→ [Tuần 4: CSS Frameworks](../tuan_4_css_frameworks/README.md) — Bootstrap 5 hoặc TailwindCSS.**
 
 > [!TIP]
-> **Lựa chọn Framework:**
-> - **Bootstrap 5:** Nếu bạn thích components có sẵn, thiết kế nhanh → [Xem Bootstrap](../tuan_4_css_frameworks/bootstrap/README.md)
-> - **TailwindCSS:** Nếu bạn thích utility classes, thiết kế linh hoạt hơn → [Xem TailwindCSS](../tuan_4_css_frameworks/tailwindcss/README.md)
-> 
-> Bạn chỉ cần học **1 trong 2**, không cần học cả hai. Sau đó chuyển sang JavaScript Fundamentals.
+> Chỉ cần học **1 trong 2** framework. Bootstrap = components sẵn. TailwindCSS = utility classes linh hoạt hơn.

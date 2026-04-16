@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 01 & 02
 # **GETTING STARTED WITH REACT**
 
-Chào mừng bạn đến với **React** - Thư viện JavaScript số 1 thế giới để xây dựng giao diện người dùng (UI). Đây là kỹ năng "phải có" nếu bạn muốn trở thành Frontend Developer chuyên nghiệp.
+## 🎬 "3 Lệnh Terminal, 30 Giây = React App Chạy" — Vite Magic
+
+*Minh: "React setup chắc phức tạp lắm?" Anh Hùng gõ 3 lệnh: `npm create vite@latest`, `npm install`, `npm run dev`. Browser mở — React app đang chạy. 30 giây. "Đấy, hết rồi."*
 
 ---
 

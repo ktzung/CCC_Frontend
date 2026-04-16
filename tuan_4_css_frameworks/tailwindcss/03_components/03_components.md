@@ -1,6 +1,10 @@
 # 🟩 BÀI 03: TAILWINDCSS - COMPONENTS
 
-TailwindCSS không có components có sẵn như Bootstrap. Thay vào đó, bạn sẽ xây dựng components từ utility classes. Bài này hướng dẫn cách build các components phổ biến.
+## 🎬 "Bootstrap Cho Em LEGO. Tailwind Cho Em Nguyên Tử" — Xây Từ Số 0
+
+*Minh: "Bootstrap có Card component sẵn. Tailwind thì... không có gì?"*
+
+*Anh Hùng: "Đúng. Tailwind cho em nguyên liệu thô: `bg-white rounded-lg shadow-md p-6`. Em TỰ XÂY Card. Mất thời gian hơn — nhưng Card của em KHÔNG GIỐNG ai cả. Và khi cần đổi, em control từng pixel."*
 
 ---
 

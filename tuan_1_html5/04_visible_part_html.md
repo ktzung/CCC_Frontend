@@ -1,168 +1,134 @@
 # 🟦 CHƯƠNG 04
-# **THE VISIBLE PART OF AN HTML DOCUMENT**
+# **PHẦN HIỂN THỊ — Visible Part of HTML**
 
-Chúng ta đã có khung xương (`<html>`, `<body>`) và bộ não (`<head>`). Bây giờ là lúc đắp thịt da cho trang web. Chương này sẽ hướng dẫn cách tổ chức nội dung hiển thị sao cho vừa đẹp mắt với người dùng, vừa "dễ hiểu" với Google.
+## 🎬 "Trang Web Trống Rỗng Vs Trang Web Sống Động"
 
----
+*Minh so sánh trang Todo App của mình (text đơn giản) với Shopee (ảnh sản phẩm, bảng giá, video review). "Sao Shopee nhiều thứ thế? Mình chỉ biết `<p>` và `<h1>`!"*
 
-# 🎯 MỤC TIÊU HỌC TẬP
-
-Sau chương này, bạn sẽ:
-- Phân biệt **Block** và **Inline** elements.
-- Sử dụng các thẻ cấu trúc chung: `<div>`, `<span>`.
-- Hiểu và áp dụng **Semantic HTML** (`header`, `nav`, `main`, `section`...).
-- Định dạng văn bản chuyên sâu (`blockquote`, `pre`, `code`...).
-- Sử dụng các ký tự đặc biệt (Character Entities).
+*Anh Hùng: "HTML có hàng chục thẻ semantic — mỗi thẻ một mục đích. E-commerce dùng `<article>` cho sản phẩm, `<section>` cho danh mục, `<aside>` cho sidebar bộ lọc. Dùng đúng thẻ = Google hiểu nội dung = SEO tốt hơn."*
 
 ---
 
-# 1. **STRUCTURING PAGES (CẤU TRÚC TRANG)**
-
-Để xây dựng bố cục, ta cần các "chiếc hộp" để chứa nội dung.
-
-## 1.1. Block vs. Inline Elements
-Trước hết, bạn cần hiểu 2 loại hành vi hiển thị cơ bản:
-
-- **Block Elements (Khối):**
-    - Luôn bắt đầu dòng mới.
-    - Chiếm **toàn bộ chiều rộng** có thể.
-    - Ví dụ: `<div>`, `<p>`, `<h1>`, `<ul>`.
-
-- **Inline Elements (Dòng):**
-    - Không xuống dòng.
-    - Chỉ chiếm chiều rộng **vừa đủ** nội dung của nó.
-    - Ví dụ: `<span>`, `<a>`, `<img>`, `<strong>`.
-
-## 1.2. Thẻ chứa chung (Generic Containers)
-Khi chưa có HTML5, chúng ta dùng `<div>` và `<span>` cho mọi thứ.
-
-- **`<div>` (Division):** Thẻ block vô nghĩa, dùng để nhóm các phần tử lớn.
-  ```html
-  <div class="user-profile">
-      <img src="avatar.jpg">
-      <h3>User Name</h3>
-  </div>
-  ```
-- **`<span>`:** Thẻ inline vô nghĩa, dùng để bôi màu hoặc xử lý một mẩu text nhỏ.
-  ```html
-  <p>Giá tiền: <span class="price-red">500.000đ</span></p>
-  ```
+## 🎯 Mục tiêu
+- Sử dụng Semantic HTML5 elements
+- Text formatting nâng cao
+- Nhúng media (ảnh, video, audio)
+- Block vs Inline elements
 
 ---
 
-# 2. **USING SEMANTIC HTML (HTML CÓ Ý NGHĨA)**
+## 🏗️ Semantic HTML5 — "Thẻ có ý nghĩa"
 
-Thay vì dùng `<div>` khắp nơi ("đóng hàng vào thùng giống hệt nhau"), HTML5 cung cấp các thẻ có tên gọi rõ ràng ("thùng có dán nhãn"). Điều này cực tốt cho SEO và Accessibility.
+### Tại sao không dùng `<div>` cho mọi thứ?
 
-## Các thẻ Semantic phổ biến:
-
-1.  **`<header>`:** Đầu trang hoặc đầu một bài viết. Thường chứa Logo, Menu.
-2.  **`<nav>`:** Chứa các link điều hướng chính.
-3.  **`<main>`:** Nội dung chính của trang (chỉ có 1 thẻ main mỗi trang).
-4.  **`<section>`:** Các phần nội dung liên quan (Giới thiệu, Liên hệ, Tin tức).
-5.  **`<article>`:** Nội dung độc lập (Bài báo, Sản quy cách phẩm, Comment).
-6.  **`<aside>`:** Nội dung phụ bên lề (Quảng cáo, Bài viết liên quan).
-7.  **`<footer>`:** Chân trang (Bản quyền, thông tin liên hệ).
-
-### Ví dụ cấu trúc chuẩn:
 ```html
-<body>
-    <header>
-        <h1>My Website</h1>
-        <nav>...</nav>
-    </header>
+<!-- ❌ "Div Soup" — Google không hiểu gì -->
+<div class="header">
+    <div class="nav">...</div>
+</div>
+<div class="content">
+    <div class="article">...</div>
+    <div class="sidebar">...</div>
+</div>
+<div class="footer">...</div>
 
-    <main>
-        <article>
-            <h2>Bài viết hay nhất</h2>
-            <p>Nội dung...</p>
-        </article>
-
-        <aside>
-            <h3>Quảng cáo</h3>
-        </aside>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Bản quyền thuộc về tôi.</p>
-    </footer>
-</body>
+<!-- ✅ Semantic — Google hiểu cấu trúc -->
+<header>
+    <nav>...</nav>
+</header>
+<main>
+    <article>...</article>
+    <aside>...</aside>
+</main>
+<footer>...</footer>
 ```
 
+### Bản đồ Semantic Elements:
+
+| Thẻ | Ý nghĩa | Dùng cho |
+|---|---|---|
+| `<header>` | Phần đầu | Logo, menu chính |
+| `<nav>` | Điều hướng | Menu, breadcrumb |
+| `<main>` | Nội dung chính | Content area (1 per page) |
+| `<article>` | Bài viết độc lập | Blog post, sản phẩm, comment |
+| `<section>` | Phân đoạn nội dung | Danh mục, chapters |
+| `<aside>` | Nội dung phụ | Sidebar, quảng cáo |
+| `<footer>` | Phần cuối | Copyright, links, contacts |
+| `<figure>` | Media + caption | Ảnh kèm chú thích |
+
 ---
 
-# 3. **TEXT MARKUPS (ĐỊNH DẠNG VĂN BẢN)**
-
-Ngoài `<b>`, `<i>`, chúng ta có nhiều thẻ định dạng văn bản mạnh mẽ hơn.
-
-## 3.1. Nhấn mạnh (Emphasis)
-- `<strong>`: In đậm, mang ý nghĩa **quan trọng**.
-- `<em>` (Emphasis): In nghiêng, mang ý nghĩa *nhấn giọng*.
-
-## 3.2. Trích dẫn (Quotations)
-- `<blockquote>`: Trích dẫn dài (Block), thường tựt thụt lề.
-- `<q>` (Quote): Trích dẫn ngắn (Inline), tự động thêm dấu ngoặc kép.
-- `<cite>`: Tên tác phẩm hoặc tác giả được trích dẫn.
+## 📝 Text Formatting nâng cao
 
 ```html
-<p>Bác Hồ từng nói:</p>
-<blockquote>
-  Không có gì quý hơn độc lập tài do.
+<blockquote cite="https://source.com">
+    "Code is like humor. When you have to explain it, it's bad."
+    <cite>— Cory House</cite>
 </blockquote>
+
+<code>console.log("Hello")</code>        <!-- Code inline -->
+<pre><code>                               <!-- Block code -->
+function hello() {
+    return "world";
+}
+</code></pre>
+
+<abbr title="HyperText Markup Language">HTML</abbr>  <!-- Viết tắt -->
+<time datetime="2026-01-15">15 tháng 1, 2026</time>  <!-- Thời gian -->
+<mark>Highlighted text</mark>              <!-- Highlight -->
 ```
 
-## 3.3. Code và Preformatted Text
-- `<code>`: Dùng để hiển thị đoạn mã lập trình (font monospace).
-- `<pre>`: Giữ nguyên định dạng khoảng trắng và xuống dòng.
+---
+
+## 🎨 Media — Ảnh, Video, Audio
 
 ```html
-<pre>
-  Line 1
-      Line 2
-</pre>
+<!-- Ảnh responsive -->
+<figure>
+    <img src="product.jpg" alt="iPhone 15 Pro Max" 
+         loading="lazy" width="400" height="300">
+    <figcaption>iPhone 15 Pro Max - 25.990.000đ</figcaption>
+</figure>
+
+<!-- Video HTML5 -->
+<video controls width="640" poster="thumbnail.jpg">
+    <source src="demo.mp4" type="video/mp4">
+    <source src="demo.webm" type="video/webm">
+    Browser không hỗ trợ video.
+</video>
+
+<!-- YouTube embed -->
+<iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        allowfullscreen></iframe>
 ```
 
-## 3.4. Các thẻ khác
-- `<mark>`: Highlight (như bút dạ quang).
-- `<del>`: Gạch ngang (đã xóa/hết hàng).
-- `<ins>`: Gạch chân (mới thêm vào).
-- `<sub>` / `<sup>`: Chỉ số dưới / trên (H<sub>2</sub>O, E=mc<sup>2</sup>).
-- `<abbr>`: Viết tắt (hiển thị chú thích khi hover).
-  ```html
-  <abbr title="HyperText Markup Language">HTML</abbr>
-  ```
+> 💡 **`loading="lazy"`** = Ảnh chỉ tải khi user scroll đến → trang load nhanh hơn!
 
 ---
 
-# 4. **CHARACTER ENTITIES (KÝ TỰ ĐẶC BIỆT)**
+## 📊 Block vs Inline — Hai loại element cơ bản
 
-Trong HTML, một số ký tự bị "cấm" dùng trực tiếp vì trùng với cú pháp code (ví dụ dấu `<` và `>`). Để hiển thị chúng, ta dùng **Entities**.
+| Block | Inline |
+|---|---|
+| Chiếm CẢ DÒNG | Chỉ chiếm NỘI DUNG |
+| `<div>`, `<p>`, `<h1>`, `<section>` | `<span>`, `<a>`, `<strong>`, `<img>` |
+| Co thể set width/height | Không set width/height |
 
-| Ký tự | Entity Name | Mô tả |
-| :--- | :--- | :--- |
-| `<` | `&lt;` | Less than (Dấu nhỏ hơn) |
-| `>` | `&gt;` | Greater than (Dấu lớn hơn) |
-| `&` | `&amp;` | Ampersand (Dấu và) |
-| `"` | `&quot;` | Double quote (Ngoặc kép) |
-| `'` | `&apos;` | Single quote (Ngoặc đơn) |
-| ` ` | `&nbsp;` | Non-breaking Space (Khoảng trắng không xuống dòng) |
-| `©` | `&copy;` | Copyright |
-
-**Ví dụ:**
-Để viết: `<h1> là thẻ tiêu đề`, ta code:
 ```html
-<p>&lt;h1&gt; là thẻ tiêu đề</p>
+<div>Block 1 — chiếm cả dòng</div>
+<div>Block 2 — xuống dòng mới</div>
+
+<span>Inline 1</span>
+<span>Inline 2 — nằm cạnh nhau</span>
 ```
 
 ---
 
-# 5. **TỔNG KẾT**
+## ➡️ Chương tiếp theo...
 
-- Dùng `<div>` cho bố cục chung, `<span>` cho text nhỏ.
-- Ưu tiên dùng **Semantic Tags** (`header`, `main`...) bất cứ khi nào có thể.
-- Sử dụng đúng thẻ ngữ nghĩa cho văn bản (`<strong>`, `<blockquote>`, `<code>`).
-- Nhớ dùng **Entities** cho các ký tự đặc biệt.
+*Minh đã có nội dung phong phú: text, ảnh, video, semantic structure.*
 
----
+*"Nhưng với e-commerce, mình cần bảng giá sản phẩm và form đặt hàng," Minh nghĩ. "HTML có thẻ nào cho bảng biểu và liên kết giữa các trang không?"*
 
-**Chương tiếp theo:** Hiển thị dữ liệu dạng bảng và tạo liên kết giữa các trang web.
+**Chương tiếp theo:** Tables & Hyperlinks — Bảng dữ liệu cho danh sách sản phẩm, và navigation giữa các trang.

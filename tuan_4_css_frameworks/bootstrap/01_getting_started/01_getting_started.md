@@ -1,6 +1,12 @@
 # 🟦 BÀI 01: BOOTSTRAP 5 - GETTING STARTED
 
-Bootstrap là CSS Framework phổ biến nhất thế giới, giúp bạn xây dựng website responsive nhanh chóng với các component có sẵn.
+## 🎬 "200 Dòng CSS Cho Một Cái Navbar" — Khi CSS Thuần Không Đủ Nhanh
+
+*Minh mất 3 tiếng viết CSS cho navbar: responsive, hamburger menu, dropdown. 200 dòng CSS. Test trên 5 trình duyệt — vỡ trên Safari.*
+
+*Linh copy-paste 1 dòng Bootstrap: `<nav class="navbar navbar-expand-lg">`. Navbar responsive, dropdown, hamburger — tất cả có sẵn. 5 phút.*
+
+> **Anh Hùng:** *"Bootstrap = LEGO cho web. Components đã được thiết kế, test, và responsive sẵn. Em chỉ cần LẮP GHÉP."*
 
 ---
 

@@ -1,6 +1,12 @@
 # 🟦 BÀI 02: BOOTSTRAP 5 - GRID SYSTEM
 
-Grid System là nền tảng của Bootstrap, giúp bạn tạo layout responsive dễ dàng với hệ thống 12 cột. Đây là phần quan trọng nhất của Bootstrap - nếu hiểu Grid System, bạn đã nắm được 50% Bootstrap!
+## 🎬 "Chia Pizza Thành 12 Miếng" — Bí Mật Layout Responsive
+
+*Minh hỏi: "Tại sao Bootstrap dùng 12 cột? Sao không 10?"*
+
+*Anh Hùng: "Vì 12 chia được cho 2, 3, 4, 6! Chia đôi = 6+6. Chia ba = 4+4+4. Chia tư = 3+3+3+3. Như pizza 12 miếng — chia cho mấy người cũng đều."*
+
+> 💡 **Grid System = Nền tảng Bootstrap.** Nắm Grid = nắm 50% Bootstrap.
 
 ---
 

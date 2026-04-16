@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 03
 # **BASIC PRINCIPLES OF REACT**
 
-Đây là chương quan trọng nhất. Nắm vững chương này là bạn đã làm chủ 70% React.
+## 🎬 "Props = CMND (Cha cho, không đổi). State = Tâm Trạng (Tự đổi)" — Nắm 70% React
+
+*Anh Hùng: "Component, JSX, Props, State — 4 từ này = 70% React. Props giống CMND: cha cho, con không sửa. State giống tâm trạng: tự thay đổi bên trong."*
 
 ---
 

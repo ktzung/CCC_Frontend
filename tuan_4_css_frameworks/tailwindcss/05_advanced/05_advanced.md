@@ -1,6 +1,10 @@
 # 🟩 BÀI 05: TAILWINDCSS - ADVANCED
 
-Bài này hướng dẫn các kỹ thuật nâng cao: @apply directive, Plugins, Performance optimization, và Best practices để sử dụng TailwindCSS hiệu quả nhất.
+## 🎬 "Class Dài 15 Từ, Copy-Paste 50 Lần" — Khi Utility-First Cần @apply
+
+*Minh copy-paste `class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-semibold"` lần thứ 20. "Tailwind bắt đầu khó chịu rồi."*
+
+*Anh Hùng: "@apply — viết 1 lần, dùng mãi mãi. `.btn-primary { @apply px-4 py-2 bg-blue-500...; }` Giờ chỉ cần `class='btn-primary'`. Tailwind + DRY principle."*
 
 ---
 

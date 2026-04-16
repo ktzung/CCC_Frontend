@@ -1,6 +1,10 @@
 # 🟩 BÀI 02: TAILWINDCSS - UTILITIES
 
-Utilities là trái tim của TailwindCSS. Hàng nghìn utility classes giúp bạn style mọi thứ mà không cần viết CSS. Đây là phần quan trọng nhất - nếu nắm vững utilities, bạn đã nắm được 80% TailwindCSS!
+## 🎬 "Học 50 Từ Vựng, Viết Mọi Câu" — Tailwind Giống Học Ngoại Ngữ
+
+*Minh: "Nhớ hết mấy ngàn class của Tailwind sao?"*
+
+*Anh Hùng: "Không cần. Nhớ 50 'từ vựng': m/p (margin/padding), bg (background), text (color/size), flex, grid, rounded, shadow. Phần còn lại = ghép từ. m-4 = margin 16px. bg-blue-500 = blue shade 500. Nắm quy tắc = viết mọi thứ."*
 
 ---
 

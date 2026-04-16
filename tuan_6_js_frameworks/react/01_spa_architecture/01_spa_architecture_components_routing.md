@@ -1,7 +1,13 @@
 # 🟫 CHƯƠNG 11
 # **SPA ARCHITECTURE — COMPONENT & ROUTING**
 
-Từ Multiple Page App (MPA) lên Single Page Application (SPA). Chương này giải thích kiến trúc SPA modern.
+## 🎬 "Tại Sao Gmail Không Bao Giờ Reload Trang?" — Bí Mật SPA
+
+*Minh dùng Gmail cả ngày: mở email, soạn thư, chuyển tab — ZERO trang trắng. Nhưng web PHP của Minh? Click link = trang trắng 2 giây → load lại từ đầu. Mỗi lần.*
+
+*Anh Hùng: "Gmail, Facebook, Google Docs — tất cả là SPA. Single Page Application. Tải 1 lần → JavaScript quản lý MỌI THỨ. Browser không hỏi server mỗi lần click."*
+
+> 💡 **MPA → SPA = Tivi analog → Smart TV.** Cùng nội dung, trải nghiệm KHÁC HOÀN TOÀN.
 
 ---
 

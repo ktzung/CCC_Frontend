@@ -1,86 +1,163 @@
-# 🟨 PART II - CHƯƠNG 21
-# **ESTABLISHING A PROFESSIONAL DEVELOPMENT PROCESS**
+# 🟨 PART III - CHƯƠNG 21
+# **PROFESSIONAL DEVELOPMENT PROCESS**
 
-Code chạy được là một chuyện. Code bền vững, dễ bảo trì, làm việc nhóm tốt lại là chuyện khác. Chương này giới thiệu quy trình làm việc (Workflow) của một Developer chuyên nghiệp.
+## 🎬 "Ngày Đầu Đi Thực Tập" — Khi BTL Khác Xa Với Production
 
----
+*Ngày đầu tiên thực tập tại FPT Software. Minh mở laptop, anh Hùng nói:*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+> *"Trước tiên, clone repo. Chạy `npm install`. Rồi `npm run dev`. Đọc README. Tìm Jira ticket. Tạo branch. Code. Tạo PR. Code review. Merge. Deploy staging. QA test. Deploy production."*
 
-Sau chương này, bạn sẽ:
-- Biết về **Task Runners** (Tự động hóa công việc).
-- Hiểu tầm quan trọng của **Automated Testing** (Kiểm thử tự động).
-- Nắm vững **Git** - Công cụ quản lý mã nguồn bắt buộc phải biết.
+*Minh nghe xong, đầu quay. "Ở trường mình chỉ code → submit → xong mà..."*
 
----
-
-# 1. **AUTOMATING TASKS (TỰ ĐỘNG HÓA)**
-
-Khi làm dự án lớn, bạn phải làm nhiều việc lặp đi lặp lại:
-- Nén file CSS/JS (Minify).
-- Chuyển SASS sang CSS.
-- Tối ưu ảnh.
-- Reload trình duyệt mỗi khi sửa code.
-
-Thay vì làm tay, ta dùng tool:
-- **Cổ điển:** Grunt, Gulp.
-- **Hiện đại (Bundlers - Cực phổ biến):** **Webpack**, **Vite**, **Parcel**. (Ở khóa này chúng ta sẽ dùng Vite khi đụng đến React/Framework).
+> *"Đó là khác biệt giữa BTL và production. Code chỉ là 30%. 70% còn lại là QUY TRÌNH."*
 
 ---
 
-# 2. **AUTOMATED TESTING (KIỂM THỬ TỰ ĐỘNG)**
-
-Làm sao biết code mình sửa hôm nay không làm hỏng tính năng hôm qua? -> Viết test.
-
-## Các loại test:
-1.  **Unit Test (Kiểm thử đơn vị):** Test từng hàm nhỏ lẻ. (Ví dụ: Test hàm `add(1, 2)` có ra `3` không?).
-    - Tool phổ biến: **Jest**, Mocha, QUnit.
-2.  **Integration Test:** Test các phần ghép nối với nhau.
-3.  **E2E Test (End-to-End):** Robot giả lập người dùng click chuột thật trên trình duyệt. (Cypress, Selenium).
-
-*Tư duy: "Test càng nhiều, ngủ càng ngon."*
+## 🎯 Mục tiêu
+- Hiểu workflow phát triển phần mềm chuyên nghiệp
+- Tổ chức dự án (folder structure)
+- Task management (Jira/Trello workflow)
+- Code review và CI/CD cơ bản
+- Deployment basics
 
 ---
 
-# 3. **SOURCE CODE VERSION MANAGEMENT (GIT)**
+## 📁 Tổ chức dự án Front-end
 
-**Git** là cỗ máy thời gian cho code của bạn.
-
-## Tại sao cần Git?
-- **Lưu lịch sử:** Quay lại phiên bản code ngày hôm qua nếu lỡ tay xóa nhầm.
-- **Làm việc nhóm:** 10 người cùng sửa 1 dự án mà không ghi đè code lên nhau.
-- **Backup:** Đẩy code lên Cloud (GitHub/GitLab) để không sợ mất máy.
-
-## Các lệnh Git cơ bản (Phải thuộc lòng)
-1.  `git init`: Khởi tạo kho chứa (repo).
-2.  `git add .`: Gom các file thay đổi lại.
-3.  `git commit -m "Message"`: Lưu mốc thời gian (Chụp ảnh code hiện tại).
-4.  `git push`: Đẩy code lên GitHub.
-5.  `git pull`: Kéo code mới nhất từ GitHub về.
-6.  `git checkout -b <branch>`: Tạo nhánh mới để làm tính năng riêng (không ảnh hưởng nhánh chính).
+```
+my-project/
+├── src/                    ← Source code
+│   ├── components/         ← Reusable components
+│   │   ├── Button.js
+│   │   ├── Modal.js
+│   │   └── TodoItem.js
+│   ├── pages/              ← Pages/Routes
+│   │   ├── Home.js
+│   │   ├── Login.js
+│   │   └── Dashboard.js
+│   ├── services/           ← API calls
+│   │   └── api.js
+│   ├── utils/              ← Helper functions
+│   │   └── formatDate.js
+│   ├── styles/             ← CSS files
+│   │   ├── global.css
+│   │   └── components/
+│   ├── app.js              ← Entry point
+│   └── index.html
+├── public/                 ← Static files
+├── tests/                  ← Tests
+├── .gitignore              ← Files Git bỏ qua
+├── .env                    ← Environment variables (⚠️ KHÔNG commit!)
+├── package.json            ← Dependencies & scripts
+└── README.md               ← Hướng dẫn dự án
+```
 
 ---
 
-# 4. **TỔNG KẾT KHÓA HỌC PHẦN CƠ BẢN**
+## 🔄 Development Workflow — Từ Task đến Production
 
-Chúc mừng! Bạn đã đi hết chặng đường Web Frontend Foundation:
-1.  **HTML:** Khung xương.
-2.  **CSS:** Giao diện.
-3.  **JavaScript:** Tư duy logic & Tương tác.
-4.  **Tools:** Git & Process.
+```
+1. 📋 Nhận task                   (Jira: "Fix bug login page")
+       ↓
+2. 🌿 Tạo branch                 (git checkout -b fix/login-bug)
+       ↓
+3. 💻 Code + Test locally        (npm run dev, manual testing)
+       ↓
+4. 📸 Commit + Push              (Conventional commits)
+       ↓
+5. 🔀 Tạo Pull Request           (GitHub PR + description)
+       ↓
+6. 👀 Code Review                (Team review, address comments)
+       ↓
+7. ✅ CI/CD passes               (Auto: lint, test, build)
+       ↓
+8. 🚀 Merge + Deploy staging     (Test trên staging environment)
+       ↓
+9. 🧪 QA Test                    (QA team kiểm tra)
+       ↓
+10. 🎯 Deploy production         (User thật sử dụng!)
+```
 
-Đây là hành trang vững chắc để bạn bước tiếp sang các **Frontend Frameworks** (React, Vue, Angular) hoặc **Backend** (NodeJS).
+> *Minh nhận ra: Code là bước 3 trong 10 bước. Quy trình mới là thứ phân biệt junior và senior.*
 
 ---
 
-**Chương tiếp theo:** Chọn JavaScript Framework - React, Vue.js, hoặc Angular
+## 📦 Package Management (npm)
 
-> [!TIP]
-> **Lựa chọn Framework:**
-> - **React:** Phổ biến nhất, ecosystem lớn → [Xem React](../../tuan_6_js_frameworks/react/README.md)
-> - **Vue.js:** Dễ học nhất, template syntax → [Xem Vue.js](../../tuan_6_js_frameworks/vue/README.md)
-> - **Angular:** Enterprise-ready, TypeScript-first → [Xem Angular](../../tuan_6_js_frameworks/angular/README.md)
-> 
-> Bạn chỉ cần học **1 trong 3**, không cần học cả ba. Xem [Hướng dẫn chọn Framework](../../tuan_6_js_frameworks/README.md) để quyết định.
+```bash
+# Cài package
+npm install axios            # Production dependency
+npm install -D eslint        # Dev dependency
 
-**Keep coding & Stay curious!**
+# package.json scripts
+{
+    "scripts": {
+        "dev": "vite",                    # Chạy development server
+        "build": "vite build",            # Build production
+        "preview": "vite preview",        # Preview build
+        "lint": "eslint src/",            # Check code quality
+        "test": "vitest"                  # Run tests
+    }
+}
+```
+
+---
+
+## 🚀 Deployment Basics
+
+### Frontend Hosting miễn phí:
+
+| Platform | Tốc độ | Tự động deploy | Free tier |
+|---|---|---|---|
+| **Vercel** ⭐ | Nhanh | ✅ Push → Deploy | 100GB/month |
+| **Netlify** | Nhanh | ✅ Push → Deploy | 100GB/month |
+| **GitHub Pages** | OK | Cần config | Unlimited |
+
+```bash
+# Deploy lên Vercel (siêu đơn giản)
+npm i -g vercel
+vercel          # → Trả lời vài câu → Deploy xong!
+```
+
+---
+
+## 🛠️ Developer Tools trong ngày đi làm
+
+| Tool | Mục đích |
+|---|---|
+| **VS Code** | Editor |
+| **Chrome DevTools** | Debug HTML/CSS/JS |
+| **Git + GitHub** | Version control |
+| **Jira / Trello** | Task management |
+| **Slack / Discord** | Communication |
+| **Figma** | Design handoff |
+| **Postman** | Test API |
+
+---
+
+## 💡 Best Practices "First Day at Work"
+
+1. **Đọc README trước khi code** — Setup instructions, conventions
+2. **Chạy project local thành công** trước khi sửa bất cứ gì
+3. **Hỏi khi không hiểu** — Không đoán. Hỏi senior 5 phút, tiết kiệm 5 giờ debug
+4. **Commit nhỏ, commit thường xuyên** — Mỗi commit = 1 ý nghĩa
+5. **Push mỗi cuối ngày** — Backup code, team thấy progress
+
+> **Chị Hà:** *"Developer giỏi không phải code nhanh nhất. Mà là developer có QUY TRÌNH tốt nhất — ít bug, dễ maintain, team happy."*
+
+---
+
+## 🎓 Tổng kết khóa học
+
+Bạn đã đi từ **zero** đến **production-ready**:
+
+| Tuần | Nội dung | Bạn đã học |
+|---|---|---|
+| 1 | HTML5 | Cấu trúc, semantic, forms, media |
+| 2 | CSS Core | Selectors, box model, positioning |
+| 3 | CSS Advanced | Flexbox, Grid, responsive, animations |
+| 4 | JavaScript Basics | Variables, functions, arrays, objects |
+| 5 | JS DOM & Async | DOM manipulation, events, fetch API |
+| 6 | Professional | Workflow, deployment, tools |
+
+**→ Bạn sẵn sàng cho: Frameworks (React/Vue), Internship, và Career path trong Web Development!** 🚀

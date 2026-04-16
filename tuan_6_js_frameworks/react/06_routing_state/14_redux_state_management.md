@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 14 & 15
 # **CENTRAL STATE MANAGEMENT (REDUX)**
 
-Khi ứng dụng quá lớn, việc truyền props lằng nhằng hoặc dùng Context API không còn hiệu quả (vấn đề hiệu năng). Lúc này "Trùm cuối" **Redux** xuất hiện.
+## 🎬 "Truyền Props Qua 10 Component = Chuyền Thư Qua 10 Người" — Redux Ra Đời
+
+*Minh truyền `user` từ App → Dashboard → Sidebar → UserMenu → Avatar. 5 tầng, 5 lần copy-paste props. Sửa 1 chỗ = sửa 5 file. Anh Hùng: "Redux = Bưu điện trung tâm. Mọi component đọc/ghi từ 1 nơi duy nhất. Không chuyền tay nữa."*
 
 ---
 

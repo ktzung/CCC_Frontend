@@ -1,107 +1,100 @@
 # 🟩 CHƯƠNG 10
-# **INHERITANCE AND CASCADING**
+# **INHERITANCE & CASCADING**
 
-CSS là viết tắt của **Cascading** Style Sheets. Nếu không hiểu "Cascading" (Xếp chồng/Thác đổ), bạn sẽ luôn gặp tình trạng: *"Tại sao mình sửa code mà nó không chạy???"*.
+## 🎬 "Tại Sao Font Chữ Tự Thay Đổi?" — Bí ẩn CSS
 
----
+*Minh đặt `font-family: 'Inter'` cho `body`. Mọi text trên trang đều đổi font — kể cả `<h1>`, `<p>`, `<li>` — dù anh không style từng thẻ.*
 
-# 🎯 MỤC TIÊU HỌC TẬP
+*"Ma thuật à?" Minh hỏi.*
 
-Sau chương này, bạn sẽ:
-- Hiểu cơ chế **Inheritance** (Kế thừa) - cái gì cha truyền con nối.
-- Nắm vững quy tắc **Specificity** (Độ ưu tiên) - ai mạnh hơn người đó thắng.
-- Hiểu **Cascade Algorithm** - cách trình duyệt quyết định style cuối cùng.
+*"Không — đó là Inheritance (Kế thừa)," anh Hùng trả lời. "Con thừa hưởng style từ cha. Body là tổ tiên → tất cả thẻ bên trong đều kế thừa font."*
 
 ---
 
-# 1. **THE PRINCIPLE OF INHERITANCE (TÍNH KẾ THỪA)**
+## 🎯 Mục tiêu
+- Hiểu Inheritance — properties nào kế thừa, nào không
+- Hiểu Cascade — khi có xung đột, rule nào thắng
+- Debug CSS nhanh bằng DevTools
 
-## 1.1. Kế thừa là gì?
-Một số thuộc tính CSS được gán cho thẻ cha sẽ tự động truyền xuống thẻ con.
+---
 
-**Ví dụ:** Bạn set font chữ cho `<body>`, tất cả bài viết bên trong đều dùng font đó.
+## 🧬 Inheritance — "Con thừa hưởng từ cha"
 
+### Properties ĐƯỢC kế thừa (Text-related):
 ```css
 body {
-  font-family: Arial, sans-serif;
-  color: #333;
+    font-family: 'Inter', sans-serif;  /* ✅ Con kế thừa */
+    color: #1e293b;                    /* ✅ Con kế thừa */
+    line-height: 1.6;                  /* ✅ Con kế thừa */
+    font-size: 16px;                   /* ✅ Con kế thừa */
 }
+/* → Tất cả <p>, <h1>, <span>, <li> bên trong body đều nhận font và color */
 ```
--> Các thẻ `p`, `h1`, `div` bên trong body đều sẽ có màu chữ #333 và font Arial.
 
-## 1.2. Cái gì được kế thừa?
-- **Inherited (Kế thừa):** Liên quan đến văn bản (`color`, `font-family`, `font-size`, `line-height`, `text-align`).
-- **Non-inherited (Không kế thừa):** Liên quan đến hộp (`width`, `height`, `margin`, `padding`, `border`). *Tưởng tượng: Cha mặc áo viền đỏ, con không tự nhiên cũng có viền đỏ được.*
-
-## 1.3. Bắt buộc kế thừa (`inherit`)
-Bạn có thể ép một thuộc tính phải lấy giá trị từ cha.
-
+### Properties KHÔNG kế thừa (Box-related):
 ```css
-button {
-  font-family: inherit; /* Nút bấm thường không kế thừa font, phải ép */
+.container {
+    border: 1px solid red;    /* ❌ Con KHÔNG kế thừa */
+    padding: 20px;            /* ❌ Con KHÔNG kế thừa */
+    margin: 10px;             /* ❌ Con KHÔNG kế thừa */
+    background: #fff;         /* ❌ Con KHÔNG kế thừa */
+}
+/* → Con phải tự đặt border, padding, margin */
+```
+
+> 💡 **Quy tắc nhớ nhanh:** Text-related → kế thừa. Box-related → không kế thừa. Hợp lý! Bạn muốn tất cả text cùng font, nhưng KHÔNG muốn tất cả box cùng border.
+
+### Force inheritance:
+```css
+.child {
+    border: inherit;     /* Ép kế thừa */
+    padding: initial;    /* Reset về mặc định */
 }
 ```
 
 ---
 
-# 2. **UNDERSTANDING THE CONTROL SYSTEM FOR CASCADING**
+## 🌊 Cascade — "Thác nước" ưu tiên
 
-Khi một phần tử có nhiều rules CSS mâu thuẫn nhau (ví dụ: vừa được bảo màu đỏ, vừa được bảo màu xanh), trình duyệt nghe ai? Nó dựa trên hệ thống tính điểm **Specificity**.
+Khi nhiều rule nhắm cùng element, thứ tự ưu tiên:
 
-## 2.1. Thang điểm Specificity (Độ ưu tiên)
-
-Hãy tưởng tượng một cuộc thi sức mạnh:
-
-1.  **Inline Style** (`style="..."`): **1000 điểm** (Quyền lực tối cao, khó ghi đè).
-2.  **ID Selector** (`#header`): **100 điểm**.
-3.  **Class/Pseudo-class** (`.btn`, `:hover`): **10 điểm**.
-4.  **Element Selector** (`div`, `p`): **1 điểm**.
-5.  **Universal** (`*`): **0 điểm**.
-
-**Ví dụ:**
-
-```css
-/* Rule A: 1 điểm (Element) */
-p { 
-  color: blue; 
-}
-
-/* Rule B: 10 điểm (Class) -> THẮNG */
-.text-red { 
-  color: red; 
-}
-
-/* Rule C: 100 điểm (ID) -> THẮNG TUYỆT ĐỐI */
-#demo { 
-  color: green; 
-}
+```
+1. !important              ← Cao nhất (TRÁNH DÙNG!)
+2. Inline styles           ← style="..."
+3. ID selectors            ← #header
+4. Class/Pseudo selectors  ← .btn, :hover
+5. Type selectors          ← h1, p
+6. Source order             ← Rule sau ghi đè rule trước
 ```
 
-Nếu một thẻ `<p id="demo" class="text-red">` tồn tại, nó sẽ có màu **Green**.
+### Ví dụ thực tế:
 
-## 2.2. Quy tắc ghi đè (The Cascade)
-
-Thứ tự ưu tiên từ cao xuống thấp:
-
-1.  **Importance:** Có dính `!important` không? (Nếu có là trùm, nhưng **hạn chế dùng** vì phá vỡ cấu trúc).
-2.  **Specificity:** Điểm ai cao hơn người đó thắng.
-3.  **Source Order:** Nếu điểm bằng nhau, **câu nào viết sau** (nằm dưới cùng file CSS) sẽ thắng.
-
-**Ví dụ Source Order:**
 ```css
+p { color: blue; }              /* Type: 1 */
+.intro { color: green; }        /* Class: 10 — THẮNG vì specificity cao hơn */
+
+/* Nếu cùng specificity → rule SAU thắng */
 .btn { color: red; }
-.btn { color: blue; } /* Viết sau -> Thắng -> Nút màu xanh */
+.btn { color: green; }          /* ← Rule sau THẮNG → green */
 ```
 
 ---
 
-# 3. **TỔNG KẾT**
+## 🔧 Debug CSS bằng DevTools
 
-- Các thuộc tính văn bản (`font`, `color`) thường được **kế thừa**. Hộp (`border`, `margin`) thì không.
-- **ID** mạnh hơn **Class**. **Class** mạnh hơn **Tag**.
-- Nếu bằng điểm, **Viết sau** thắng **Viết trước**.
-- Đừng lạm dụng `!important` và `Inline Style`.
+1. **F12** → Tab **Elements** → Click element
+2. Panel **Styles** bên phải: Thấy TẤT CẢ rules áp dụng
+3. Rules bị ~~gạch ngang~~ = bị override
+4. Tìm rule nào override → sửa selector hoặc tăng specificity
+
+> *Minh dùng DevTools lần đầu: "Ồ, CSS debug dễ hơn mình tưởng! Thấy ngay rule nào thắng, rule nào thua."*
 
 ---
 
-**Chương tiếp theo:** Hiểu về bản chất hình hộp của mọi phần tử HTML (Box Model).
+## ➡️ Chương tiếp theo...
+
+*Minh hiểu cascade rồi. Nhưng khi thêm padding cho `.card`, card bị phình to hơn mong đợi.*
+
+*"Đó là Box Model!" anh Hùng nói. "Content + Padding + Border + Margin = kích thước thực. Không hiểu Box Model = layout LUÔN sai."*
+
+**Chương tiếp theo:** CSS Box Model — Bài học quan trọng nhất trong CSS.
