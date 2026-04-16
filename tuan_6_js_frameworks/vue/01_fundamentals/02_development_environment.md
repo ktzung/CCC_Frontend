@@ -1,7 +1,9 @@
 # 🟢 MODULE 1 - BÀI 02
 # **THIẾT LẬP MÔI TRƯỜNG PHÁT TRIỂN**
 
-Trong bài này, bạn sẽ học cách thiết lập môi trường phát triển Vue.js từ đầu, bao gồm cài đặt Node.js, tạo project với Vite hoặc Vue CLI, và sử dụng Vue DevTools để debug.
+## 🎬 "npm create vue@latest — Xong Setup Trong 60 Giây" — Vite + DevTools
+
+*Minh: "Vue setup chắc cần Webpack config dài 200 dòng?" Anh Hùng: "`npm create vue@latest` → chọn TypeScript, Router, Pinia → Done. Vite build trong 200ms (Webpack: 20 giây). Vue DevTools trong Chrome = nhìn thấy state, component tree, events real-time."*
 
 ---
 

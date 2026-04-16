@@ -1,7 +1,9 @@
 # 🟢 MODULE 3 - BÀI 11
 # **ADVANCED JAVASCRIPT (ES6+)**
 
-Vue 3 sử dụng nhiều tính năng ES6+ của JavaScript. Trong bài này, bạn sẽ học các tính năng quan trọng được sử dụng trong Vue.
+## 🎬 "Arrow, Destructuring, Async/Await — JavaScript Hiện Đại" — Ngôn Ngữ Vue Nói
+
+*Minh đọc Vue 3 code: `const { ref, computed } = await import('vue')`. "Destructuring? Arrow? Async?" Anh Hùng: "Vue 3 viết bằng ES6+. Không biết ES6+ = đọc Vue như đọc tiếng Pháp. 6 tính năng cần nắm: arrow functions, destructuring, spread, template literals, async/await, modules."*
 
 ---
 

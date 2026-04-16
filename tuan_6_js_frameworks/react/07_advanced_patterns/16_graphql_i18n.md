@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 16 & 17
 # **ADVANCED DATA & INTERNATIONALIZATION**
 
-Khi ứng dụng vươn tầm quốc tế hoặc cần xử lý dữ liệu cực phức tạp, REST API và Tiếng Anh là chưa đủ.
+## 🎬 "REST Trả Về 50 Fields, Em Chỉ Cần 3" — GraphQL & i18n
+
+*Minh fetch `/api/users` — nhận được 50 fields, chỉ dùng `name`, `avatar`, `email`. Bandwidth phí 90%. Anh Hùng: "GraphQL — em HỎI chính xác cần gì, server TRẢ đúng cái đó. Còn i18n? Khi app phục vụ 10 quốc gia, hardcode 'Đăng nhập' = chết."*
 
 ---
 

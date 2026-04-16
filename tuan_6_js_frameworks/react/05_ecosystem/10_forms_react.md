@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 10
 # **FORMS IN REACT**
 
-Xử lý Form trong React ngày xưa là cơn ác mộng. Nhưng nay chúng ta đã có những cách tiếp cận thông minh hơn.
+## 🎬 "15 Input, 15 useState, 15 Handler" — Ác Mộng Form React
+
+*Minh viết form đăng ký: 15 fields = 15 useState + 15 onChange handlers. 200 dòng boilerplate. Anh Hùng: "react-hook-form — 1 hook `useForm()`, validation tự động, re-render tối thiểu. 15 fields → 30 dòng code."*
 
 ---
 

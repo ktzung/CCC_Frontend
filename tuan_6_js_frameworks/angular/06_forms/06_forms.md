@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 06
 # **FORMS**
 
-Angular cung cấp 2 cách xử lý forms: Template-driven và Reactive Forms.
+## 🎬 "2 Triết Lý Form: Template-Driven vs Reactive" — Angular Cho Cả Hai
+
+*Minh: "Vue/React chỉ có 1 cách làm form. Angular cho 2?" Chị Hà: "Template-driven = form đơn giản (login, contact). Reactive Forms = form enterprise (50 fields, dynamic validation, nested groups). Angular cho em CHỌN vũ khí phù hợp."*
 
 ---
 

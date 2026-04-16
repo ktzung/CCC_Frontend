@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 07
 # **HTTP CLIENT**
 
-Angular HttpClient giúp giao tiếp với REST APIs.
+## 🎬 "fetch() Cơ Bản Quá — HttpClient Của Angular Có Interceptors" — Gọi API Cấp Doanh Nghiệp
+
+*Minh dùng `fetch()`: phải tự handle loading, error, retry, token. 50 API calls = copy-paste 50 lần. Anh Hùng: "Angular HttpClient + Interceptor: viết 1 interceptor gắn token → TẤT CẢ request tự có token. Error handling → 1 chỗ. Retry → 1 dòng."*
 
 ---
 

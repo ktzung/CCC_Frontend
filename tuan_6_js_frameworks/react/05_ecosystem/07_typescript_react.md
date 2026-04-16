@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 07
 # **TYPE SAFETY WITH TYPESCRIPT**
 
-JavaScript rất linh hoạt, nhưng "linh hoạt" thường đi kèm với "dễ gãy". TypeScript (TS) ra đời để trị căn bệnh này.
+## 🎬 "add(1, '2') = '12'" — Bug Ngớ Ngẩn Nhất Trong JS
+
+*Minh deploy code lúc 23h. 3h sáng, sếp gọi: "Giỏ hàng tổng tiền 100₫ + 50₫ = '10050₫'!" JS nối string thay vì cộng số. TypeScript? Báo lỗi ĐỎ LÒM ngay khi gõ. "Tiết kiệm cho em 4 tiếng debug lúc 3h sáng."*
 
 ---
 

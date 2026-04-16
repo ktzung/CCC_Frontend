@@ -1,7 +1,9 @@
 # 🟢 MODULE 1 - BÀI 03
 # **TEMPLATE SYNTAX & DIRECTIVES**
 
-Template syntax là cách Vue.js bind data vào HTML. Đây là một trong những điểm mạnh của Vue - syntax đơn giản, dễ đọc, giống HTML thuần. Trong bài này, bạn sẽ học tất cả các cách để hiển thị và điều khiển data trong template.
+## 🎬 "v-if, v-for, v-bind — HTML Biết Suy Nghĩ" — Template Syntax Của Vue
+
+*Minh viết React: `{isLoggedIn && <Welcome />}` — JavaScript thuần. Vue? `<div v-if="isLoggedIn">Welcome</div>` — đọc như HTML! Anh Hùng: "Vue template = HTML + superpowers. `v-if` = if/else, `v-for` = loop, `v-bind` = dynamic attributes. Không cần học JSX."*
 
 ---
 

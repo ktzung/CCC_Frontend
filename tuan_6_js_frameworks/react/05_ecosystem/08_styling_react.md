@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 08
 # **STYLING REACT COMPONENTS**
 
-React không áp đặt cách bạn viết CSS. Có hàng tá cách, nhưng chúng ta sẽ tập trung vào 3 cách phổ biến nhất hiện nay.
+## 🎬 "10 Cách Viết CSS Trong React — Cách Nào Đúng?" — Cuộc Chiến Styling
+
+*Minh hỏi 5 developer: "React dùng CSS gì?" 5 câu trả lời: CSS Modules, Tailwind, Styled Components, Emotion, inline styles. Chị Hà: "Không có cách 'đúng'. Có cách PHÙ HỢP. Project nhỏ → CSS Modules. Design system → Tailwind. Dynamic themes → CSS-in-JS."*
 
 ---
 

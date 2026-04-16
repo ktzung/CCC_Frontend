@@ -1,7 +1,9 @@
 # 🟢 MODULE 1 - BÀI 04
 # **EVENT HANDLING**
 
-Event handling là cách ứng dụng phản ứng với các hành động của người dùng (click, type, scroll...). Vue.js cung cấp directive `v-on` (hoặc `@`) để xử lý events một cách dễ dàng và mạnh mẽ.
+## 🎬 "@click — 1 Ký Tự Thay addEventListener" — Sự Kiện Trong Vue
+
+*Minh viết JS thuần: `document.getElementById('btn').addEventListener('click', handler)`. Vue: `<button @click="handler">`. Một dòng. Anh Hùng: "@ = v-on shorthand. @click, @submit, @keyup.enter — Vue tự xử lý bindation. Modifier `.prevent` thay `e.preventDefault()`."*
 
 ---
 

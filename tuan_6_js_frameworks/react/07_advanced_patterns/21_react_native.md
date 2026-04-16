@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 21
 # **NATIVE APPS WITH REACT NATIVE**
 
-Bạn đã biết React. Tin vui: Bạn đã hoàn thành 90% chặng đường để trở thành **Mobile Developer**. React Native cho phép viết code bằng JS/React nhưng xuất ra app **Native** (iOS/Android) xịn sò.
+## 🎬 "Code React → Chạy Trên iPhone + Android" — Phép Màu React Native
+
+*Minh biết React. Sếp: "Làm app mobile được không?" Minh học Swift 6 tháng hoặc... dùng React Native 1 tuần. Cùng codebase JavaScript, xuất ra app NATIVE trên cả iOS lẫn Android. Instagram, Discord, Shopify — tất cả dùng React Native.*
 
 ---
 

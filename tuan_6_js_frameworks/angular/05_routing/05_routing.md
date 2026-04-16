@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 05
 # **ROUTING**
 
-Angular Router giúp tạo Single Page Application với client-side routing.
+## 🎬 "Angular Router = GPS Cho SPA" — Điều Hướng Không Reload
+
+*Minh click "Products" → trang không reload → component Products xuất hiện. "Sao biết hiển thị component nào?" Anh Hùng: "Angular Router = GPS. URL = tọa độ. Route config = bản đồ. `RouterOutlet` = màn hình hiển thị. Lazy loading = chỉ tải bản đồ khi cần."*
 
 ---
 

@@ -1,7 +1,9 @@
 # 🟢 MODULE 2 - BÀI 08
 # **LIFECYCLE HOOKS**
 
-Mỗi component Vue có một lifecycle (vòng đời) từ khi được tạo đến khi bị hủy. Lifecycle hooks cho phép bạn chạy code tại các thời điểm cụ thể trong lifecycle này.
+## 🎬 "Component Sinh Ra → Sống → Chết — Hook Vào Mỗi Giai Đoạn" — Lifecycle
+
+*Minh gọi API trước khi component render → data undefined → crash. Anh Hùng: "onMounted() — gọi API SAU KHI component tồn tại trong DOM. onUnmounted() — dọn dẹp (clearInterval, unsubscribe). Hiểu lifecycle = không bao giờ gặp 'Cannot read property of undefined'."*
 
 ---
 

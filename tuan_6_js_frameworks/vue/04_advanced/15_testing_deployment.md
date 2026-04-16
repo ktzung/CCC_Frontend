@@ -1,7 +1,9 @@
 # 🟢 MODULE 4 - BÀI 15
 # **TESTING & DEPLOYMENT**
 
-Trong bài này, bạn sẽ học cách test Vue components và deploy ứng dụng.
+## 🎬 "Code Xong → Test → Deploy → Uống Cà Phê" — Từ Localhost Ra Internet
+
+*Minh: "Deploy Vue app lên đâu?" Anh Hùng: "Vitest test → `npm run build` → 1 folder `dist/` chứa HTML/JS/CSS tĩnh → kéo thả lên Vercel/Netlify → LIVE trong 30 giây. CI/CD với GitHub Actions = push code → tự test → tự deploy. Không cần server."*
 
 ---
 

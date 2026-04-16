@@ -1,7 +1,9 @@
 # 🟢 MODULE 2 - BÀI 06
 # **COMPONENT COMMUNICATION (PROPS & EVENTS)**
 
-Trong ứng dụng Vue, các components cần giao tiếp với nhau. Có 2 cách chính: **Props** (truyền data từ cha xuống con) và **Events** (truyền data từ con lên cha). Đây là kiến thức cốt lõi của Vue.js.
+## 🎬 "Props Xuống, Events Lên — Luật Bất Di Bất Dịch" — Giao Tiếp Component
+
+*Minh muốn con sửa data của cha. Anh Hùng: "KHÔNG. Props = cha đưa con (read-only). Events = con BÁO CÁO lên cha. Cha quyết định sửa hay không. Đây là one-way data flow — giữ app PREDICTABLE. Vi phạm = bugs khắp nơi."*
 
 ---
 

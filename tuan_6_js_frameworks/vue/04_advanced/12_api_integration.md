@@ -1,7 +1,9 @@
 # 🟢 MODULE 4 - BÀI 12
 # **API INTEGRATION**
 
-Trong bài này, bạn sẽ học cách kết nối Vue app với REST APIs, xử lý HTTP requests, và quản lý loading/error states.
+## 🎬 "fetch() Xong Rồi Sao? Loading, Error, Retry..." — API Integration Thực Tế
+
+*Minh fetch API: data hiển thị. Done? Không. Loading spinner? Error message? Retry button? Cancel khi unmount? Anh Hùng: "Axios + Composable = `useFetch()` custom hook. 1 lần viết → mọi component dùng lại. Loading, error, data — tất cả trong 1 composable."*
 
 ---
 

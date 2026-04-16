@@ -1,7 +1,9 @@
 # 🟢 MODULE 2 - BÀI 07
 # **METHODS, COMPUTED PROPERTIES & WATCHERS**
 
-Trong Vue, có 3 cách để xử lý logic và data: **Methods**, **Computed Properties**, và **Watchers**. Mỗi cách có mục đích sử dụng khác nhau. Hiểu rõ sự khác biệt giúp bạn viết code hiệu quả hơn.
+## 🎬 "Method Chạy Mỗi Lần. Computed Chạy Khi CẦN" — 3 Vũ Khí Xử Lý Logic
+
+*Minh dùng method tính `totalPrice` — gọi 100 lần/giây khi render. Anh Hùng: "Computed = CACHED. Chỉ tính lại khi dependency thay đổi. Method = gọi mỗi lần. Watcher = 'canh gác' — khi X thay đổi → làm Y. 3 công cụ, 3 mục đích khác nhau."*
 
 ---
 

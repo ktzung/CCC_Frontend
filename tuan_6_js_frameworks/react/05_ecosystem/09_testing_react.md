@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 09
 # **SECURING A REACT APP THROUGH TESTING**
 
-Dù code bạn viết có hay đến đâu, nếu chưa test thì vẫn là code rác. Testing giúp bạn ngủ ngon hơn mỗi khi deploy.
+## 🎬 "Deploy Rồi Cầu Nguyện" — Khi Không Có Test
+
+*Minh deploy Friday 17h, đi ăn. 19h: 200 user report lỗi checkout. Rollback? Không biết commit nào gây bug. Anh Hùng: "Test = dù nhảy dù. Deploy không test = nhảy không dù. Vitest + React Testing Library — 30 phút setup, cứu cả career."*
 
 ---
 

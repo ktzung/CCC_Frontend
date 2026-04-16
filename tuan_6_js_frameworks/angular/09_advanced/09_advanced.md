@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 09
 # **ADVANCED TOPICS**
 
-Trong bài này, bạn sẽ học các chủ đề nâng cao trong Angular.
+## 🎬 "Lazy Loading, Guards, Pipes — Vũ Khí Cuối Cùng" — Angular Master Class
+
+*Minh: "Angular app tải 5MB JavaScript!" Chị Hà: "Lazy loading — chia app thành chunks, chỉ tải khi user truy cập module đó. Route Guards — chặn user chưa login. Custom Pipes — format tiền VNĐ, ngày tháng. Đây là những thứ biến junior thành senior."*
 
 ---
 

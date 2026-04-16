@@ -1,7 +1,9 @@
 # 🟢 MODULE 4 - BÀI 13
 # **FORM HANDLING & VALIDATION**
 
-Trong bài này, bạn sẽ học cách xây dựng forms trong Vue, xử lý validation, và submit forms.
+## 🎬 "v-model = Two-Way Binding Thần Thánh" — Forms Trong Vue Dễ Hơn React
+
+*Minh viết form React: useState + onChange + value cho mỗi input. Vue? `v-model="email"` — done. Two-way binding tự động. Validation? VeeValidate + Yup schema. Anh Hùng: "Vue sinh ra cho forms. v-model là lý do nhiều người chọn Vue thay React."*
 
 ---
 

@@ -1,7 +1,9 @@
 # 🟢 MODULE 3 - BÀI 10
 # **STATE MANAGEMENT VỚI PINIA**
 
-Pinia là state management library chính thức của Vue 3, thay thế Vuex. Pinia đơn giản hơn, type-safe hơn, và tích hợp tốt với Composition API.
+## 🎬 "Vuex Dài 100 Dòng. Pinia Chỉ 20" — State Management Thế Hệ Mới
+
+*Minh dùng Vuex: mutations, actions, getters, modules — 100 dòng cho 1 counter. Anh Hùng: "Pinia = Vuex 5 nhưng đơn giản hơn 80%. Không cần mutations. TypeScript tự động. Composition API style. Vue team chính thức khuyên dùng Pinia thay Vuex."*
 
 ---
 

@@ -1,7 +1,9 @@
 # 🟢 MODULE 4 - BÀI 14
 # **AUTHENTICATION & AUTHORIZATION**
 
-Trong bài này, bạn sẽ học cách implement authentication và authorization trong Vue app.
+## 🎬 "User Gõ /admin Thẳng Vào URL — Chặn Hay Cho Vào?" — Auth & Guards
+
+*Minh: "Login xong, lưu token ở đâu? localStorage hay cookie?" Chị Hà: "JWT trong httpOnly cookie (an toàn nhất). Route guard `beforeEach()` kiểm tra token trước mỗi navigation. Pinia store lưu user info. Axios interceptor gắn token vào mọi request. Đây là auth PRODUCTION-READY."*
 
 ---
 

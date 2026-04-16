@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 03
 # **TYPESCRIPT IN ANGULAR**
 
-Angular sử dụng TypeScript làm ngôn ngữ chính. TypeScript là superset của JavaScript, thêm static typing và các tính năng hiện đại. TypeScript giúp phát hiện lỗi sớm, cải thiện tooling, và làm code dễ maintain hơn.
+## 🎬 "Angular Không Cho Viết JavaScript" — TypeScript Bắt Buộc
+
+*Minh: "Sao Angular bắt dùng TypeScript?" Chị Hà: "Vì Angular SINH RA cho enterprise. 50 developers, 1000 files — không có type = hỗn loạn. TypeScript = hợp đồng giữa các developer. Interface = 'API này nhận cái gì, trả cái gì'. Không đoán mò."*
 
 ---
 

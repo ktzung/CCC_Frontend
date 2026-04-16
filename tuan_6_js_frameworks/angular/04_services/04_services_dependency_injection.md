@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 04
 # **SERVICES & DEPENDENCY INJECTION**
 
-Services là nơi chứa business logic và data sharing giữa components. Dependency Injection (DI) giúp inject services vào components một cách dễ dàng.
+## 🎬 "Component Không Nên Gọi API" — Services & DI
+
+*Minh viết `fetch()` ngay trong component. Code chạy — nhưng 5 component cùng gọi cùng API → duplicate 500 dòng. Anh Hùng: "Service = cầu nối giữa component và data. DI = nhà hàng: em (component) không vào bếp, WAITER (Angular) mang service đến bàn."*
 
 ---
 

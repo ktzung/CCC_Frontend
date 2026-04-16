@@ -1,7 +1,9 @@
 # 🟦 PART III - CHƯƠNG 11
 # **COMPONENT LIBRARIES**
 
-Tại sao phải đi design từng cái nút bấm, ô nhập liệu trong khi các kỹ sư Google/Alibaba đã làm sẵn cho bạn? Component Libraries giúp xây dựng giao diện chuẩn, đẹp cực nhanh.
+## 🎬 "Design Button Mất 2 Ngày vs Import Button Mất 2 Giây" — Component Libraries
+
+*Minh tự viết DatePicker: 3 ngày, 500 dòng, 12 bugs. Linh import `@mui/material`: `<DatePicker />` — done. Chị Hà: "MUI (Google), Ant Design (Alibaba), shadcn/ui (Vercel) — hàng triệu giờ R&D, free. Đừng reinvent the wheel."*
 
 ---
 

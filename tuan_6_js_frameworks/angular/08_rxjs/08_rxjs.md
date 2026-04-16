@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 08
 # **RXJS - REACTIVE PROGRAMMING**
 
-RxJS là library cho reactive programming với Observables. Angular sử dụng RxJS rất nhiều.
+## 🎬 "Promise Xử Lý 1 Lần. Observable Xử Lý MÃI MÃI" — RxJS: Khó Nhưng Mạnh
+
+*Minh: "RxJS khó quá — Observable, pipe, map, switchMap, debounceTime..." Chị Hà: "RxJS = công thức Excel cho DATA STREAMS. Search input → debounce 300ms → gọi API → lọc kết quả → hiển thị. 1 pipe chain thay 20 dòng setTimeout + fetch."*
 
 ---
 

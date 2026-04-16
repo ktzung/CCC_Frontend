@@ -1,7 +1,9 @@
 # 🔴 ANGULAR - BÀI 02
 # **COMPONENTS & TEMPLATES**
 
-Components là nền tảng của Angular. Mỗi component bao gồm TypeScript class, HTML template, và CSS styles. Trong bài này, bạn sẽ học cách tạo và sử dụng components, hiểu về data binding và các directives cơ bản.
+## 🎬 "1 Lệnh CLI = 4 File Chuẩn" — Angular Components
+
+*Minh gõ `ng g c user-card`. Angular CLI tự tạo: `.ts` (logic), `.html` (template), `.css` (styles), `.spec.ts` (test). Chị Hà: "Angular ép em viết code CÓ CẤU TRÚC từ ngày 1. React cho tự do, Angular cho KỶ LUẬT."*
 
 ---
 
