@@ -1,380 +1,582 @@
-# 🟢 MODULE 1 - BÀI 01
-# **GIỚI THIỆU VUE.JS**
-
-## 🎬 "Framework Nào Dễ Nhất Cho Người Mới?" — Câu Hỏi $1 Triệu
-
-*Minh hỏi Google: "React vs Vue vs Angular cho beginner." 500 bài viết. Tranh cãi nảy lửa.*
-
-*Anh Hùng: "Vue.js — 3 lý do: (1) Template giống HTML, không cần học JSX. (2) Reactivity tự động, không cần setState. (3) Tài liệu tiếng Việt nhiều nhất. 30 phút từ zero đến Counter App."*
-
-> 💡 **Vue = 'Progressive Framework'** — bắt đầu nhỏ (thêm vào 1 trang), mở rộng lớn (SPA hoàn chỉnh). Không ép em all-in từ đầu.
+# 🟢 TUẦN 6 - BÀI 03 (VUE.JS)
+# **GIỚI THIỆU VUE.JS — Progressive Framework**
 
 ---
 
-## 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau bài này, bạn sẽ:
-- Hiểu Vue.js là gì và tại sao nên học Vue.js
-- So sánh được Vue.js với React và Angular
-- Nắm được các khái niệm cơ bản của Vue.js
-- Biết khi nào nên sử dụng Vue.js
+*Minh đã học React. Syntax JSX, useState, useEffect — mọi thứ OK. Nhưng khi mở dự án của anh Hùng — một Laravel app cũ cần thêm 1 component tương tác — vấn đề bắt đầu:*
 
----
+*"React ở đây sẽ phải Vite setup, build pipeline, bundle... để thêm 1 cái dropdown. Không hợp lý," anh Hùng nói.*
 
-## 1. **VUE.JS LÀ GÌ?**
-
-Vue.js (phát âm là "view") là một **progressive JavaScript framework** để xây dựng user interface (giao diện người dùng).
-
-### 1.1. Progressive Framework nghĩa là gì?
-
-**Progressive** có nghĩa là bạn có thể:
-- **Tích hợp từng phần:** Bắt đầu với một phần nhỏ của trang web, không cần viết lại toàn bộ
-- **Mở rộng dần:** Khi cần, bạn có thể mở rộng thành một Single Page Application (SPA) hoàn chỉnh
-- **Học từng bước:** Bắt đầu với HTML + Vue, sau đó thêm Router, State Management...
-
-**Ví dụ:**
+*Anh mở file HTML của Laravel app, thêm 2 dòng:*
 ```html
-<!-- Bạn có thể thêm Vue vào một phần của trang web -->
-<div id="app">
-  {{ message }}
-</div>
-
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+```
+*Rồi thêm 1 component Vue vào đúng 1 `<div>` trên trang. Xong. Không rebuild. Không pipeline.*
+
+*"Vue là 'Progressive Framework'," anh Hùng giải thích. "Có nghĩa là em có thể thêm từng chút một — không phải all-or-nothing như React."*
+
+---
+
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
+
+Vue là lựa chọn tốt khi:
+- Cần thêm tương tác vào **dự án web hiện có** (không rebuild từ đầu)
+- Muốn **cú pháp gần HTML** hơn JSX
+- **Team mới với framework** — learning curve thấp nhất
+- Làm dự án với **Laravel, Django, Rails** backend (cộng đồng Vue + Laravel rất lớn ở VN)
+
+Hiểu Vue ngay bây giờ → có thêm 1 lựa chọn trong bộ công cụ, không bị phụ thuộc vào 1 framework duy nhất.
+
+---
+
+## 2. 🌐 Big Picture — Vue vs React so sánh thực tiễn
+
+```
+VUE                                  REACT
+────────────────────────────         ────────────────────────────
+Template (HTML + directives)         JSX (JavaScript + HTML)
+<p v-if="isLoggedIn">Hi!</p>        {isLoggedIn && <p>Hi!</p>}
+
+Reactivity tự động (Proxy)           State explicit (useState)
+count.value++ → UI tự cập nhật      setCount(count + 1)
+
+Progressive                          All-in
+Thêm vào 1 div của dự án cũ         Cần Vite/CRA project riêng
+
+Options API (OOP-style)              Hooks (functional-style)
+data(), methods(), computed()        useState(), useEffect()...
+
+Composition API (Vue 3)             Tương đương Hooks
+setup() { ref(), computed() }       Cú pháp tương tự
+
+Single-File Component (.vue)         JSX trong .jsx/.tsx file
+<template><script><style>            1 file JS với JSX embedded
+
+Vue Router + Pinia (built-in team)  React Router + Redux/Zustand
+Official packages, tight integration  Ecosystem tự chọn
+
+Job VN: ~20%                         Job VN: ~65%
+Phổ biến: Laravel ecosystem          Phổ biến: Startup, tech company
+```
+
+**Không phải Vue tốt hơn React hay ngược lại — đây là 2 công cụ cho 2 context khác nhau.**
+
+---
+
+## 3. ⚙️ Core Technical Truth
+
+### Vue 3 — 2 API Styles
+
+```vue
+<!-- OPTIONS API (Vue 2 style — dễ đọc cho người mới) -->
 <script>
-  const { createApp } = Vue
-  
-  createApp({
+export default {
     data() {
-      return {
-        message: 'Hello Vue!'
-      }
+        return {
+            count: 0,
+            message: "Hello Vue!"
+        }
+    },
+    computed: {
+        doubleCount() {
+            return this.count * 2
+        }
+    },
+    methods: {
+        increment() {
+            this.count++
+        }
+    },
+    mounted() {
+        console.log("Component mounted!")
     }
-  }).mount('#app')
-</script>
-```
-
-### 1.2. Đặc điểm nổi bật của Vue.js
-
-#### ✅ **Template Syntax dễ học**
-- Giống HTML thuần, dễ đọc và hiểu
-- Không cần học JSX như React
-- Người mới bắt đầu có thể hiểu ngay
-
-```vue
-<template>
-  <div>
-    <h1>{{ title }}</h1>
-    <button @click="increment">Count: {{ count }}</button>
-  </div>
-</template>
-```
-
-#### ✅ **Reactivity System mạnh mẽ**
-- Tự động cập nhật UI khi data thay đổi
-- Không cần gọi `setState()` như React
-- Vue tự động theo dõi và cập nhật
-
-```vue
-<script setup>
-import { ref } from 'vue'
-
-const count = ref(0)
-
-function increment() {
-  count.value++ // UI tự động cập nhật!
 }
 </script>
 ```
 
-#### ✅ **Composition API linh hoạt**
-- Vue 3 giới thiệu Composition API
-- Tổ chức code theo logic thay vì theo lifecycle
-- Dễ tái sử dụng và test hơn
-
-#### ✅ **Bundle size nhỏ gọn**
-- Vue 3 chỉ khoảng 34KB (gzipped)
-- Nhỏ hơn React (~42KB) và Angular (~143KB)
-- Tải nhanh, hiệu suất tốt
-
----
-
-## 2. **SO SÁNH VUE.JS VỚI CÁC FRAMEWORK KHÁC**
-
-### 2.1. Vue.js vs React
-
-| Tiêu chí | Vue.js | React |
-|----------|--------|-------|
-| **Learning Curve** | ⭐⭐⭐⭐⭐ Dễ học | ⭐⭐⭐ Trung bình |
-| **Template** | HTML-like (dễ đọc) | JSX (JavaScript + HTML) |
-| **State Management** | Built-in (Pinia/Vuex) | External (Redux) |
-| **Bundle Size** | ~34KB | ~42KB |
-| **Performance** | Rất tốt | Tốt |
-| **Community** | Lớn, đang phát triển | Rất lớn, mature |
-| **Use Case** | Progressive, từ nhỏ đến lớn | SPA, Mobile apps |
-
-**Khi nào chọn Vue.js:**
-- Bạn mới bắt đầu học framework
-- Cần tích hợp vào dự án hiện có
-- Muốn syntax đơn giản, dễ đọc
-- Làm việc với team nhỏ hoặc solo
-
-**Khi nào chọn React:**
-- Cần ecosystem lớn (nhiều thư viện)
-- Làm việc với team lớn
-- Cần React Native cho mobile
-- Đã quen với JSX
-
-### 2.2. Vue.js vs Angular
-
-| Tiêu chí | Vue.js | Angular |
-|----------|--------|---------|
-| **Learning Curve** | ⭐⭐⭐⭐⭐ Dễ học | ⭐⭐ Khó học |
-| **TypeScript** | Optional | Required |
-| **Bundle Size** | ~34KB | ~143KB |
-| **Complexity** | Đơn giản | Phức tạp |
-| **Use Case** | Progressive, flexible | Enterprise apps |
-| **CLI** | Vite/Vue CLI | Angular CLI |
-
-**Khi nào chọn Vue.js:**
-- Muốn học nhanh, dễ hiểu
-- Cần flexibility cao
-- Dự án nhỏ đến trung bình
-
-**Khi nào chọn Angular:**
-- Dự án enterprise lớn
-- Team đã quen TypeScript
-- Cần full-featured framework (routing, forms, HTTP built-in)
-
----
-
-## 3. **CÁC KHÁI NIỆM CƠ BẢN CỦA VUE.JS**
-
-### 3.1. Components (Thành phần)
-
-Component là các khối xây dựng của ứng dụng Vue. Mỗi component là một phần độc lập, có thể tái sử dụng.
-
 ```vue
-<!-- UserCard.vue -->
-<template>
-  <div class="user-card">
-    <img :src="avatar" :alt="name" />
-    <h3>{{ name }}</h3>
-    <p>{{ email }}</p>
-  </div>
-</template>
-
+<!-- COMPOSITION API (Vue 3 recommended — dùng trong khóa này) -->
 <script setup>
-defineProps({
-  name: String,
-  email: String,
-  avatar: String
+import { ref, computed, onMounted } from 'vue'
+
+const count = ref(0)
+const message = ref("Hello Vue!")
+
+const doubleCount = computed(() => count.value * 2)
+
+function increment() {
+    count.value++
+}
+
+onMounted(() => {
+    console.log("Component mounted!")
 })
 </script>
 ```
 
-### 3.2. Template Syntax
-
-Vue sử dụng template syntax đặc biệt để bind data vào HTML:
-
-- **Interpolation:** `{{ message }}` - Hiển thị giá trị
-- **Directives:** `v-if`, `v-for`, `v-bind`, `v-on` - Điều khiển DOM
-- **Shorthand:** `@click` thay cho `v-on:click`, `:src` thay cho `v-bind:src`
-
-```vue
-<template>
-  <!-- Interpolation -->
-  <p>{{ message }}</p>
-  
-  <!-- Directives -->
-  <div v-if="isVisible">Hiển thị khi isVisible = true</div>
-  <ul>
-    <li v-for="item in items" :key="item.id">{{ item.name }}</li>
-  </ul>
-  
-  <!-- Event handling -->
-  <button @click="handleClick">Click me</button>
-</template>
-```
-
-### 3.3. Reactivity (Tính phản ứng)
-
-Vue tự động theo dõi các thay đổi của data và cập nhật UI:
-
-```vue
-<script setup>
-import { ref } from 'vue'
-
-const count = ref(0) // Reactive reference
-
-function increment() {
-  count.value++ // Thay đổi này tự động cập nhật UI
-}
-</script>
-
-<template>
-  <div>
-    <p>Count: {{ count }}</p>
-    <button @click="increment">+1</button>
-  </div>
-</template>
-```
-
-### 3.4. Single-File Components (SFC)
-
-Vue cho phép viết component trong một file duy nhất với 3 phần:
-- `<template>` - HTML
-- `<script>` - JavaScript logic
-- `<style>` - CSS
-
-```vue
-<template>
-  <div class="greeting">
-    <h1>{{ greeting }}</h1>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const greeting = ref('Hello Vue!')
-</script>
-
-<style scoped>
-.greeting {
-  color: #42b983;
-}
-</style>
-```
+**Khuyến nghị:** Dùng **Composition API** (`<script setup>`) — đây là hướng chính của Vue 3, code concise hơn, dễ tái sử dụng logic.
 
 ---
 
-## 4. **KHI NÀO NÊN SỬ DỤNG VUE.JS?**
-
-### ✅ Nên dùng Vue.js khi:
-
-1. **Bạn mới bắt đầu học framework**
-   - Syntax đơn giản, dễ hiểu
-   - Tài liệu tiếng Việt phong phú
-   - Community hỗ trợ tốt
-
-2. **Cần tích hợp vào dự án hiện có**
-   - Progressive framework
-   - Có thể thêm vào một phần của trang web
-   - Không cần viết lại toàn bộ
-
-3. **Xây dựng SPA (Single Page Application)**
-   - Vue Router mạnh mẽ
-   - State management với Pinia
-   - Performance tốt
-
-4. **Dự án nhỏ đến trung bình**
-   - Setup nhanh
-   - Bundle size nhỏ
-   - Development experience tốt
-
-5. **Team nhỏ hoặc solo developer**
-   - Học nhanh
-   - Productivity cao
-   - Ít boilerplate code
-
-### ❌ Có thể cân nhắc framework khác khi:
-
-1. **Dự án enterprise rất lớn**
-   - Có thể cân nhắc Angular (nếu team đã quen)
-   - Hoặc React (nếu cần ecosystem lớn)
-
-2. **Cần React Native cho mobile**
-   - React có React Native
-   - Vue có NativeScript-Vue nhưng ít phổ biến hơn
-
-3. **Team đã quen với framework khác**
-   - Nếu team đã master React/Angular, có thể tiếp tục
-
----
-
-## 5. **VÍ DỤ ĐẦU TIÊN**
-
-Hãy xem một ví dụ đơn giản để cảm nhận sức mạnh của Vue:
+### Single-File Component (SFC) — Cấu trúc .vue
 
 ```vue
+<!-- ProductCard.vue — Template, Script, Style trong 1 file -->
+
 <template>
-  <div class="counter">
-    <h1>Counter App</h1>
-    <p>Count: {{ count }}</p>
-    <div class="buttons">
-      <button @click="decrement">-</button>
-      <button @click="reset">Reset</button>
-      <button @click="increment">+</button>
+    <!-- HTML template của component -->
+    <div class="product-card">
+        <!-- {{ expression }} = interpolation -->
+        <h3>{{ product.name }}</h3>
+
+        <!-- :attr="expression" = dynamic binding -->
+        <img :src="product.imageUrl" :alt="product.name" />
+
+        <!-- Conditional rendering -->
+        <span v-if="product.badge" class="badge">{{ product.badge }}</span>
+
+        <!-- Formatted price (computed) -->
+        <p class="price">{{ formattedPrice }}</p>
+
+        <!-- @event = event listener -->
+        <button @click="handleAddToCart" :disabled="isAdded">
+            {{ isAdded ? "✅ Đã thêm" : "Thêm vào giỏ" }}
+        </button>
     </div>
-    <p v-if="count > 10" class="warning">
-      Count đã vượt quá 10!
-    </p>
-  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-// Reactive state
-const count = ref(0)
+// defineProps — Nhận data từ parent
+const props = defineProps({
+    product: {
+        type: Object,
+        required: true
+    }
+})
+
+// defineEmits — Phát sự kiện lên parent
+const emit = defineEmits(['add-to-cart'])
+
+// Local state
+const isAdded = ref(false)
+
+// Computed property — tự động tính lại khi dependency thay đổi
+const formattedPrice = computed(() =>
+    props.product.price.toLocaleString('vi-VN') + 'đ'
+)
 
 // Methods
-function increment() {
-  count.value++
-}
-
-function decrement() {
-  count.value--
-}
-
-function reset() {
-  count.value = 0
+function handleAddToCart() {
+    isAdded.value = true
+    emit('add-to-cart', props.product)
+    setTimeout(() => { isAdded.value = false }, 2000) // Reset sau 2s
 }
 </script>
 
 <style scoped>
-.counter {
-  text-align: center;
-  padding: 2rem;
+/* scoped = CSS chỉ áp dụng cho component này, không leak ra ngoài */
+.product-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: box-shadow 0.2s;
 }
 
-.buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin: 1rem 0;
+.product-card:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.warning {
-  color: red;
-  font-weight: bold;
+.price {
+    font-weight: bold;
+    color: #dc2626;
 }
 </style>
 ```
 
-**Giải thích:**
-- `{{ count }}` - Hiển thị giá trị count
-- `@click` - Bắt sự kiện click
-- `v-if` - Điều kiện hiển thị
-- `ref()` - Tạo reactive reference
-- Khi `count.value` thay đổi, UI tự động cập nhật!
+---
+
+### Vue Directives — Cốt lõi của template
+
+```vue
+<template>
+    <!-- v-if / v-else-if / v-else — Conditional rendering -->
+    <div v-if="isLoggedIn">Chào mừng trở lại!</div>
+    <div v-else-if="isGuest">Xem với tư cách khách</div>
+    <div v-else>Vui lòng đăng nhập</div>
+
+    <!-- v-show — Hiện/ẩn (giữ trong DOM, dùng display:none) -->
+    <!-- Dùng khi toggle thường xuyên (tốt hơn v-if về performance) -->
+    <p v-show="isExpanded">Nội dung mở rộng...</p>
+
+    <!-- v-for — Loop rendering -->
+    <ul>
+        <li v-for="item in cartItems" :key="item.id">
+            {{ item.name }} × {{ item.quantity }}
+        </li>
+    </ul>
+
+    <!-- v-for với index -->
+    <div v-for="(product, index) in products" :key="product.id">
+        {{ index + 1 }}. {{ product.name }}
+    </div>
+
+    <!-- v-bind (:) — Bind dynamic attribute -->
+    <img :src="user.avatar" :alt="user.name" />
+    <button :disabled="isLoading" :class="{ 'btn-active': isActive }">
+        Submit
+    </button>
+
+    <!-- v-on (@) — Event handling -->
+    <button @click="handleClick">Click</button>
+    <input @input="handleInput" @keydown.enter="handleSubmit" />
+    <form @submit.prevent="handleSubmit">...</form>
+
+    <!-- v-model — Two-way binding (input ↔ state) -->
+    <input v-model="searchQuery" placeholder="Tìm kiếm..." />
+    <select v-model="selectedCategory">
+        <option value="">Tất cả</option>
+        <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+            {{ cat.name }}
+        </option>
+    </select>
+    <input type="checkbox" v-model="agreeToTerms" />
+</template>
+```
 
 ---
 
-## 6. **TỔNG KẾT**
+### Reactivity — ref() vs reactive()
 
-- ✅ **Vue.js** là progressive framework dễ học, mạnh mẽ
-- ✅ **Template syntax** giống HTML, dễ đọc và hiểu
-- ✅ **Reactivity system** tự động cập nhật UI
-- ✅ **Single-File Components** giúp tổ chức code tốt
-- ✅ Phù hợp cho người mới bắt đầu và dự án từ nhỏ đến lớn
+```vue
+<script setup>
+import { ref, reactive, computed, watch } from 'vue'
+
+// ref() — Cho primitive values (number, string, boolean)
+// Phải dùng .value trong JavaScript, template tự unwrap
+const count = ref(0)
+const name = ref("")
+const isLoading = ref(false)
+
+count.value++     // JavaScript: cần .value
+// {{ count }}   // Template: KHÔNG cần .value
+
+// reactive() — Cho objects (không cần .value)
+const cart = reactive({
+    items: [],
+    total: 0,
+})
+
+cart.items.push({ name: "iPhone", price: 25990000 })  // Không cần .value
+cart.total += 25990000
+
+// computed() — Derived state, auto-recalculate
+const cartCount = computed(() => cart.items.length)
+const cartTotal = computed(() =>
+    cart.items.reduce((sum, item) => sum + item.price, 0)
+)
+
+// watch() — React to state changes (side effects)
+watch(count, (newValue, oldValue) => {
+    console.log(`count: ${oldValue} → ${newValue}`)
+})
+
+// watch array của dependencies
+watch([count, name], ([newCount, newName]) => {
+    document.title = `${newName} - ${newCount}`
+})
+
+// watchEffect() — Auto-track dependencies (như useEffect deps tự động)
+import { watchEffect } from 'vue'
+watchEffect(() => {
+    document.title = `${name.value} (${count.value})`
+    // Tự động watch name và count vì dùng trong callback
+})
+</script>
+```
 
 ---
 
-**Bài tiếp theo:** [02. Development Environment](./02_development_environment.md) - Học cách setup project Vue.js với Vite và Vue CLI.
+### Lifecycle Hooks
+
+```vue
+<script setup>
+import { onMounted, onUpdated, onUnmounted, onBeforeMount } from 'vue'
+
+// Tương đương React hooks:
+// onMounted   ≈ useEffect(() => {}, [])  — sau khi mount
+// onUpdated   ≈ useEffect(() => {})      — sau mỗi render
+// onUnmounted ≈ cleanup function trong useEffect
+
+onBeforeMount(() => {
+    console.log("Chuẩn bị mount — DOM chưa sẵn")
+})
+
+onMounted(async () => {
+    console.log("Component đã mount — DOM sẵn")
+    // Fetch data, access DOM refs, initialize plugins
+    const products = await fetchProducts()
+    productList.value = products
+})
+
+onUpdated(() => {
+    console.log("Component đã update")
+})
+
+onUnmounted(() => {
+    console.log("Component bị xóa — cleanup ở đây")
+    // Clear timers, remove event listeners, cancel API calls
+})
+</script>
+```
+
+---
+
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
+
+> **`ref()` cho primitive, `reactive()` cho object. Template tự unwrap ref (không cần `.value`), JavaScript phải dùng `.value`.**
+> **Vue directives: `v-if` (remove DOM), `v-show` (hide CSS), `v-for` (loop), `v-model` (two-way), `:attr` (bind), `@event` (listen).**
+
+---
+
+## 5. 🏭 Real-world Layer
+
+### Vue 3 + Vite Todo App
+
+```vue
+<!-- src/App.vue -->
+<template>
+    <div class="app">
+        <h1>📝 Todo App — Vue 3</h1>
+
+        <!-- Form thêm todo -->
+        <div class="input-group">
+            <input
+                v-model="newTodo"
+                @keydown.enter="addTodo"
+                placeholder="Thêm todo mới..."
+                class="todo-input"
+            />
+            <button @click="addTodo" class="btn btn-primary">Thêm</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <button
+                v-for="f in ['all', 'active', 'done']"
+                :key="f"
+                :class="{ active: filter === f }"
+                @click="filter = f"
+            >
+                {{ filterLabels[f] }}
+            </button>
+        </div>
+
+        <!-- Todo list -->
+        <TransitionGroup name="todo-list" tag="ul">
+            <li
+                v-for="todo in filteredTodos"
+                :key="todo.id"
+                :class="{ done: todo.done }"
+                class="todo-item"
+            >
+                <input type="checkbox" v-model="todo.done" />
+                <span>{{ todo.text }}</span>
+                <button @click="deleteTodo(todo.id)" class="delete-btn">❌</button>
+            </li>
+        </TransitionGroup>
+
+        <!-- Stats -->
+        <div v-if="todos.length > 0" class="stats">
+            <span>{{ activeTodos }} việc chưa xong</span>
+            <button v-if="doneTodos > 0" @click="clearDone">
+                Xóa {{ doneTodos }} đã xong
+            </button>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+
+const STORAGE_KEY = 'vue-todos'
+const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]'))
+const newTodo = ref('')
+const filter = ref('all')
+const filterLabels = { all: 'Tất cả', active: 'Chưa xong', done: 'Hoàn thành' }
+
+// Computed
+const filteredTodos = computed(() => {
+    if (filter.value === 'active') return todos.value.filter(t => !t.done)
+    if (filter.value === 'done') return todos.value.filter(t => t.done)
+    return todos.value
+})
+
+const activeTodos = computed(() => todos.value.filter(t => !t.done).length)
+const doneTodos = computed(() => todos.value.filter(t => t.done).length)
+
+// Auto-save
+watch(todos, (newTodos) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newTodos))
+}, { deep: true })  // deep: true để watch nested changes
+
+// Methods
+function addTodo() {
+    if (!newTodo.value.trim()) return
+    todos.value.push({ id: Date.now(), text: newTodo.value.trim(), done: false })
+    newTodo.value = ''
+}
+
+function deleteTodo(id) {
+    todos.value = todos.value.filter(t => t.id !== id)
+}
+
+function clearDone() {
+    todos.value = todos.value.filter(t => !t.done)
+}
+</script>
+```
+
+---
+
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
+
+### Bài tập: Setup Vue 3 project và build Counter App (20 phút)
+
+```bash
+# Bước 1: Tạo project
+npm create vue@latest my-vue-app
+# Chọn: No TypeScript, No JSX, Yes Router, Yes Pinia, Yes ESLint
+
+cd my-vue-app
+npm install
+npm run dev
+```
+
+Tạo `src/components/ShoppingCart.vue`:
+
+```vue
+<template>
+    <div class="cart">
+        <h2>🛒 Giỏ hàng ({{ items.length }})</h2>
+
+        <div v-for="item in items" :key="item.id" class="cart-item">
+            <span>{{ item.name }}</span>
+            <div class="quantity">
+                <button @click="decrease(item)">-</button>
+                <span>{{ item.qty }}</span>
+                <button @click="item.qty++">+</button>
+            </div>
+            <span>{{ (item.price * item.qty).toLocaleString('vi-VN') }}đ</span>
+        </div>
+
+        <div class="total">
+            <strong>Tổng: {{ totalPrice }}đ</strong>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { reactive, computed } from 'vue'
+
+const items = reactive([
+    { id: 1, name: 'iPhone 15', price: 25990000, qty: 1 },
+    { id: 2, name: 'AirPods Pro', price: 6490000, qty: 1 },
+])
+
+const totalPrice = computed(() =>
+    items.reduce((sum, i) => sum + i.price * i.qty, 0).toLocaleString('vi-VN')
+)
+
+function decrease(item) {
+    if (item.qty > 1) item.qty--
+}
+</script>
+```
+
+---
+
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Vue dễ hơn React nên kém hơn"** | Sai — Vue dễ học hơn không có nghĩa là kém mạnh hơn. Vue tốt hơn React trong nhiều use case: project legacy integration, team mới với framework, dự án Laravel |
+| **"`ref()` luôn cần `.value`"** | Trong JavaScript thì đúng. Nhưng trong `<template>`, Vue **auto-unwrap** ref → không cần `.value`. `{{ count }}` không phải `{{ count.value }}` |
+| **"`reactive()` tốt hơn `ref()` vì không cần `.value`"** | Có trade-offs: `reactive()` mất reactivity khi destructure (`const { count } = state` → `count` không reactive nữa). `ref()` an toàn hơn vì luôn giữ reference |
+| **"`v-if` và `v-show` như nhau"** | `v-if` = thêm/xóa khỏi DOM (expensive mount/unmount nhưng không render khi false). `v-show` = `display: none` (element vẫn trong DOM). `v-show` tốt hơn khi toggle thường xuyên |
+| **"Composition API thay thế Options API"** | Không — cả hai đều được hỗ trợ chính thức trong Vue 3. Options API vẫn valid. Composition API là lựa chọn ưu tiên cho code mới vì reusability tốt hơn |
+
+---
+
+## 8. ✅ Checkpoint
+
+### Câu hỏi hiểu cơ bản:
+
+1. `ref()` và `reactive()` dùng cho loại dữ liệu nào? Tại sao template không cần `.value` nhưng JavaScript thì cần?
+2. `v-if` và `v-show` khác nhau thế nào? Khi nào nên dùng cái nào?
+3. `computed()` và `watch()` khác nhau thế nào? Khi nào dùng cái nào?
+
+### Câu hỏi áp dụng:
+
+4. Viết Vue template hiển thị danh sách sản phẩm, mỗi sản phẩm có tên và nút "Thêm vào giỏ". Khi click, emit event `add-to-cart` lên parent.
+5. Bạn cần một component `SearchBox` có input text, mỗi khi user gõ thì gọi API search sau 500ms (debounce). Dùng hook/function nào? Viết logic.
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **`ref()`** cho primitives (number, string, boolean, null). **`reactive()`** cho objects và arrays. Template auto-unwrap ref vì Vue compiler phát hiện `.value` và tự thêm vào compiled template. Trong JavaScript (script setup), bạn phải gọi `.value` thủ công vì Vue không compile JS thuần.
+2. **`v-if`**: Thêm/xóa element khỏi DOM. `false` → element không tồn tại trong DOM, không consume memory. **`v-show`**: Set `display: none`. Element vẫn trong DOM. Dùng `v-if` khi condition ít thay đổi hoặc component cần lazy load. Dùng `v-show` khi toggle thường xuyên (tránh mount/unmount overhead).
+3. **`computed()`**: Return giá trị được tính từ reactive state. Tự động re-calculate khi dependency thay đổi. Dùng khi cần **derived data** (price format, filtered list, totals). **`watch()`**: Observe state changes và thực hiện **side effects** (fetch API, localStorage, timer). Dùng khi cần phản ứng với thay đổi mà không return value.
+4. ```vue
+   <template>
+       <div v-for="product in products" :key="product.id">
+           <span>{{ product.name }}</span>
+           <button @click="emit('add-to-cart', product)">Thêm</button>
+       </div>
+   </template>
+   <script setup>
+   const props = defineProps({ products: Array })
+   const emit = defineEmits(['add-to-cart'])
+   </script>
+   ```
+5. ```vue
+   <script setup>
+   import { ref, watch } from 'vue'
+   const query = ref('')
+   const results = ref([])
+   let debounceTimer = null
+   watch(query, (newQuery) => {
+       clearTimeout(debounceTimer)
+       debounceTimer = setTimeout(async () => {
+           if (!newQuery.trim()) return
+           const res = await fetch(`/api/search?q=${newQuery}`)
+           results.value = await res.json()
+       }, 500)
+   })
+   </script>
+   ```
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **Composition API** (`<script setup>`) = cách viết Vue 3 mới, concise và reusable
+2. **SFC** = `<template>` + `<script setup>` + `<style scoped>` trong 1 `.vue` file
+3. **ref()** cho primitives (cần `.value` trong JS, tự unwrap trong template). **reactive()** cho objects
+4. **Directives**: `v-if/v-show` (conditional), `v-for` (loop), `v-model` (two-way), `:` (bind), `@` (event)
+5. **computed()** = derived state tự tính lại. **watch()** = side effects khi state thay đổi
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Vue setup xong, Counter chạy được," Minh nói. "Muốn thêm nhiều trang, router."*
+
+*"Cài `vue-router` là xong. Syntax như React Router nhưng đơn giản hơn. Cũng cần biết Pinia — state management của Vue, kiểu như Zustand của React nhưng official."*
+
+**→ [Bài 04: Vue DevEnv Setup](./02_development_environment.md) — Vite setup, project structure, Vue DevTools: môi trường chuẩn production.**

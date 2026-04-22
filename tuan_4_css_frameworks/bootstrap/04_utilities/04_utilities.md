@@ -1,501 +1,449 @@
-# 🟦 BÀI 04: BOOTSTRAP 5 - UTILITIES
-
-## 🎬 "mt-3 Thay margin-top: 1rem" — Viết CSS Bằng Class Names
-
-*Minh viết CSS: `margin-top: 1rem; padding: 0.5rem; text-align: center; display: flex; justify-content: center;` — 5 dòng CSS.*
-
-*Linh viết Bootstrap: `class="mt-3 p-2 text-center d-flex justify-content-center"` — 1 dòng HTML. Không cần file CSS riêng.*
-
-> **Anh Hùng:** *"Utilities = 'viết CSS trong HTML'. Nhanh, nhưng cẩn thận HTML sẽ dài. Đây là triết lý giống TailwindCSS — và cũng là nhược điểm lớn nhất."*
+# 🟦 TUẦN 4B - BÀI 04 (CSS FRAMEWORKS)
+# **BOOTSTRAP 5 — UTILITIES**
 
 ---
 
-# 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau bài này, bạn sẽ:
-- Sử dụng Spacing utilities (margin, padding) thành thạo
-- Sử dụng Color utilities (text, background)
-- Sử dụng Typography utilities (text alignment, font weight)
-- Sử dụng Display utilities (d-none, d-block, d-flex)
-- Sử dụng Flexbox utilities
-- Kết hợp nhiều utilities với nhau
+*Designer giao Figma cho Minh: "Button cần thêm margin-top 16px, text căn giữa, background xanh 50% opacity."*
+
+*CSS thuần: Mở file CSS, thêm 3 dòng, save, reload.*
+
+*Bootstrap: Gõ thêm 3 chữ vào class: `mt-3 text-center bg-primary bg-opacity-50`.*
+
+*Anh Hùng: "Utilities = triết lý của Tailwind CSS nhưng trong Bootstrap. Không cần file CSS riêng cho mọi styling nhỏ. Nhược điểm: class HTML sẽ dài. Đó là trade-off. Team lớn chấp nhận được vì code dễ đọc hơn 'magic CSS'."*
 
 ---
 
-# 1. **SPACING - KHOẢNG CÁCH**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-Spacing utilities dùng để tạo margin và padding. Đây là utilities được dùng nhiều nhất!
+Utilities giải quyết vấn đề thực tế hàng ngày:
+- Thêm spacing giữa các elements
+- Ẩn element trên mobile, hiện trên desktop
+- Căn giữa nội dung
+- Đổi màu text, background
+- Flexbox layout nhanh
 
-## 1.1. Cú pháp
+**Không biết Utilities** → phải viết file CSS riêng cho từng điều chỉnh nhỏ → CSS file lộn xộn.
+
+---
+
+## 2. 🌐 Big Picture — Cú pháp Utilities
 
 ```
-{margin/padding}{direction}-{size}
+PATTERN CHUNG: {property}{direction}-{breakpoint}-{size}
+
+Ví dụ: mt  -  md  -  3
+        ↑       ↑     ↑
+      margin  (optional) giá trị
+       top    từ md    (0-5 hoặc auto)
+
+Không có breakpoint → áp dụng mọi kích thước:
+mt-3         → margin-top: 1rem (mọi màn hình)
+mt-md-3      → margin-top: 1rem từ 768px trở lên
+
+DANH MỤC UTILITIES
+├── Spacing       → m-*, p-* (margin, padding)
+├── Colors        → text-*, bg-* (text, background)
+├── Typography    → fw-*, fs-*, text-* (font, alignment)
+├── Display       → d-* (display property)
+├── Flexbox       → d-flex + justify-content-*, align-items-*
+├── Sizing        → w-*, h-* (width, height)
+├── Borders       → border-*, rounded-* (border, border-radius)
+├── Shadows       → shadow-* (box-shadow)
+└── Position      → position-*, top-*, start-* (positioning)
 ```
 
-**Giải thích:**
-- `m` = margin, `p` = padding
-- Direction: `t` (top), `b` (bottom), `s` (start/left), `e` (end/right), `x` (left + right), `y` (top + bottom), hoặc không có (all sides)
-- Size: `0`, `1`, `2`, `3`, `4`, `5`, `auto`
+---
 
-## 1.2. Margin Examples
+## 3. ⚙️ Core Technical Truth
+
+### Spacing — Dùng nhiều nhất
+
+```
+Cú pháp:
+{m/p}{direction}-{size}
+
+m = margin    p = padding
+t = top       b = bottom
+s = start(left)  e = end(right)
+x = left+right   y = top+bottom
+(không có) = all sides
+
+Size: 0 (0) | 1 (0.25rem/4px) | 2 (0.5rem/8px) | 3 (1rem/16px) | 4 (1.5rem/24px) | 5 (3rem/48px) | auto
+```
 
 ```html
-<!-- Margin all sides -->
-<div class="m-0">No margin</div>
-<div class="m-1">Small margin (0.25rem)</div>
-<div class="m-2">Margin (0.5rem)</div>
-<div class="m-3">Margin (1rem)</div>
-<div class="m-4">Large margin (1.5rem)</div>
-<div class="m-5">Extra large margin (3rem)</div>
+<!-- Margin examples -->
+<div class="mt-3">Margin top 1rem</div>
+<div class="mb-4">Margin bottom 1.5rem</div>
+<div class="ms-auto">Margin start auto (đẩy sang phải)</div>
+<div class="mx-auto" style="width: 300px;">Căn giữa ngang</div>
+<div class="my-5">Margin top+bottom 3rem</div>
+<div class="m-0">Xóa toàn bộ margin</div>
 
-<!-- Margin specific sides -->
-<div class="mt-3">Margin top</div>
-<div class="mb-4">Margin bottom</div>
-<div class="ms-3">Margin start (left)</div>
-<div class="me-3">Margin end (right)</div>
-<div class="mx-auto">Margin x auto (căn giữa ngang)</div>
-<div class="my-3">Margin y (top + bottom)</div>
-```
+<!-- Padding examples -->
+<div class="p-3">Padding 1rem tất cả</div>
+<div class="px-4 py-2">Padding horizontal lớn, vertical nhỏ</div>
+<div class="pt-5 pb-0">Padding top lớn, bottom 0</div>
 
-**Giá trị cụ thể:**
-- `0` = 0
-- `1` = 0.25rem (4px)
-- `2` = 0.5rem (8px)
-- `3` = 1rem (16px)
-- `4` = 1.5rem (24px)
-- `5` = 3rem (48px)
-- `auto` = auto (chỉ dùng với margin)
-
-## 1.3. Padding Examples
-
-```html
-<!-- Padding all sides -->
-<div class="p-0">No padding</div>
-<div class="p-1">Small padding</div>
-<div class="p-2">Padding</div>
-<div class="p-3">Padding (1rem)</div>
-<div class="p-4">Large padding</div>
-<div class="p-5">Extra large padding</div>
-
-<!-- Padding specific sides -->
-<div class="pt-3">Padding top</div>
-<div class="pb-4">Padding bottom</div>
-<div class="ps-3">Padding start (left)</div>
-<div class="pe-3">Padding end (right)</div>
-<div class="px-4">Padding x (left + right)</div>
-<div class="py-3">Padding y (top + bottom)</div>
-```
-
-## 1.4. Responsive Spacing
-
-Bạn có thể thêm breakpoint vào spacing:
-
-```html
-<div class="m-3 m-md-5">Margin 3 trên mobile, 5 trên tablet+</div>
-<div class="p-2 p-lg-4">Padding 2 trên mobile, 4 trên desktop+</div>
-```
-
-## 1.5. Ví dụ thực tế
-
-```html
-<!-- Card với spacing -->
-<div class="card m-3">
-  <div class="card-body p-4">
-    <h5 class="card-title mb-3">Card Title</h5>
-    <p class="card-text mb-4">Card description.</p>
-    <button class="btn btn-primary">Action</button>
-  </div>
-</div>
-
-<!-- Căn giữa element -->
-<div class="mx-auto" style="width: 200px;">
-  Centered element
+<!-- Responsive spacing -->
+<div class="mt-2 mt-md-4 mt-lg-5">
+    <!-- mt-2 trên mobile, mt-4 trên tablet, mt-5 trên desktop -->
 </div>
 ```
 
+**Bảng spacing nhanh:**
+| Class | CSS | Pixel (base 16px) |
+|---|---|---|
+| `m-0`, `p-0` | 0 | 0 |
+| `m-1`, `p-1` | 0.25rem | 4px |
+| `m-2`, `p-2` | 0.5rem | 8px |
+| `m-3`, `p-3` | 1rem | 16px |
+| `m-4`, `p-4` | 1.5rem | 24px |
+| `m-5`, `p-5` | 3rem | 48px |
+
 ---
 
-# 2. **COLORS - MÀU SẮC**
-
-Bootstrap cung cấp utilities để đổi màu text và background.
-
-## 2.1. Text Colors
+### Colors — Text và Background
 
 ```html
-<p class="text-primary">Primary text (blue)</p>
-<p class="text-secondary">Secondary text (gray)</p>
-<p class="text-success">Success text (green)</p>
-<p class="text-danger">Danger text (red)</p>
-<p class="text-warning">Warning text (yellow)</p>
-<p class="text-info">Info text (cyan)</p>
-<p class="text-light bg-dark">Light text (white)</p>
-<p class="text-dark">Dark text (black)</p>
-<p class="text-muted">Muted text (gray)</p>
-<p class="text-white bg-primary">White text</p>
-```
+<!-- Text colors -->
+<p class="text-primary">Xanh Bootstrap</p>
+<p class="text-danger">Đỏ — lỗi, cảnh báo</p>
+<p class="text-success">Xanh lá — thành công</p>
+<p class="text-warning">Vàng — cảnh báo nhẹ</p>
+<p class="text-info">Xanh nhạt — thông tin</p>
+<p class="text-muted">Xám — secondary text</p>
+<p class="text-dark">Gần đen — heading</p>
+<p class="text-white bg-dark">Trắng trên nền tối</p>
 
-## 2.2. Background Colors
+<!-- Background colors -->
+<div class="bg-primary text-white p-3">Primary bg</div>
+<div class="bg-light text-dark p-3">Light bg</div>
+<div class="bg-dark text-white p-3">Dark bg</div>
+<div class="bg-transparent border p-3">Transparent (clear)</div>
 
-```html
-<div class="bg-primary text-white">Primary background</div>
-<div class="bg-secondary text-white">Secondary background</div>
-<div class="bg-success text-white">Success background</div>
-<div class="bg-danger text-white">Danger background</div>
-<div class="bg-warning text-dark">Warning background</div>
-<div class="bg-info text-white">Info background</div>
-<div class="bg-light text-dark">Light background</div>
-<div class="bg-dark text-white">Dark background</div>
-```
-
-**Lưu ý:** Khi dùng background tối, nhớ đổi text sang màu sáng (`text-white`).
-
-## 2.3. Background với Opacity
-
-```html
-<div class="bg-primary bg-opacity-75">75% opacity</div>
-<div class="bg-primary bg-opacity-50">50% opacity</div>
-<div class="bg-primary bg-opacity-25">25% opacity</div>
+<!-- Opacity -->
+<div class="bg-primary bg-opacity-75 p-3">75% opacity</div>
+<div class="bg-primary bg-opacity-50 p-3">50% opacity</div>
+<div class="bg-primary bg-opacity-25 p-3">25% opacity</div>
+<div class="text-danger text-opacity-75">Text 75% opacity</div>
 ```
 
 ---
 
-# 3. **TYPography - ĐỊNH DẠNG CHỮ**
-
-## 3.1. Text Alignment (Căn chỉnh)
+### Typography
 
 ```html
-<p class="text-start">Left aligned text</p>
-<p class="text-center">Center aligned text</p>
-<p class="text-end">Right aligned text</p>
-```
+<!-- Text alignment -->
+<p class="text-start">Căn trái</p>
+<p class="text-center">Căn giữa</p>
+<p class="text-end">Căn phải</p>
+<!-- Responsive alignment -->
+<p class="text-center text-md-start">Giữa trên mobile, trái trên tablet+</p>
 
-**Responsive:**
-```html
-<p class="text-start text-md-center text-lg-end">
-  Left on mobile, center on tablet, right on desktop
-</p>
-```
+<!-- Font weight & style -->
+<p class="fw-bold">Bold (700)</p>
+<p class="fw-semibold">Semibold (600)</p>
+<p class="fw-normal">Normal (400)</p>
+<p class="fw-light">Light (300)</p>
+<p class="fst-italic">Italic</p>
 
-## 3.2. Font Weight (Độ đậm)
+<!-- Font size -->
+<p class="fs-1">fs-1 (2.5rem)</p>
+<p class="fs-2">fs-2 (2rem)</p>
+<p class="fs-3">fs-3 (1.75rem)</p>
+<p class="fs-4">fs-4 (1.5rem)</p>
+<p class="fs-5">fs-5 (1.25rem)</p>
+<p class="fs-6">fs-6 (1rem)</p>
 
-```html
-<p class="fw-bold">Bold text</p>
-<p class="fw-bolder">Bolder text</p>
-<p class="fw-normal">Normal text</p>
-<p class="fw-light">Light text</p>
-<p class="fw-lighter">Lighter text</p>
-```
+<!-- Text transform -->
+<p class="text-uppercase">lowercase → UPPERCASE</p>
+<p class="text-lowercase">UPPERCASE → lowercase</p>
+<p class="text-capitalize">capitalize first letter</p>
 
-## 3.3. Font Style
+<!-- Text decoration -->
+<a class="text-decoration-none" href="#">Link không có underline</a>
+<p class="text-decoration-line-through">Gạch ngang</p>
 
-```html
-<p class="fst-italic">Italic text</p>
-<p class="fst-normal">Normal text</p>
-```
-
-## 3.4. Text Transform
-
-```html
-<p class="text-lowercase">LOWERCASE TEXT</p>
-<p class="text-uppercase">uppercase text</p>
-<p class="text-capitalize">capitalize text</p>
-```
-
-## 3.5. Text Decoration
-
-```html
-<p class="text-decoration-underline">Underlined text</p>
-<p class="text-decoration-line-through">Line through text</p>
-<p class="text-decoration-none">No decoration (dùng cho links)</p>
-```
-
-## 3.6. Text Wrapping
-
-```html
-<div class="text-nowrap">This text will not wrap</div>
-<div class="text-break">Verylongwordthatwillbreak</div>
+<!-- Text overflow -->
+<p class="text-truncate" style="max-width: 200px;">Văn bản quá dài sẽ bị cắt...</p>
+<p class="text-nowrap">Không bao giờ wrap xuống dòng</p>
 ```
 
 ---
 
-# 4. **DISPLAY - HIỂN THỊ**
-
-Display utilities điều khiển cách phần tử hiển thị.
-
-## 4.1. Display Values
+### Display — Ẩn/Hiện theo breakpoint
 
 ```html
-<div class="d-none">Hidden (display: none)</div>
+<!-- Display values -->
+<div class="d-none">Ẩn hoàn toàn (display: none)</div>
 <div class="d-block">Block</div>
 <div class="d-inline">Inline</div>
-<div class="d-inline-block">Inline block</div>
-<div class="d-flex">Flexbox</div>
-<div class="d-grid">Grid</div>
-<div class="d-table">Table</div>
+<div class="d-inline-block">Inline-block</div>
+<div class="d-flex">Flex container</div>
+<div class="d-grid">Grid container</div>
+
+<!-- Responsive display — Pattern phổ biến nhất -->
+<div class="d-none d-md-block">Ẩn trên mobile, hiện trên tablet+</div>
+<div class="d-block d-md-none">Hiện trên mobile, ẩn trên tablet+</div>
+<div class="d-none d-lg-flex">Ẩn < 992px, flex từ 992px+</div>
+
+<!-- Ví dụ: Desktop menu vs Mobile hamburger -->
+<ul class="navbar-nav d-none d-lg-flex"><!-- Desktop menu --></ul>
+<button class="navbar-toggler d-lg-none"><!-- Mobile button --></button>
 ```
 
-## 4.2. Responsive Display
-
-```html
-<!-- Hidden on mobile, visible on tablet+ -->
-<div class="d-none d-md-block">Visible on tablet+</div>
-
-<!-- Visible on mobile, hidden on tablet+ -->
-<div class="d-block d-md-none">Visible only on mobile</div>
+**Quy tắc responsive display:**
 ```
+d-none d-{bp}-{value}
+= Ẩn mặc định → hiện từ breakpoint bp trở lên
 
-## 4.3. Ví dụ thực tế: Responsive Menu
-
-```html
-<!-- Desktop menu -->
-<nav class="d-none d-md-block">
-  <ul class="nav">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
-</nav>
-
-<!-- Mobile menu button -->
-<button class="d-md-none">Menu</button>
+d-{value} d-{bp}-none
+= Hiện mặc định → ẩn từ breakpoint bp trở lên
 ```
 
 ---
 
-# 5. **FLEXBOX UTILITIES**
-
-Bootstrap cung cấp nhiều Flexbox utilities.
-
-## 5.1. Flex Direction
+### Flexbox Utilities
 
 ```html
-<div class="d-flex flex-row">Row (default)</div>
-<div class="d-flex flex-row-reverse">Row reverse</div>
-<div class="d-flex flex-column">Column</div>
-<div class="d-flex flex-column-reverse">Column reverse</div>
+<!-- Flex container -->
+<div class="d-flex">
+    <!-- flex-direction -->
+    <div class="d-flex flex-row">Row (default)</div>
+    <div class="d-flex flex-column">Column</div>
+    <div class="d-flex flex-row-reverse">Row reverse</div>
+
+    <!-- justify-content (căn ngang) -->
+    <div class="d-flex justify-content-start">Start</div>
+    <div class="d-flex justify-content-center">Center</div>
+    <div class="d-flex justify-content-end">End</div>
+    <div class="d-flex justify-content-between">Space between</div>
+    <div class="d-flex justify-content-around">Space around</div>
+    <div class="d-flex justify-content-evenly">Space evenly</div>
+
+    <!-- align-items (căn dọc) -->
+    <div class="d-flex align-items-start">Start</div>
+    <div class="d-flex align-items-center">Center (phổ biến nhất)</div>
+    <div class="d-flex align-items-end">End</div>
+    <div class="d-flex align-items-stretch">Stretch (default)</div>
+
+    <!-- gap -->
+    <div class="d-flex gap-2">Gap 8px giữa items</div>
+    <div class="d-flex gap-3">Gap 16px giữa items</div>
+
+    <!-- flex-wrap -->
+    <div class="d-flex flex-wrap">Wrap xuống dòng nếu tràn</div>
+</div>
+
+<!-- Flex items -->
+<div class="d-flex">
+    <div class="flex-grow-1">Chiếm hết không gian còn lại</div>
+    <div class="flex-shrink-0">Không co lại</div>
+    <div class="ms-auto">Đẩy sang phải (auto margin)</div>
+</div>
 ```
 
-## 5.2. Justify Content (Căn ngang)
-
+**Pattern Flex phổ biến nhất:**
 ```html
-<div class="d-flex justify-content-start">Start</div>
-<div class="d-flex justify-content-center">Center</div>
-<div class="d-flex justify-content-end">End</div>
-<div class="d-flex justify-content-between">Space between</div>
-<div class="d-flex justify-content-around">Space around</div>
-<div class="d-flex justify-content-evenly">Space evenly</div>
-```
+<!-- Navbar pattern: logo trái, menu phải -->
+<div class="d-flex justify-content-between align-items-center">
+    <div>Logo</div>
+    <nav>Menu</nav>
+</div>
 
-## 5.3. Align Items (Căn dọc)
+<!-- Card footer: text trái, button phải -->
+<div class="d-flex justify-content-between align-items-center">
+    <span class="text-muted">2 ngày trước</span>
+    <button class="btn btn-sm btn-primary">Đọc thêm</button>
+</div>
 
-```html
-<div class="d-flex align-items-start">Start</div>
-<div class="d-flex align-items-center">Center</div>
-<div class="d-flex align-items-end">End</div>
-<div class="d-flex align-items-stretch">Stretch</div>
-```
-
-## 5.4. Flex Wrap
-
-```html
-<div class="d-flex flex-nowrap">No wrap</div>
-<div class="d-flex flex-wrap">Wrap</div>
-<div class="d-flex flex-wrap-reverse">Wrap reverse</div>
-```
-
-## 5.5. Gap (Khoảng cách giữa items)
-
-```html
-<div class="d-flex gap-1">Gap 1</div>
-<div class="d-flex gap-2">Gap 2</div>
-<div class="d-flex gap-3">Gap 3</div>
-<div class="d-flex gap-4">Gap 4</div>
-<div class="d-flex gap-5">Gap 5</div>
-```
-
-## 5.6. Ví dụ thực tế: Navbar với Flexbox
-
-```html
-<nav class="d-flex justify-content-between align-items-center p-3 bg-dark text-white">
-  <div class="logo">My Website</div>
-  <div class="d-flex gap-3">
-    <a href="#" class="text-white text-decoration-none">Home</a>
-    <a href="#" class="text-white text-decoration-none">About</a>
-    <a href="#" class="text-white text-decoration-none">Contact</a>
-  </div>
-</nav>
+<!-- Button group with gap -->
+<div class="d-flex gap-2">
+    <button class="btn btn-primary">Lưu</button>
+    <button class="btn btn-secondary">Hủy</button>
+</div>
 ```
 
 ---
 
-# 6. **BORDERS - VIỀN**
+### Borders & Shadows
 
 ```html
-<!-- Border all sides -->
-<div class="border">Border</div>
-<div class="border-top">Border top</div>
-<div class="border-end">Border end</div>
-<div class="border-bottom">Border bottom</div>
-<div class="border-start">Border start</div>
+<!-- Borders -->
+<div class="border">Viền tất cả (mặc định xám nhạt)</div>
+<div class="border border-primary">Viền xanh</div>
+<div class="border border-2 border-danger">Viền đỏ dày</div>
+<div class="border-top border-3">Chỉ viền trên dày</div>
+<div class="border-0">Xóa viền</div>
 
-<!-- Border colors -->
-<div class="border border-primary">Primary border</div>
-<div class="border border-success">Success border</div>
-<div class="border border-danger">Danger border</div>
+<!-- Border radius -->
+<div class="rounded">Bo tròn nhẹ (4px)</div>
+<div class="rounded-3">Bo tròn vừa</div>
+<div class="rounded-pill">Pill (bo hoàn toàn 2 đầu)</div>
+<div class="rounded-circle" style="width:50px;height:50px;">Tròn</div>
 
-<!-- Border width -->
-<div class="border border-1">Thin border</div>
-<div class="border border-2">Medium border</div>
-<div class="border border-3">Thick border</div>
-<div class="border border-4">Extra thick border</div>
-<div class="border border-5">Maximum border</div>
-
-<!-- Rounded corners -->
-<div class="rounded">Rounded</div>
-<div class="rounded-top">Rounded top</div>
-<div class="rounded-circle">Circle</div>
-<div class="rounded-pill">Pill shape</div>
+<!-- Shadows -->
+<div class="shadow-none">Không shadow</div>
+<div class="shadow-sm">Shadow nhẹ</div>
+<div class="shadow">Shadow mặc định</div>
+<div class="shadow-lg">Shadow lớn</div>
 ```
 
 ---
 
-# 7. **SIZING - KÍCH THƯỚC**
+### Sizing & Position
 
 ```html
-<!-- Width -->
+<!-- Sizing -->
 <div class="w-25">Width 25%</div>
 <div class="w-50">Width 50%</div>
 <div class="w-75">Width 75%</div>
 <div class="w-100">Width 100%</div>
-<div class="w-auto">Width auto</div>
+<div class="h-100">Height 100% (của parent)</div>
+<div class="mw-100">Max-width 100%</div>
+<div class="vw-100">100vw (full viewport width)</div>
+<div class="min-vw-100">min-width: 100vw</div>
 
-<!-- Height -->
-<div class="h-25">Height 25%</div>
-<div class="h-50">Height 50%</div>
-<div class="h-75">Height 75%</div>
-<div class="h-100">Height 100%</div>
-<div class="h-auto">Height auto</div>
+<!-- Position utilities -->
+<div class="position-relative">Relative (parent cho absolute)</div>
+<div class="position-absolute top-0 end-0">Top-right corner</div>
+<div class="position-absolute top-50 start-50 translate-middle">Căn giữa tuyệt đối</div>
+<div class="position-sticky top-0">Sticky header</div>
 
-<!-- Max width/height -->
-<div class="mw-100">Max width 100%</div>
-<div class="mh-100">Max height 100%</div>
+<!-- Visibility (khác với d-none) -->
+<div class="visible">Hiển thị (mặc định)</div>
+<div class="invisible">Ẩn nhưng vẫn chiếm chỗ (vs d-none)</div>
 ```
 
 ---
 
-# 8. **POSITION - VỊ TRÍ**
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
+
+> **`m` = margin, `p` = padding. `t/b/s/e/x/y` = direction. `0-5` = size. Cộng breakpoint vào giữa để responsive.**
+> **`d-none d-md-block` = ẩn trên mobile, hiện trên tablet+. `d-block d-md-none` = ngược lại.**
+
+---
+
+## 5. 🏭 Real-world Layer
+
+### Navbar thực tế chỉ dùng Utilities
 
 ```html
-<div class="position-static">Static</div>
-<div class="position-relative">Relative</div>
-<div class="position-absolute">Absolute</div>
-<div class="position-fixed">Fixed</div>
-<div class="position-sticky">Sticky</div>
-
-<!-- Positioning -->
-<div class="position-absolute top-0 start-0">Top left</div>
-<div class="position-absolute top-0 end-0">Top right</div>
-<div class="position-absolute bottom-0 start-0">Bottom left</div>
-<div class="position-absolute bottom-0 end-0">Bottom right</div>
+<nav class="d-flex justify-content-between align-items-center
+            px-4 py-3 bg-dark text-white shadow sticky-top">
+    <a href="#" class="text-white text-decoration-none fw-bold fs-5">🛒 Shop</a>
+    <div class="d-none d-md-flex gap-4 align-items-center">
+        <a href="#" class="text-white text-decoration-none">Trang chủ</a>
+        <a href="#" class="text-white text-decoration-none">Sản phẩm</a>
+        <a href="#" class="text-white text-decoration-none">Liên hệ</a>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-outline-light btn-sm">🔍</button>
+        <button class="btn btn-warning btn-sm position-relative">
+            🛒
+            <span class="position-absolute top-0 start-100 translate-middle
+                         badge rounded-pill bg-danger">3</span>
+        </button>
+    </div>
+</nav>
 ```
 
 ---
 
-# 9. **SHADOWS - ĐỔ BÓNG**
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
+
+### Bài tập: Decode và Rebuild (20 phút)
+
+Đọc đoạn HTML sau và **giải thích bằng lời mỗi class** làm gì:
 
 ```html
-<div class="shadow-none">No shadow</div>
-<div class="shadow-sm">Small shadow</div>
-<div class="shadow">Default shadow</div>
-<div class="shadow-lg">Large shadow</div>
-```
-
----
-
-# 10. **VISIBILITY - HIỂN THỊ/ẨN**
-
-```html
-<div class="visible">Visible</div>
-<div class="invisible">Invisible (vẫn chiếm chỗ)</div>
-```
-
-**Khác biệt:**
-- `d-none`: `display: none` - Không chiếm chỗ
-- `invisible`: `visibility: hidden` - Vẫn chiếm chỗ nhưng không nhìn thấy
-
----
-
-# 11. **KẾT HỢP NHIỀU UTILITIES**
-
-Bạn có thể kết hợp nhiều utilities với nhau:
-
-```html
-<!-- Card với nhiều utilities -->
-<div class="card shadow-lg m-4 p-3 border border-primary rounded">
-  <h5 class="text-center text-primary fw-bold mb-3">Card Title</h5>
-  <p class="text-muted text-justify">Card content with multiple utilities.</p>
-  <div class="d-flex justify-content-between align-items-center mt-3">
-    <span class="badge bg-success">Active</span>
-    <button class="btn btn-primary btn-sm">Action</button>
-  </div>
+<div class="d-flex justify-content-between align-items-center
+            p-3 mb-3 border border-2 rounded-3 shadow-sm bg-light">
+    <div>
+        <h6 class="fw-bold mb-1 text-dark">Học Bootstrap 5</h6>
+        <small class="text-muted">Hoàn thành 80%</small>
+    </div>
+    <div class="d-flex gap-2">
+        <span class="badge bg-success rounded-pill">Active</span>
+        <button class="btn btn-outline-danger btn-sm">✕</button>
+    </div>
 </div>
 ```
 
----
-
-# 12. **BÀI TẬP THỰC HÀNH**
-
-## Bài tập 1: Tạo Card với Utilities
-
-Tạo card với:
-- Shadow lớn
-- Border primary
-- Padding 4
-- Margin 3
-- Text center
-- Rounded corners
-
-## Bài tập 2: Tạo Flexbox Layout
-
-Tạo layout với:
-- Flexbox container
-- Justify content: space-between
-- Align items: center
-- Gap 3
-- Responsive: column trên mobile, row trên desktop
-
-## Bài tập 3: Tạo Responsive Text
-
-Tạo text với:
-- Left align trên mobile
-- Center align trên tablet
-- Right align trên desktop
-- Bold font weight
-- Primary color
+Sau đó: tạo thêm 2 item tương tự với trạng thái khác nhau (Warning, Danger).
 
 ---
 
-# 13. **TỔNG KẾT**
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
-**Các utilities đã học:**
-1. ✅ Spacing (m, p, mt, mb, mx, my, px, py...)
-2. ✅ Colors (text-*, bg-*)
-3. ✅ Typography (text-center, fw-bold, text-uppercase...)
-4. ✅ Display (d-none, d-block, d-flex...)
-5. ✅ Flexbox (justify-content, align-items, gap...)
-6. ✅ Borders (border, rounded...)
-7. ✅ Sizing (w-*, h-*)
-8. ✅ Position (position-*, top-*, start-*...)
-9. ✅ Shadows (shadow, shadow-lg...)
-10. ✅ Visibility (visible, invisible)
-
-**Lưu ý:**
-- Utilities có thể kết hợp với nhau
-- Có thể thêm breakpoint: `m-3 m-md-5`
-- Utilities giúp giảm CSS custom, code gọn hơn
+| Hiểu sai | Sự thật |
+|---|---|
+| **"`d-none` và `invisible` như nhau"** | `d-none` = `display: none` → không chiếm chỗ, không ảnh hưởng layout. `invisible` = `visibility: hidden` → vẫn chiếm chỗ, chỉ ẩn visual |
+| **"`ms-auto` hoạt động mọi nơi"** | `ms-auto` chỉ hoạt động khi parent là **flex container** (`d-flex`). Trong block context → không có tác dụng |
+| **"`mx-auto` căn giữa mọi element"** | `mx-auto` chỉ căn giữa **block element có width xác định**. Phải set width trước: `<div class="w-50 mx-auto">`. Không set width → element full width, mx-auto vô nghĩa |
+| **"Utilities override CSS custom của mình"** | Utilities có specificity thấp (1 class = 0-1-0). CSS custom của bạn với `!important` hoặc higher specificity sẽ thắng. Nhưng khi có conflict không mong muốn, dùng DevTools để check |
+| **"Responsive utilities từ breakpoint trở xuống"** | Ngược lại — `d-md-block` áp dụng từ md **TRỞ LÊN**. Bootstrap Mobile-First. Muốn "từ trở xuống" → dùng kết hợp: `d-block d-md-none` |
 
 ---
 
-**Bài tiếp theo:** [05. Customization](../05_customization/05_customization.md) - Customize Bootstrap với SASS
+## 8. ✅ Checkpoint
 
-> [!TIP]
-> **Lời khuyên:** Hãy thử nghiệm kết hợp nhiều utilities với nhau. Đây là cách nhanh nhất để style mà không cần viết CSS custom!
+### Câu hỏi hiểu cơ bản:
+
+1. `mt-3` và `mt-md-3` khác nhau thế nào?
+2. `d-none d-lg-flex` làm gì ở kích thước màn hình 1024px (lg = ≥ 992px)?
+3. Tại sao `mx-auto` không hoạt động khi không set width?
+
+### Câu hỏi áp dụng:
+
+4. Viết HTML (chỉ dùng Utilities, không CSS riêng) cho element: nền trắng, viền đỏ mỏng, bo tròn nhẹ, shadow nhẹ, padding 1rem, margin-bottom 1rem.
+5. Bạn có navigation: Logo bên trái, 3 links ở giữa, Cart button bên phải. Trên mobile, ẩn 3 links. Chỉ dùng Flexbox utilities và Display utilities — viết HTML.
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **`mt-3`** áp dụng margin-top 1rem trên **mọi kích thước màn hình**. **`mt-md-3`** áp dụng margin-top 1rem **chỉ từ 768px trở lên** (tablet+). Dưới 768px → không có margin-top.
+2. Ở 1024px (≥ 992px = lg): `d-none` bị override bởi `d-lg-flex` → **`display: flex`**. Từ 992px trở lên, element hiển thị dưới dạng flex. Dưới 992px → `display: none` (ẩn).
+3. `mx-auto` set `margin-left: auto; margin-right: auto`. Với block element **full width**, left và right margin đều = 0 (không có không gian). Width phải < 100% để có "room" cho auto margins để chia đều 2 bên → element căn giữa.
+4. ```html
+   <div class="bg-white border border-danger rounded shadow-sm p-3 mb-3">
+       Nội dung
+   </div>
+   ```
+5. ```html
+   <nav class="d-flex justify-content-between align-items-center p-3">
+       <a href="#">Logo</a>
+       <!-- Ẩn trên mobile, hiện từ lg+ -->
+       <div class="d-none d-lg-flex gap-4">
+           <a href="#">Link 1</a>
+           <a href="#">Link 2</a>
+           <a href="#">Link 3</a>
+       </div>
+       <button class="btn btn-warning">🛒 Cart</button>
+   </nav>
+   ```
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **Spacing**: `m/p` + `t/b/s/e/x/y` + `-{0-5/auto}`. Thêm breakpoint để responsive
+2. **Colors**: `text-{color}`, `bg-{color}`, `bg-opacity-{25/50/75}` — không cần CSS riêng
+3. **Display responsive**: `d-none d-md-block` (ẩn mobile), `d-block d-md-none` (hiện mobile)
+4. **Flexbox**: `d-flex` + `justify-content-*` + `align-items-*` + `gap-*` — layout linh hoạt
+5. **`d-none` ≠ `invisible`** — chiếm chỗ hay không là khác biệt quan trọng
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Trang web Bootstrap xong nhưng màu xanh mặc định Bootstrap — khác brand của khách hàng," Minh nói. "Đổi màu nút thủ công từng cái thì mãi không xong."*
+
+*"Không cần. 1 dòng SASS: `$primary: #e63946`. Build lại → toàn bộ website đổi màu. Đó là SASS Customization," anh Hùng nói. "Đây mới là cách Bootstrap được dùng ở công ty thật."*
+
+**→ [Bài 05: Customization](../05_customization/05_customization.md) — SASS variables: đổi toàn bộ brand color bằng 1 dòng code.**

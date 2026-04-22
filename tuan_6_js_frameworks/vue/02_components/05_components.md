@@ -1,574 +1,371 @@
-# 🟢 MODULE 2 - BÀI 05
-# **COMPONENTS (SINGLE-FILE COMPONENTS)**
-
-## 🎬 "1 File = 1 Component = Template + Logic + Style" — Sức Mạnh SFC
-
-*Minh viết React: component.jsx + component.css + component.test.js — 3 files. Vue: `ProductCard.vue` — MỘT file chứa HTML (template), JS (script), CSS (style). "Đóng gói hoàn chỉnh, mở 1 file = hiểu mọi thứ."*
+# 🟢 TUẦN 6 - BÀI 07 (VUE.JS)
+# **COMPONENTS & SLOTS — Xây Dựng Design System**
 
 ---
 
-## 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau bài này, bạn sẽ:
-- Hiểu Components là gì và tại sao cần dùng
-- Tạo Single-File Components (SFC) với `.vue` files
-- Sử dụng components trong các components khác
-- Hiểu cấu trúc của một SFC (template, script, style)
-- Sử dụng scoped styles
+*"Tại sao phải chia component nhỏ?" Minh hỏi. "Viết thẳng vào 1 file cho nhanh."*
+
+*Anh Hùng chỉ vào màn hình: "App của em có 3 nút — màu khác nhau, size khác nhau, chỗ nào cũng có. Khi sếp bảo 'đổi font size nút từ 14px lên 16px' — em sửa bao nhiêu chỗ?"*
+
+*Minh đếm: "...23 chỗ."*
+
+*"Với `AppButton.vue` component — 1 chỗ. Đó là lý do tồn tại của component reusability. Và Slots là cơ chế cho phép component đó flexible — không cứng nội dung."*
 
 ---
 
-## 1. **COMPONENTS LÀ GÌ?**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-### 1.1. Khái niệm
+Components + Slots = nền tảng xây dựng **Design System** trong Vue:
+- **Props**: Component nhận data từ ngoài → customizable
+- **Slots**: Component nhận template từ ngoài → flexible layout
+- **Emit**: Component báo lại cho parent → two-way communication
+- **defineExpose**: Expose methods ra ngoài → imperative API
 
-Component là các khối xây dựng của ứng dụng Vue. Mỗi component:
-- **Độc lập:** Có logic và UI riêng
-- **Tái sử dụng:** Dùng lại ở nhiều nơi
-- **Có thể kết hợp:** Component cha có thể chứa component con
+---
 
-**Ví dụ thực tế:**
+## 2. 🌐 Big Picture — Component Communication Patterns
+
 ```
-Website E-Commerce
-├── Header Component (Logo, Navigation, Cart)
-├── ProductList Component
-│   ├── ProductCard Component (x10)
-│   └── ProductCard Component
-├── Footer Component
-└── Modal Component
+PARENT                          CHILD
+──────────────────              ──────────────────
+:propName="value"    →          defineProps({ propName })
+                     ←          emit('event', data)
+@event="handler"    ←
+<template #slot>     →          <slot name="slot" />
+
+DESIGN SYSTEM HIERARCHY:
+atoms/          → AppButton, AppInput, AppBadge (pure UI)
+molecules/      → SearchBar, ProductCard, FormField (composed)
+organisms/      → Navbar, ProductGrid, CheckoutForm (feature)
+templates/      → PageLayout, DashboardLayout (structure)
+pages/          → HomePage, ProductsPage (route components)
 ```
-
-### 1.2. Lợi ích của Components
-
-- ✅ **Tổ chức code tốt:** Mỗi component trong một file riêng
-- ✅ **Tái sử dụng:** Viết một lần, dùng nhiều nơi
-- ✅ **Dễ bảo trì:** Sửa một component không ảnh hưởng component khác
-- ✅ **Dễ test:** Test từng component độc lập
-- ✅ **Teamwork:** Nhiều người có thể làm việc trên các components khác nhau
 
 ---
 
-## 2. **SINGLE-FILE COMPONENTS (SFC)**
+## 3. ⚙️ Core Technical Truth
 
-Single-File Component là cách tổ chức component trong Vue, với 3 phần trong một file `.vue`:
-
-### 2.1. Cấu trúc cơ bản
+### defineProps với Validation
 
 ```vue
+<!-- AppButton.vue — Reusable Button component -->
 <template>
-  <!-- HTML template -->
-  <div class="greeting">
-    <h1>{{ message }}</h1>
-  </div>
+    <button
+        :class="[
+            'btn',
+            `btn--${variant}`,
+            `btn--${size}`,
+            { 'btn--loading': isLoading, 'btn--block': block }
+        ]"
+        :disabled="disabled || isLoading"
+        :type="type"
+        v-bind="$attrs"
+    >
+        <span v-if="isLoading" class="spinner">⏳</span>
+        <!-- Default slot — nội dung button -->
+        <slot>{{ label }}</slot>
+    </button>
 </template>
 
 <script setup>
-// JavaScript logic
-import { ref } from 'vue'
-
-const message = ref('Hello Vue!')
+// defineProps với full validation
+const props = defineProps({
+    variant: {
+        type: String,
+        default: 'primary',
+        validator: (v) => ['primary', 'secondary', 'danger', 'ghost'].includes(v),
+    },
+    size: {
+        type: String,
+        default: 'md',
+        validator: (v) => ['sm', 'md', 'lg'].includes(v),
+    },
+    label: String,
+    type: { type: String, default: 'button' },
+    disabled: Boolean,
+    isLoading: Boolean,
+    block: Boolean,  // Full width
+})
 </script>
 
-<style scoped>
-/* CSS styles */
-.greeting {
-  color: #42b983;
-}
-</style>
+<!-- Sử dụng -->
+<!-- <AppButton variant="primary">Thêm vào giỏ</AppButton> -->
+<!-- <AppButton variant="danger" :isLoading="isDeleting">Xóa</AppButton> -->
+<!-- <AppButton variant="ghost" size="sm">Hủy</AppButton> -->
 ```
 
-**Giải thích:**
-- `<template>`: HTML markup (bắt buộc)
-- `<script setup>`: JavaScript logic với Composition API
-- `<style>`: CSS styles (tùy chọn)
+---
 
-### 2.2. Ví dụ: Button Component
-
-Tạo file `src/components/Button.vue`:
+### Slots — Flexible Templates
 
 ```vue
+<!-- AppCard.vue — Card với Named Slots -->
 <template>
-  <button 
-    :class="['btn', `btn-${variant}`, { 'btn-disabled': disabled }]"
-    :disabled="disabled"
-    @click="handleClick"
-  >
-    <slot></slot>
-  </button>
+    <div class="card" :class="{ 'card--elevated': elevated }">
+        <!-- Named slot: header -->
+        <div v-if="$slots.header" class="card__header">
+            <slot name="header" />
+        </div>
+
+        <!-- Default slot: body content -->
+        <div class="card__body">
+            <slot />
+        </div>
+
+        <!-- Named slot: footer -->
+        <div v-if="$slots.footer" class="card__footer">
+            <slot name="footer" />
+        </div>
+    </div>
 </template>
 
 <script setup>
 defineProps({
-  variant: {
-    type: String,
-    default: 'primary',
-    validator: (value) => ['primary', 'secondary', 'danger'].includes(value)
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-})
-
-const emit = defineEmits(['click'])
-
-function handleClick(event) {
-  if (!props.disabled) {
-    emit('click', event)
-  }
-}
-
-const props = defineProps({
-  variant: String,
-  disabled: Boolean
+    elevated: { type: Boolean, default: false }
 })
 </script>
 
-<style scoped>
-.btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s;
-}
+<!-- Sử dụng AppCard với named slots -->
+<AppCard :elevated="true">
+    <template #header>
+        <h2>Thông tin đơn hàng #12345</h2>
+        <span class="badge">Đang giao</span>
+    </template>
 
-.btn-primary {
-  background-color: #42b983;
-  color: white;
-}
+    <!-- Default slot (không cần template tag) -->
+    <div class="order-items">
+        <p v-for="item in order.items" :key="item.id">{{ item.name }}</p>
+    </div>
 
-.btn-primary:hover {
-  background-color: #35a372;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn-disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-</style>
-```
-
-**Sử dụng Button component:**
-
-```vue
-<template>
-  <div>
-    <Button variant="primary" @click="handleClick">
-      Click me
-    </Button>
-    <Button variant="secondary">Secondary</Button>
-    <Button variant="danger" :disabled="true">
-      Disabled
-    </Button>
-  </div>
-</template>
-
-<script setup>
-import Button from './components/Button.vue'
-
-function handleClick() {
-  console.log('Button clicked!')
-}
-</script>
+    <template #footer>
+        <span>Tổng: {{ order.total.toLocaleString('vi-VN') }}đ</span>
+        <AppButton variant="primary">Theo dõi đơn</AppButton>
+    </template>
+</AppCard>
 ```
 
 ---
 
-## 3. **SỬ DỤNG COMPONENTS**
-
-### 3.1. Import và sử dụng
+### Scoped Slots — Slots với Data
 
 ```vue
-<!-- App.vue -->
+<!-- DataTable.vue — Flexible table với scoped slots -->
 <template>
-  <div id="app">
-    <Header />
-    <ProductList />
-    <Footer />
-  </div>
+    <table>
+        <thead>
+            <tr>
+                <th v-for="col in columns" :key="col.key">{{ col.label }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(row, index) in data" :key="row.id ?? index">
+                <td v-for="col in columns" :key="col.key">
+                    <!-- Scoped slot: truyền row data xuống cho parent render -->
+                    <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]">
+                        <!-- Default fallback: hiển thị text -->
+                        {{ row[col.key] }}
+                    </slot>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 
 <script setup>
-import Header from './components/Header.vue'
-import ProductList from './components/ProductList.vue'
-import Footer from './components/Footer.vue'
+defineProps({
+    columns: { type: Array, required: true },
+    data: { type: Array, required: true },
+})
 </script>
+
+<!-- Parent dùng scoped slots để customize cell rendering -->
+<DataTable :columns="columns" :data="products">
+    <!-- Slot nhận { row, value } từ DataTable -->
+    <template #cell-price="{ value }">
+        <strong class="price">{{ value.toLocaleString('vi-VN') }}đ</strong>
+    </template>
+
+    <template #cell-status="{ row }">
+        <span :class="`badge badge--${row.status}`">{{ row.status }}</span>
+    </template>
+
+    <template #cell-actions="{ row }">
+        <AppButton size="sm" @click="editProduct(row)">Sửa</AppButton>
+        <AppButton size="sm" variant="danger" @click="deleteProduct(row.id)">Xóa</AppButton>
+    </template>
+</DataTable>
 ```
-
-### 3.2. Component registration (Global)
-
-Nếu muốn dùng component ở mọi nơi mà không cần import:
-
-```javascript
-// main.js
-import { createApp } from 'vue'
-import App from './App.vue'
-import Button from './components/Button.vue'
-
-const app = createApp(App)
-
-// Global registration
-app.component('Button', Button)
-
-app.mount('#app')
-```
-
-Sau đó có thể dùng ở bất kỳ đâu:
-```vue
-<template>
-  <Button>Click me</Button>
-</template>
-```
-
-**⚠️ Lưu ý:** Chỉ nên register global cho components dùng rất nhiều (như Button, Input).
 
 ---
 
-## 4. **VÍ DỤ: PRODUCT CARD COMPONENT**
-
-Tạo component hoàn chỉnh để hiểu rõ hơn:
+### defineExpose — Imperative API
 
 ```vue
-<!-- src/components/ProductCard.vue -->
+<!-- SearchInput.vue — Expose focus/clear methods -->
 <template>
-  <div class="product-card">
-    <div class="product-image">
-      <img :src="product.image" :alt="product.name" />
-      <span v-if="product.discount" class="discount-badge">
-        -{{ product.discount }}%
-      </span>
+    <div class="search-wrapper">
+        <input ref="inputRef" v-model="query" @input="emit('search', query)" />
+        <button v-if="query" @click="clear">✕</button>
     </div>
-    
-    <div class="product-info">
-      <h3 class="product-name">{{ product.name }}</h3>
-      <p class="product-description">{{ product.description }}</p>
-      
-      <div class="product-price">
-        <span class="current-price">${{ product.price }}</span>
-        <span v-if="product.originalPrice" class="original-price">
-          ${{ product.originalPrice }}
-        </span>
-      </div>
-      
-      <div class="product-actions">
-        <Button 
-          variant="primary" 
-          @click="addToCart"
-          :disabled="!product.inStock"
-        >
-          {{ product.inStock ? 'Add to Cart' : 'Out of Stock' }}
-        </Button>
-        <button class="wishlist-btn" @click="toggleWishlist">
-          ❤️
-        </button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import Button from './Button.vue'
 
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true,
-    validator: (product) => {
-      return product.name && product.price
-    }
-  }
-})
+const inputRef = ref(null)
+const query = ref('')
+const emit = defineEmits(['search', 'clear'])
 
-const emit = defineEmits(['add-to-cart', 'toggle-wishlist'])
+function focus() { inputRef.value?.focus() }
+function clear() { query.value = ''; emit('clear') }
 
-const isInWishlist = ref(false)
-
-function addToCart() {
-  emit('add-to-cart', props.product)
-}
-
-function toggleWishlist() {
-  isInWishlist.value = !isInWishlist.value
-  emit('toggle-wishlist', {
-    product: props.product,
-    inWishlist: isInWishlist.value
-  })
-}
+// Expose public API cho parent dùng ref
+defineExpose({ focus, clear })
 </script>
 
-<style scoped>
-.product-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.product-image {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.discount-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #dc3545;
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: bold;
-}
-
-.product-info {
-  padding: 1rem;
-}
-
-.product-name {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
-}
-
-.product-description {
-  color: #666;
-  margin: 0 0 1rem 0;
-  font-size: 0.9rem;
-}
-
-.product-price {
-  margin-bottom: 1rem;
-}
-
-.current-price {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #42b983;
-}
-
-.original-price {
-  margin-left: 0.5rem;
-  text-decoration: line-through;
-  color: #999;
-}
-
-.product-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.wishlist-btn {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.wishlist-btn:hover {
-  background-color: #f5f5f5;
-}
-</style>
-```
-
-**Sử dụng ProductCard:**
-
-```vue
-<!-- src/components/ProductList.vue -->
+<!-- Parent dùng ref để gọi method -->
 <template>
-  <div class="product-list">
-    <ProductCard
-      v-for="product in products"
-      :key="product.id"
-      :product="product"
-      @add-to-cart="handleAddToCart"
-      @toggle-wishlist="handleToggleWishlist"
-    />
-  </div>
+    <SearchInput ref="searchRef" @search="handleSearch" />
+    <button @click="searchRef.focus()">Tìm kiếm</button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import ProductCard from './ProductCard.vue'
-
-const products = ref([
-  {
-    id: 1,
-    name: 'Laptop',
-    description: 'High performance laptop',
-    price: 999,
-    originalPrice: 1299,
-    discount: 23,
-    image: '/images/laptop.jpg',
-    inStock: true
-  },
-  {
-    id: 2,
-    name: 'Mouse',
-    description: 'Wireless mouse',
-    price: 29,
-    image: '/images/mouse.jpg',
-    inStock: false
-  }
-])
-
-function handleAddToCart(product) {
-  console.log('Added to cart:', product)
-  // Logic thêm vào giỏ hàng
-}
-
-function handleToggleWishlist(data) {
-  console.log('Wishlist:', data)
-  // Logic wishlist
-}
+const searchRef = ref(null)
+// searchRef.value.focus() — gọi được sau onMounted
 </script>
-
-<style scoped>
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
-}
-</style>
 ```
 
 ---
 
-## 5. **SCOPED STYLES**
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
 
-### 5.1. Scoped CSS
+> **`defineProps` = nhận data từ parent. `defineEmits` = báo parent. `<slot>` = nhận template từ parent. `defineExpose` = cho parent gọi methods.**
+> **Named slots: `<slot name="header" />` + `<template #header>`. Scoped slots: `<slot :row="row" />` + `<template #cell="{ row }">`.**
 
-`scoped` đảm bảo styles chỉ áp dụng cho component hiện tại:
+---
+
+## 5. 🏭 Real-world Layer
+
+### Modal Component Production-Ready
 
 ```vue
+<!-- AppModal.vue -->
 <template>
-  <div class="container">
-    <h1>Title</h1>
-  </div>
+    <Teleport to="body">
+        <Transition name="modal">
+            <div v-if="modelValue" class="modal-overlay" @click.self="close">
+                <div class="modal" :class="`modal--${size}`" role="dialog">
+                    <div class="modal__header">
+                        <slot name="header">
+                            <h2>{{ title }}</h2>
+                        </slot>
+                        <button class="modal__close" @click="close" aria-label="Đóng">✕</button>
+                    </div>
+
+                    <div class="modal__body">
+                        <slot />
+                    </div>
+
+                    <div v-if="$slots.footer" class="modal__footer">
+                        <slot name="footer" />
+                    </div>
+                </div>
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
-<style scoped>
-/* Chỉ áp dụng cho component này */
-.container {
-  padding: 2rem;
-}
+<script setup>
+defineProps({
+    modelValue: Boolean,
+    title: String,
+    size: { type: String, default: 'md' },
+})
+const emit = defineEmits(['update:modelValue'])
+function close() { emit('update:modelValue', false) }
+</script>
 
-h1 {
-  color: blue;
-}
-</style>
+<!-- Sử dụng -->
+<AppModal v-model="isOpen" title="Xác nhận xóa" size="sm">
+    <p>Bạn có chắc muốn xóa sản phẩm này?</p>
+    <template #footer>
+        <AppButton variant="ghost" @click="isOpen = false">Hủy</AppButton>
+        <AppButton variant="danger" @click="confirmDelete">Xóa</AppButton>
+    </template>
+</AppModal>
 ```
 
-**Không scoped:**
+---
+
+## 6. 🛠️ Hands-on Practice
+
+### Bài tập: Xây AppCard và DataList (20 phút)
+
 ```vue
-<style>
-/* Áp dụng cho TẤT CẢ components */
-h1 {
-  color: blue; /* Tất cả h1 trong app sẽ màu blue */
-}
-</style>
-```
+<!-- Yêu cầu: AppCard component với 3 named slots -->
+<!-- header, default (body), footer -->
+<!-- Prop: variant ('default' | 'outlined' | 'elevated') -->
 
-### 5.2. Deep selectors
-
-Để style child components:
-
-```vue
-<style scoped>
-/* Không hoạt động với child component */
-.child-component h2 {
-  color: red;
-}
-
-/* Dùng :deep() hoặc >>> */
-:deep(.child-component h2) {
-  color: red;
-}
-
-/* Hoặc */
-::v-deep(.child-component h2) {
-  color: red;
-}
-</style>
+<!-- DataList component với scoped slot -->
+<!-- Props: items (Array), loading (Boolean) -->
+<!-- Slot: #item="{ item, index }" cho mỗi item -->
+<!-- Slot: #empty khi items rỗng -->
+<!-- Slot: #loading khi loading = true -->
 ```
 
 ---
 
-## 6. **BEST PRACTICES**
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
-### 6.1. Đặt tên components
-
-- ✅ PascalCase: `ProductCard.vue`, `UserProfile.vue`
-- ❌ camelCase: `productCard.vue`
-- ❌ kebab-case: `product-card.vue`
-
-### 6.2. Tổ chức thư mục
-
-```
-src/
-├── components/
-│   ├── common/          # Components dùng chung
-│   │   ├── Button.vue
-│   │   ├── Input.vue
-│   │   └── Modal.vue
-│   ├── layout/         # Layout components
-│   │   ├── Header.vue
-│   │   ├── Footer.vue
-│   │   └── Sidebar.vue
-│   └── features/        # Feature-specific components
-│       ├── products/
-│       │   ├── ProductCard.vue
-│       │   └── ProductList.vue
-│       └── users/
-│           ├── UserCard.vue
-│           └── UserList.vue
-```
-
-### 6.3. Component size
-
-- ✅ Giữ component nhỏ, tập trung vào một nhiệm vụ
-- ❌ Tránh component quá lớn (>300 lines)
-- ✅ Tách component lớn thành nhiều components nhỏ
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Slot và Props giải quyết cùng vấn đề"** | Khác: Props truyền **data** (string, number, object). Slots truyền **template** (HTML, components). Dùng props cho data, slots cho layout/content structure |
+| **"Scoped styles tự apply vào slot content"** | Không — Slot content được render trong context của **parent**, không phải child. Child component với `<style scoped>` không style được slot content. Dùng `:deep()` hoặc global CSS |
+| **"Phải define tất cả props để component nhận"** | Vue component tự nhận undeclared attrs qua `$attrs` và forward xuống root element. Dùng `v-bind="$attrs"` để explicitly control. `inheritAttrs: false` để ngắt auto-inherit |
+| **"`defineExpose` = break encapsulation"** | Dùng có chủ đích, không lạm dụng. Hợp lý cho: focus(), reset(), scrollTo() — imperative DOM operations. Không expose business state — dùng emit cho đó |
+| **"Slot content phải là HTML"** | Slot nhận bất kỳ template content nào: components khác, directives, interpolation. `<AppButton>` có thể có `<slot>` chứa `<AppIcon>` chứa `<img>` |
 
 ---
 
-## 7. **TỔNG KẾT**
+## 8. ✅ Checkpoint
 
-- ✅ **Components** là khối xây dựng của Vue app
-- ✅ **SFC** (.vue files) chứa template, script, style
-- ✅ Import và sử dụng components trong components khác
-- ✅ **Scoped styles** để tránh style conflicts
-- ✅ Tổ chức components theo thư mục logic
-- ✅ Giữ components nhỏ và tập trung
+1. Khi nào dùng Props, khi nào dùng Slots? Cho ví dụ mỗi loại.
+2. Scoped slot khác slot thường thế nào? Viết ví dụ component `List` với scoped slot.
+3. `$slots.footer` kiểm tra gì? Tại sao cần check trước khi render footer wrapper?
+
+### Câu hỏi áp dụng:
+
+4. Xây `AppAlert` component: nhận prop `type` (info/warning/error/success) và slot cho message. Có nút đóng emit `close`. Viết component đầy đủ.
+5. `DataTable` của bạn cần default rendering cho cells (không có custom slot). Làm thế nào để component biết slot đó có được provide không?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **Props**: data đơn giản — `<ProductCard :price="29.99" :name="'iPhone'" />`. **Slots**: flexible content — `<AppCard><template #header><h2>...</h2></template></AppCard>`. Rule: Nếu child cần biết **nội dung** để render logic → props. Nếu parent muốn **quyết định** cách render → slots.
+2. Scoped slot = slot truyền ngược data từ child về parent để parent render. ```vue <!-- Child --> <slot :item="currentItem" :index="i" /> <!-- Parent --> <template #default="{ item, index }"> <span>{{ index }}. {{ item.name }}</span> </template> ```
+3. `$slots.footer` = slot object, truthy nếu parent đã provide content vào slot footer. Cần check để không render `<div class="footer-wrapper">` khi không có content (tránh empty padding/border).
+4. ```vue <template> <div :class="`alert alert--${type}`" role="alert"> <span class="alert__icon">{{ icons[type] }}</span> <div class="alert__content"><slot /></div> <button @click="emit('close')" aria-label="Đóng">✕</button> </div> </template> <script setup> const props = defineProps({ type: { type: String, default: 'info', validator: v => ['info','warning','error','success'].includes(v) } }) const emit = defineEmits(['close']) const icons = { info: 'ℹ️', warning: '⚠️', error: '❌', success: '✅' } </script> ```
+5. Dùng `$slots['cell-columnKey']` để check: ```vue <td v-for="col in columns"> <slot v-if="$slots[`cell-${col.key}`]" :name="`cell-${col.key}`" :row="row" :value="row[col.key]" /> <span v-else>{{ row[col.key] }}</span> </td> ```
+
+</details>
 
 ---
 
-**Bài tiếp theo:** [06. Component Communication](../02_components/06_component_communication.md) - Học cách truyền data giữa components với Props và Events.
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **SFC** = `<template>` + `<script setup>` + `<style scoped>`. Mỗi `.vue` file = 1 component độc lập
+2. **Props** = data vào. **Emits** = events ra. **Slots** = template vào. Đây là 3 APIs giao tiếp component
+3. **Named slots**: `<slot name="x" />` + `<template #x>`. **Scoped slots**: `<slot :data="val" />` + `<template #default="{ data }">`
+4. **`$slots.name`** = check nếu slot được provided → tránh render empty wrappers
+5. **`defineExpose`** cho imperative API (focus, reset). Chỉ dùng khi thực sự cần, ưu tiên emit
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Components xong," Minh nói. "Nhưng computed, watch, methods — chưa hiểu rõ khi nào dùng cái nào."*
+
+**→ [Bài 08: Computed & Watch](./07_methods_computed_properties.md) — computed cho derived data, watch cho side effects: 2 hooks quan trọng nhất của Vue reactivity.**

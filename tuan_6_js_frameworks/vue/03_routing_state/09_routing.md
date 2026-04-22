@@ -1,456 +1,473 @@
-# 🟢 MODULE 3 - BÀI 09
-# **VUE ROUTER - ROUTING**
-
-## 🎬 "SPA Chỉ Có 1 File HTML — Vậy /about Lấy Từ Đâu?" — Client-Side Routing
-
-*Minh: "Vue app chỉ có index.html. Vậy khi gõ /products, server lấy file nào?" Anh Hùng: "Không có file nào cả. JavaScript GIẢ LẬP URL bằng History API. Vue Router = bộ não điều phối: URL thay đổi → đổi component, browser KHÔNG hỏi server."*
+# 🟢 TUẦN 6 - BÀI 09 (VUE.JS)
+# **VUE ROUTER — Client-Side Navigation**
 
 ---
 
-## 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau bài này, bạn sẽ:
-- Setup Vue Router trong project
-- Tạo routes và navigation
-- Sử dụng dynamic routes và route params
-- Implement nested routes
-- Sử dụng route guards
-- Lazy load routes
+*Minh gõ `/products` vào URL của Vue app. Browser báo 404.*
+
+*"Tại sao? App đang chạy trên localhost:5173 mà."*
+
+*"Vì server không có file `/products`. Chỉ có `index.html`. Vue Router phải được config để server serve `index.html` cho mọi URL, rồi Vue Router xử lý phần còn lại."*
+
+*"Nhưng khi deploy lên Netlify thì?" Minh hỏi.*
+
+*"Netlify tự detect Vue/Vite. Các server khác → cần thêm redirect rule: `/* → /index.html`. Đó là cái giá phải trả cho SPA routing."*
 
 ---
 
-## 1. **SETUP VUE ROUTER**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-### 1.1. Cài đặt
+Vue Router = navigation system của mọi Vue SPA:
+- **`<router-link>`** thay `<a href>` → không reload trang
+- **`<router-view>`** → render component tương ứng URL
+- **`useRoute`** → đọc URL params, query, path
+- **`useRouter`** → navigate programmatically
+- **Navigation Guards** → auth protection
+
+---
+
+## 2. 🌐 Big Picture — Vue Router Architecture
+
+```
+Browser URL                Router                 Component rendered
+─────────────────          ──────────────         ──────────────────
+localhost/                 → path: "/"         →  HomeView.vue
+localhost/products         → path: "/products" →  ProductsView.vue
+localhost/products/42      → path: "/products/:id" → ProductDetailView.vue
+localhost/dashboard/orders → Nested route      →  DashboardLayout + OrdersView
+
+SERVER REALITY:
+Mọi URL → Server trả index.html → Vue Router render đúng component
+
+NAVIGATION GUARD FLOW:
+User navigate → router.beforeEach() → check auth →
+  Cho phép → load component
+  Từ chối → redirect /login?redirect=/protected-url
+```
+
+---
+
+## 3. ⚙️ Core Technical Truth
+
+### Setup Vue Router
 
 ```bash
+# Đã có nếu chọn Router khi `npm create vue@latest`
+# Cài thủ công:
 npm install vue-router@4
 ```
 
-### 1.2. Tạo router
-
-**src/router/index.js:**
 ```javascript
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import About from '../views/About.vue'
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: About
-  }
-]
+// Eager imports (cho routes hay dùng)
+import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        // Public routes
+        {
+            path: '/',
+            name: 'home',
+            component: HomeView,  // Eager load
+        },
+        {
+            path: '/products',
+            name: 'products',
+            // Lazy load — chỉ download khi user đến trang này
+            component: () => import('@/views/ProductsView.vue'),
+        },
+        {
+            path: '/products/:productId',  // Dynamic segment
+            name: 'product-detail',
+            component: () => import('@/views/ProductDetailView.vue'),
+            props: true,  // Pass params như props vào component
+        },
+        {
+            path: '/search',
+            name: 'search',
+            component: () => import('@/views/SearchView.vue'),
+            // /search?q=iphone&page=2
+        },
+
+        // Protected routes — cần đăng nhập
+        {
+            path: '/cart',
+            name: 'cart',
+            component: () => import('@/views/CartView.vue'),
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/checkout',
+            name: 'checkout',
+            component: () => import('@/views/CheckoutView.vue'),
+            meta: { requiresAuth: true },
+        },
+
+        // Nested routes — Dashboard với sidebar
+        {
+            path: '/dashboard',
+            component: () => import('@/views/DashboardLayout.vue'),
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',           // /dashboard
+                    name: 'dashboard',
+                    component: () => import('@/views/DashboardHome.vue'),
+                },
+                {
+                    path: 'orders',     // /dashboard/orders
+                    name: 'orders',
+                    component: () => import('@/views/OrdersView.vue'),
+                },
+                {
+                    path: 'settings',   // /dashboard/settings
+                    name: 'settings',
+                    component: () => import('@/views/SettingsView.vue'),
+                },
+            ],
+        },
+
+        // Auth
+        {
+            path: '/login',
+            name: 'login',
+            component: () => import('@/views/LoginView.vue'),
+            meta: { guestOnly: true }, // Redirect nếu đã đăng nhập
+        },
+
+        // 404
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not-found',
+            component: () => import('@/views/NotFoundView.vue'),
+        },
+    ],
+
+    // Scroll về đầu trang khi navigate
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) return savedPosition  // Back button → restore position
+        if (to.hash) return { el: to.hash }       // Anchor link
+        return { top: 0 }                          // Scroll to top
+    },
 })
 
-export default router
-```
+// ============================
+// NAVIGATION GUARDS
+// ============================
+router.beforeEach(async (to, from, next) => {
+    const isAuthenticated = !!localStorage.getItem('token')
+    const requiresAuth = to.meta.requiresAuth
+    const guestOnly = to.meta.guestOnly
 
-### 1.3. Sử dụng router trong app
-
-**src/main.js:**
-```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
-```
-
-**src/App.vue:**
-```vue
-<template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
-  </div>
-</template>
-```
-
----
-
-## 2. **NAVIGATION**
-
-### 2.1. router-link
-
-```vue
-<template>
-  <nav>
-    <!-- Basic link -->
-    <router-link to="/">Home</router-link>
-    
-    <!-- Named route -->
-    <router-link :to="{ name: 'About' }">About</router-link>
-    
-    <!-- With params -->
-    <router-link :to="{ name: 'User', params: { id: 123 } }">
-      User Profile
-    </router-link>
-    
-    <!-- Active class -->
-    <router-link 
-      to="/about" 
-      active-class="active-link"
-      exact-active-class="exact-active"
-    >
-      About
-    </router-link>
-  </nav>
-</template>
-```
-
-### 2.2. Programmatic navigation
-
-```vue
-<script setup>
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-function goToHome() {
-  router.push('/')
-}
-
-function goToAbout() {
-  router.push({ name: 'About' })
-}
-
-function goBack() {
-  router.go(-1) // Go back
-}
-
-function goForward() {
-  router.go(1) // Go forward
-}
-</script>
-```
-
----
-
-## 3. **DYNAMIC ROUTES**
-
-### 3.1. Route params
-
-**router/index.js:**
-```javascript
-{
-  path: '/user/:id',
-  name: 'User',
-  component: () => import('../views/User.vue')
-}
-```
-
-**User.vue:**
-```vue
-<template>
-  <div>
-    <h1>User Profile</h1>
-    <p>User ID: {{ userId }}</p>
-  </div>
-</template>
-
-<script setup>
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
-const userId = route.params.id
-</script>
-```
-
-### 3.2. Multiple params
-
-```javascript
-{
-  path: '/user/:userId/post/:postId',
-  component: Post
-}
-```
-
-### 3.3. Optional params
-
-```javascript
-{
-  path: '/user/:id?', // ? makes it optional
-  component: User
-}
-```
-
----
-
-## 4. **NESTED ROUTES**
-
-**router/index.js:**
-```javascript
-{
-  path: '/user/:id',
-  component: UserLayout,
-  children: [
-    {
-      path: '',
-      component: UserProfile
-    },
-    {
-      path: 'posts',
-      component: UserPosts
-    },
-    {
-      path: 'settings',
-      component: UserSettings
-    }
-  ]
-}
-```
-
-**UserLayout.vue:**
-```vue
-<template>
-  <div class="user-layout">
-    <nav>
-      <router-link :to="`/user/${userId}`">Profile</router-link>
-      <router-link :to="`/user/${userId}/posts`">Posts</router-link>
-      <router-link :to="`/user/${userId}/settings`">Settings</router-link>
-    </nav>
-    <router-view />
-  </div>
-</template>
-```
-
----
-
-## 5. **ROUTE GUARDS**
-
-### 5.1. Before enter guard
-
-```javascript
-{
-  path: '/admin',
-  component: Admin,
-  beforeEnter: (to, from, next) => {
-    const isAdmin = checkAdmin()
-    if (isAdmin) {
-      next()
+    if (requiresAuth && !isAuthenticated) {
+        // Lưu intended URL → redirect sau khi login
+        next({ name: 'login', query: { redirect: to.fullPath } })
+    } else if (guestOnly && isAuthenticated) {
+        // Đã login → không cho vào /login
+        next({ name: 'home' })
     } else {
-      next('/login')
+        next()
     }
-  }
-}
-```
-
-### 5.2. Navigation guards
-
-**router/index.js:**
-```javascript
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = checkAuth()
-  
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login')
-  } else {
-    next()
-  }
-})
-```
-
----
-
-## 6. **LAZY LOADING**
-
-Lazy loading giúp giảm bundle size ban đầu bằng cách chỉ load component khi cần:
-
-```javascript
-{
-  path: '/about',
-  component: () => import('../views/About.vue') // Lazy load
-}
-```
-
-**Lợi ích:**
-- Giảm initial bundle size
-- Tải nhanh hơn lần đầu
-- Chỉ load code khi user truy cập route
-
-**Ví dụ:**
-```javascript
-const routes = [
-  {
-    path: '/',
-    component: () => import('../views/Home.vue')
-  },
-  {
-    path: '/about',
-    component: () => import('../views/About.vue')
-  },
-  {
-    path: '/products',
-    component: () => import('../views/Products.vue')
-  }
-]
-```
-
----
-
-## 7. **QUERY PARAMETERS**
-
-Lấy query parameters từ URL:
-
-```vue
-<template>
-  <div>
-    <p>Search: {{ searchQuery }}</p>
-    <p>Page: {{ currentPage }}</p>
-  </div>
-</template>
-
-<script setup>
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
-const searchQuery = route.query.q || ''
-const currentPage = route.query.page || '1'
-</script>
-```
-
-**Navigation với query params:**
-```vue
-<script setup>
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-function search(query) {
-  router.push({
-    path: '/search',
-    query: { q: query, page: 1 }
-  })
-}
-</script>
-```
-
----
-
-## 8. **VÍ DỤ TỔNG HỢP: E-COMMERCE APP**
-
-**router/index.js:**
-```javascript
-import { createRouter, createWebHistory } from 'vue-router'
-
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: () => import('../views/Home.vue')
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    component: () => import('../views/Products.vue')
-  },
-  {
-    path: '/product/:id',
-    name: 'ProductDetail',
-    component: () => import('../views/ProductDetail.vue'),
-    props: true // Pass params as props
-  },
-  {
-    path: '/cart',
-    name: 'Cart',
-    component: () => import('../views/Cart.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/checkout',
-    name: 'Checkout',
-    component: () => import('../views/Checkout.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue')
-  }
-]
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
-
-// Navigation guard
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('token')
-  
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'Login', query: { redirect: to.fullPath } })
-  } else {
-    next()
-  }
 })
 
 export default router
 ```
 
-**App.vue:**
+---
+
+### Template Navigation
+
 ```vue
+<!-- App.vue -->
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/products">Products</router-link>
-      <router-link to="/cart">Cart</router-link>
-      <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-      <button v-else @click="logout">Logout</button>
-    </nav>
-    <router-view />
-  </div>
+    <header class="navbar">
+        <!-- router-link = <a> nhưng không reload trang -->
+        <RouterLink to="/" class="logo">🛒 Shop</RouterLink>
+
+        <nav>
+            <!-- Basic link -->
+            <RouterLink to="/products">Sản phẩm</RouterLink>
+
+            <!-- Named route (tốt hơn hard-coded paths) -->
+            <RouterLink :to="{ name: 'search', query: { q: '' } }">Tìm kiếm</RouterLink>
+
+            <!-- Active class tự động: router-link-active, router-link-exact-active -->
+            <!-- Custom active class -->
+            <RouterLink
+                to="/cart"
+                active-class="nav-active"
+                exact-active-class="nav-exact-active"
+            >
+                🛒 Giỏ hàng
+                <span v-if="cartCount > 0" class="badge">{{ cartCount }}</span>
+            </RouterLink>
+        </nav>
+    </header>
+
+    <!-- Router view = nơi render component của route hiện tại -->
+    <main>
+        <RouterView v-slot="{ Component }">
+            <!-- Transition giữa các routes -->
+            <Transition name="fade" mode="out-in">
+                <component :is="Component" />
+            </Transition>
+        </RouterView>
+    </main>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore'
+import { storeToRefs } from 'pinia'
 
+const cartStore = useCartStore()
+const { totalItems: cartCount } = storeToRefs(cartStore)
+</script>
+
+<style>
+.fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
+```
+
+---
+
+### useRoute & useRouter Composables
+
+```vue
+<!-- ProductDetailView.vue — Route params & programmatic navigation -->
+<template>
+    <div v-if="isLoading">⏳ Đang tải...</div>
+    <div v-else-if="error">❌ {{ error }}</div>
+    <div v-else-if="product">
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+
+        <!-- Query params trong URL: /products/42?color=red&size=L -->
+        <p>Màu đã chọn: {{ selectedColor }}</p>
+        <p>Cỡ đã chọn: {{ selectedSize }}</p>
+
+        <button @click="addToCartAndNavigate">Thêm vào giỏ → Đến giỏ hàng</button>
+        <button @click="router.back()">← Quay lại</button>
+    </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+// useRoute = đọc thông tin URL hiện tại
+const route = useRoute()
 const router = useRouter()
-const isAuthenticated = ref(false)
 
-onMounted(() => {
-  isAuthenticated.value = !!localStorage.getItem('token')
-})
+// Params: /products/:productId → route.params.productId
+const productId = computed(() => route.params.productId)
 
-function logout() {
-  localStorage.removeItem('token')
-  isAuthenticated.value = false
-  router.push('/')
+// Query: /products/42?color=red&size=L → route.query.color
+const selectedColor = computed(() => route.query.color ?? 'Mặc định')
+const selectedSize = computed(() => route.query.size ?? 'M')
+
+const product = ref(null)
+const isLoading = ref(false)
+const error = ref(null)
+
+async function fetchProduct(id) {
+    isLoading.value = true
+    error.value = null
+    try {
+        const res = await fetch(`/api/products/${id}`)
+        if (!res.ok) throw new Error('Không tìm thấy sản phẩm')
+        product.value = await res.json()
+    } catch (err) {
+        error.value = err.message
+    } finally {
+        isLoading.value = false
+    }
+}
+
+// Watch params thay đổi (khi navigate /products/42 → /products/43)
+watch(productId, (newId) => fetchProduct(newId), { immediate: true })
+
+function addToCartAndNavigate() {
+    // Programmatic navigation
+    router.push({ name: 'cart' })
+
+    // Hoặc với object:
+    // router.push({ path: '/cart' })
+    // router.push({ name: 'product-detail', params: { productId: 43 } })
+    // router.push({ name: 'search', query: { q: 'iphone', page: 2 } })
+    // router.replace({ name: 'home' })  // replace: không lưu history
+    // router.back()                      // Tương đương browser back button
+    // router.go(-2)                      // Back 2 bước
 }
 </script>
 ```
 
 ---
 
-## 9. **TỔNG KẾT**
+### Nested Routes với Outlet (router-view)
 
-- ✅ **Vue Router** giúp tạo SPA với client-side routing
-- ✅ Setup router với `createRouter` và `createWebHistory`
-- ✅ Sử dụng `router-link` và `router-view` để navigation
-- ✅ Dynamic routes với `:param`
-- ✅ Nested routes với `children`
-- ✅ Route guards để protect routes
-- ✅ Lazy loading để optimize performance
-- ✅ Query parameters cho search và filters
+```vue
+<!-- DashboardLayout.vue — Layout wrapper cho nested routes -->
+<template>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h3>Dashboard</h3>
+            <nav>
+                <!-- Nested route links -->
+                <RouterLink :to="{ name: 'dashboard' }">📊 Tổng quan</RouterLink>
+                <RouterLink :to="{ name: 'orders' }">📦 Đơn hàng</RouterLink>
+                <RouterLink :to="{ name: 'settings' }">⚙️ Cài đặt</RouterLink>
+            </nav>
+        </aside>
+
+        <main class="dashboard-content">
+            <!-- Nested component render ở đây -->
+            <RouterView />
+        </main>
+    </div>
+</template>
+```
 
 ---
 
-**Bài tiếp theo:** [10. State Management](./10_state_management.md) - Học Pinia để quản lý state trong Vue app.
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
+
+> **`<RouterLink to>` thay `<a href>`. `<RouterView />` = nơi hiện component. `useRoute()` đọc URL. `useRouter()` điều hướng bằng code.**
+> **`meta: { requiresAuth: true }` + `router.beforeEach()` = auth guard. Lưu `to.fullPath` trong query để redirect đúng sau login.**
+
+---
+
+## 5. 🏭 Real-world Layer
+
+### Login với redirect về intended URL
+
+```vue
+<!-- LoginView.vue -->
+<template>
+    <form @submit.prevent="handleLogin">
+        <input v-model="email" type="email" placeholder="Email" />
+        <input v-model="password" type="password" placeholder="Mật khẩu" />
+        <button :disabled="isLoading" type="submit">
+            {{ isLoading ? 'Đang đăng nhập...' : 'Đăng nhập' }}
+        </button>
+        <p v-if="error" class="error">{{ error }}</p>
+    </form>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+
+const route = useRoute()
+const router = useRouter()
+const auth = useAuthStore()
+
+const email = ref('')
+const password = ref('')
+const isLoading = ref(false)
+const error = ref('')
+
+// URL đích sau khi login: /login?redirect=/checkout
+const redirectPath = route.query.redirect ?? '/'
+
+async function handleLogin() {
+    isLoading.value = true
+    error.value = ''
+    try {
+        await auth.login({ email: email.value, password: password.value })
+        router.replace(redirectPath)  // Về /checkout, không về /home
+    } catch (err) {
+        error.value = 'Email hoặc mật khẩu không đúng'
+    } finally {
+        isLoading.value = false
+    }
+}
+</script>
+```
+
+---
+
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
+
+### Bài tập: Setup Router cho Mini Shop (20 phút)
+
+```javascript
+// Tạo router với các routes sau:
+// / → HomeView
+// /products → ProductsView (có query: ?category=phone)
+// /products/:id → ProductDetailView
+// /cart → CartView (protected: requiresAuth)
+// /login → LoginView
+
+// Thêm navigation guard:
+// - requiresAuth route + chưa login → redirect /login?redirect=...
+// - Đã login + truy cập /login → redirect /
+
+// Trong ProductDetailView: dùng useRoute để đọc :id, fetch product
+// Thêm <button @click="router.back()">← Quay lại</button>
+```
+
+---
+
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Router tự xử lý 404 trên server"** | Không — Vue Router chỉ handle URLs trong browser. Server cần config để trả `index.html` cho mọi URL (Nginx: `try_files $uri /index.html`). Netlify/Vercel tự handle. Nếu deploy sai → F5 trên `/products` = 404 |
+| **"Lazy loading làm app chậm"** | Ngược lại — Lazy loading giảm **initial bundle size** → app load nhanh hơn lần đầu. Trade-off: lần đầu navigate đến route đó sẽ có delay nhỏ để download chunk. Với HTTP/2 và caching, gần như không notice được |
+| **"`router.push` và `router.replace` như nhau"** | Khác về history: `push` → thêm entry vào history (Back button hoạt động). `replace` → thay entry hiện tại (Back button về trang trước trước nữa). Dùng `replace` sau login/logout để không Back được về login page |
+| **"`props: true` truyền tất cả route data như props"** | Chỉ truyền `params` (không phải `query`). `/products/:id?color=red` với `props: true` → component nhận `id` prop nhưng không nhận `color` (cần `useRoute().query.color`) |
+| **"Navigation guard `next()` phải gọi"** | Trong Vue Router 4, có thể return value thay vì gọi `next()`: `return false` (cancel), `return '/login'` (redirect), không return = allow |
+
+---
+
+## 8. ✅ Checkpoint
+
+### Câu hỏi hiểu cơ bản:
+
+1. Tại sao phải dùng `<RouterLink>` thay vì `<a href>` trong Vue SPA?
+2. `useRoute()` và `useRouter()` khác nhau thế nào? Dùng cái nào khi nào?
+3. Tại sao deploy Vue SPA lên server cần config thêm (redirect mọi URL về index.html)?
+
+### Câu hỏi áp dụng:
+
+4. Route `/orders/:orderId/items/:itemId`. Trong component, lấy cả 2 params thế nào? URL là `?status=pending` thì lấy query thế nào?
+5. Sau khi user xóa tài khoản thành công, redirect về `/login` và không cho Back về trang trước. Dùng method nào của `router`?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. `<a href="/products">` = browser gửi HTTP GET đến server → nhận HTML mới → full page reload, mất Vue state, mất Pinia data, SPA bị phá vỡ. `<RouterLink to="/products">` = intercepts click, gọi `history.pushState()`, Vue Router render component mới mà không request server. `router-link-active` / `router-link-exact-active` class tự thêm cho active navigation.
+2. `useRoute()` = **reactive read-only** object về route hiện tại. Dùng để **đọc**: `route.params.id`, `route.query.page`, `route.path`, `route.name`. `useRouter()` = router instance. Dùng để **điều hướng**: `router.push()`, `router.replace()`, `router.back()`.
+3. Vue SPA chỉ có 1 file `index.html`. Khi user gõ `localhost/products` trực tiếp hoặc F5 → browser request file `/products` từ server. Server không có file này → 404. Cần config: Nginx `try_files`, Apache `.htaccess` redirect, Netlify `_redirects` file → mọi URL đều serve `index.html`, Vue Router parse URL và render đúng component.
+4. ```javascript const route = useRoute() const { orderId, itemId } = route.params const status = route.query.status // "pending" ```
+5. Dùng `router.replace('/login')` — `replace` thay thế entry trong history, không thêm mới. Sau đó Back button → về trang **trước khi** vào trang xóa tài khoản, không phải về trang xóa tài khoản (vì entry đó đã bị replace).
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **`<RouterLink to>`** → không reload. **`<RouterView />`** → render component. Setup: `createRouter` + `app.use(router)`
+2. **`useRoute()`** = đọc URL (params, query, path). **`useRouter()`** = navigate (push, replace, back)
+3. **Lazy loading** = `component: () => import(...)` → giảm initial bundle, load khi cần
+4. **Navigation Guards** = `router.beforeEach()` + `meta.requiresAuth` → auth protection. Lưu `to.fullPath` để redirect sau login
+5. **Server config**: Mọi URL phải trả `index.html` (Netlify tự handle. Nginx cần `try_files`)
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Router xong rồi, nhưng cart data reset mỗi lần navigate sang trang khác," Minh nói. "Cần lưu state đâu đó."*
+
+*"Pinia — state management của Vue 3. Composition API style, TypeScript sẵn, localStorage persist chỉ cần 1 dòng config."*
+
+**→ [Bài 10: State Management với Pinia](./10_state_management.md) — defineStore, storeToRefs, persist plugin: global state không mất khi navigate.**

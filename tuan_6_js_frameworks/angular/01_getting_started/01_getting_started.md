@@ -1,306 +1,438 @@
-# 🔴 ANGULAR - BÀI 01
-# **GETTING STARTED WITH ANGULAR**
-
-## 🎬 "Google Dùng Gì? Angular" — Framework Cho Dự Án 10 Năm
-
-*Minh: "Angular khó quá — TypeScript bắt buộc, DI, RxJS, Modules... 143KB bundle!"*
-
-*Chị Hà: "Đúng, Angular như XE TẢI — nặng, học lái lâu, nhưng chở được MỌI THỨ. Google dùng cho Gmail, YouTube. Microsoft dùng cho Office Online. Khi dự án có 50+ developers, 1000+ components — React/Vue bắt đầu hỗn loạn. Angular giữ trật tự bằng convention."*
-
-> 💡 **Angular ≠ cho beginner.** Angular = cho team enterprise cần structure cứng, convention rõ ràng, và TypeScript từ ngày 1.
+# 🔴 TUẦN 6 - BÀI 11 (ANGULAR)
+# **GETTING STARTED — Framework Enterprise từ Google**
 
 ---
 
-## 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau bài này, bạn sẽ:
-- Hiểu Angular là gì và tại sao nên học Angular
-- So sánh Angular với React và Vue
-- Cài đặt Angular CLI và tạo project đầu tiên
-- Hiểu cấu trúc thư mục của Angular project
-- Chạy development server và build production
+*"Angular quá phức tạp!" Minh nói. "TypeScript bắt buộc, DI, RxJS, Modules, decorators — chỉ tạo 1 button cần 5 file!"*
 
----
+*Chị Hà — Tech Lead tại Viettel Digital: "Angular như xe tải công trình. Nặng, học lái lâu. Nhưng khi công trình 100 tầng — không ai dùng xe Honda."*
 
-## 1. **ANGULAR LÀ GÌ?**
+*"Gmail. Google Maps. Microsoft Office Online. Đây là Angular. Khi team 50 người cùng viết code — React/Vue không có convention → mỗi người viết 1 kiểu → chaos. Angular enforce structure từ ngày 1."*
 
-### 1.1. Khái niệm
+*"Khi nào intern như tôi cần học Angular?"*
 
-Angular là một **full-featured framework** để xây dựng web applications:
-- **Component-based:** Xây dựng app từ các components
-- **TypeScript:** Sử dụng TypeScript làm ngôn ngữ chính
-- **Full-stack solution:** Routing, HTTP, Forms, Testing đều có sẵn
-- **Enterprise-ready:** Phù hợp cho dự án lớn, phức tạp
-
-### 1.2. Đặc điểm nổi bật
-
-#### ✅ **TypeScript First**
-- TypeScript được tích hợp sẵn
-- Type safety giúp phát hiện lỗi sớm
-- Better IDE support và autocomplete
-
-#### ✅ **Dependency Injection (DI)**
-- Hệ thống DI mạnh mẽ
-- Dễ test và maintain
-- Loose coupling giữa các components
-
-#### ✅ **RxJS Integration**
-- Reactive programming với Observables
-- Xử lý async operations mạnh mẽ
-- Built-in support cho streams
-
-#### ✅ **Angular CLI**
-- Tool mạnh mẽ để generate code
-- Build, test, deploy tự động
-- Best practices được tích hợp sẵn
+*"Khi công ty yêu cầu. Khi nào? Nhìn JD — nếu thấy Angular = học. Trong khóa này, bạn cần hiểu đủ để đọc và viết component Angular cơ bản."*
 
 ---
 
-## 2. **SO SÁNH VỚI CÁC FRAMEWORK KHÁC**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-### 2.1. Angular vs React vs Vue
+Angular xuất hiện trong ~30% job descriptions cho Frontend ở VN, đặc biệt:
+- Công ty **outsource** dự án cho khách hàng nước ngoài (Nhật, Hàn, EU)
+- **Bank, Telecom, Enterprise** software (Viettel, FPT, VNPay)
+- Dự án **dài hạn** cần maintainability cao
 
-| Tiêu chí | Angular | React | Vue.js |
-|----------|---------|-------|--------|
-| **Type** | Full Framework | Library | Progressive Framework |
-| **Language** | TypeScript | JavaScript/TypeScript | JavaScript/TypeScript |
-| **Learning Curve** | ⭐⭐ Khó | ⭐⭐⭐ Trung bình | ⭐⭐⭐⭐⭐ Dễ |
-| **Bundle Size** | ~143KB | ~42KB | ~34KB |
-| **Routing** | Built-in | React Router | Vue Router |
-| **State Management** | RxJS/NgRx | Redux/MobX | Pinia/Vuex |
-| **Forms** | Built-in | Formik/React Hook Form | Built-in |
-| **CLI** | Angular CLI | Create React App/Vite | Vite/Vue CLI |
-| **Best For** | Enterprise apps | Flexible projects | Progressive enhancement |
-
-### 2.2. Khi nào nên dùng Angular?
-
-**✅ Nên dùng Angular khi:**
-- Dự án enterprise lớn, phức tạp
-- Team đã quen TypeScript
-- Cần full-featured framework (routing, forms, HTTP built-in)
-- Cần structure và conventions rõ ràng
-- Dự án dài hạn, cần maintainability cao
-
-**❌ Có thể cân nhắc framework khác khi:**
-- Dự án nhỏ, đơn giản
-- Team mới bắt đầu học framework
-- Cần flexibility cao
-- Bundle size là vấn đề quan trọng
+Biết đủ Angular = mở rộng cơ hội việc làm đáng kể.
 
 ---
 
-## 3. **CÀI ĐẶT ANGULAR CLI**
+## 2. 🌐 Big Picture — Angular Architecture
 
-### 3.1. Yêu cầu tiên quyết
+```
+ANGULAR vs REACT vs VUE
 
-- **Node.js:** Version 18.x hoặc 20.x
-- **npm:** Version 9.x trở lên
+Angular                    React                     Vue
+──────────────────         ──────────────            ──────────────
+Full Framework             UI Library                Progressive Framework
+"Opinionated"              "Unopinionated"           Middle ground
 
-**Kiểm tra:**
+TypeScript (bắt buộc)      JS/TS (tùy chọn)          JS/TS (tùy chọn)
+~143KB initial             ~42KB                     ~34KB
+Learning curve: cao        Trung bình                Thấp nhất
+
+Built-in:                  Cần install thêm:         Cần install thêm:
+- Router                   - React Router            - Vue Router
+- HTTP Client              - Axios/Fetch             - Axios/Fetch
+- Forms                    - Formik/RHF              - VeeValidate
+- Testing                  - Jest/RTL                - Vitest
+- DI System                - (không có)              - (không có)
+
+Use cases:
+Enterprise app (50+ devs)  Startup, tech company     Laravel ecosystem, VN market
+
+Job VN:
+~30% (enterprise)          ~65% (startup/tech)       ~20% (Laravel teams)
+
+ANGULAR MENTAL MODEL:
+Class-based OOP + TypeScript + Decorator pattern
+@Component → @Injectable → @NgModule → AppComponent
+Giống Spring Boot (Java), ASP.NET (C#) hơn React/Vue
+```
+
+---
+
+## 3. ⚙️ Core Technical Truth
+
+### Angular CLI Setup
+
 ```bash
+# Yêu cầu: Node.js 18.x hoặc 20.x
 node --version
 npm --version
-```
 
-### 3.2. Cài đặt Angular CLI
-
-```bash
-# Cài đặt globally
+# Cài Angular CLI globally
 npm install -g @angular/cli
 
-# Kiểm tra version
+# Kiểm tra
 ng version
+
+# Tạo project mới (non-interactive)
+ng new my-angular-app --routing --style=css --skip-tests
+
+# Start development server
+cd my-angular-app
+ng serve --open  # Mở browser tự động
+# → http://localhost:4200
 ```
 
-### 3.3. Tạo project mới
+---
 
-```bash
-# Tạo project
-ng new my-angular-app
-
-# Các câu hỏi sẽ xuất hiện:
-# - Add Angular routing? Yes
-# - Which stylesheet format? CSS
-```
-
-**Các options:**
-- **Angular routing:** Chọn Yes (sẽ cần cho routing)
-- **Stylesheet:** CSS, SCSS, Sass, Less (chọn CSS cho đơn giản)
-
-### 3.4. Cấu trúc thư mục
+### Cấu trúc Project
 
 ```
 my-angular-app/
+│
 ├── src/
 │   ├── app/
-│   │   ├── app.component.ts      # Root component
-│   │   ├── app.component.html    # Template
-│   │   ├── app.component.css     # Styles
-│   │   └── app.module.ts          # Root module
-│   ├── assets/                    # Static assets
-│   ├── index.html                 # Entry HTML
-│   ├── main.ts                    # Bootstrap
-│   └── styles.css                 # Global styles
-├── angular.json                   # Angular config
-├── package.json                   # Dependencies
-└── tsconfig.json                  # TypeScript config
+│   │   ├── app.component.ts         ← Root component (TypeScript class)
+│   │   ├── app.component.html       ← Template (HTML + Angular directives)
+│   │   ├── app.component.css        ← Component styles
+│   │   ├── app.component.spec.ts    ← Unit tests
+│   │   ├── app.module.ts            ← Root NgModule (traditional)
+│   │   └── app.routes.ts            ← Routes config (Angular 17+)
+│   │
+│   ├── assets/                      ← Static files
+│   ├── environments/                ← Dev/Prod configs
+│   ├── index.html                   ← Shell HTML
+│   ├── main.ts                      ← Bootstrap entry point
+│   └── styles.css                   ← Global styles
+│
+├── angular.json                     ← Angular CLI config
+├── tsconfig.json                    ← TypeScript config
+└── package.json
 ```
 
 ---
 
-## 4. **CHẠY DEVELOPMENT SERVER**
+### Anatomy của Angular Component
 
-```bash
-# Vào thư mục project
-cd my-angular-app
+Angular component = **3 phần tách biệt** (khác Vue SFC gộp lại):
 
-# Chạy dev server
-ng serve
-
-# Hoặc với port tùy chỉnh
-ng serve --port 4200
-
-# Mở browser tự động
-ng serve --open
-```
-
-Mở trình duyệt tại `http://localhost:4200`
-
-### 4.1. Hot Reload
-
-Angular CLI hỗ trợ Hot Module Replacement (HMR):
-- Thay đổi code → Tự động reload
-- Giữ state khi có thể
-- Fast refresh
-
----
-
-## 5. **BUILD PRODUCTION**
-
-```bash
-# Build production
-ng build
-
-# Build với optimization
-ng build --configuration production
-
-# Output sẽ ở thư mục dist/
-```
-
-**Kết quả:**
-- Code đã được minify và optimize
-- Tree-shaking để loại bỏ code không dùng
-- AOT (Ahead-of-Time) compilation
-- Sẵn sàng deploy
-
----
-
-## 6. **VÍ DỤ ĐẦU TIÊN**
-
-### 6.1. Component cơ bản
-
-**src/app/app.component.ts:**
 ```typescript
-import { Component } from '@angular/core';
+// src/app/product-card/product-card.component.ts
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-product-card',     // HTML tag: <app-product-card>
+    templateUrl: './product-card.component.html',
+    styleUrls: ['./product-card.component.css'],
+    // Hoặc inline template:
+    // template: `<div>{{ product.name }}</div>`,
+    // styles: [`.card { border: 1px solid #ddd; }`],
+    standalone: true,                  // Angular 17+ Standalone components
+    imports: [CommonModule],
 })
-export class AppComponent {
-  title = 'my-angular-app';
-  count = 0;
+export class ProductCardComponent implements OnInit, OnDestroy {
+    // @Input = nhận dữ liệu từ parent (như Vue defineProps)
+    @Input() product!: Product;
+    @Input() currency = 'VND';
 
-  increment() {
-    this.count++;
-  }
+    // @Output = emit events lên parent (như Vue defineEmits)
+    @Output() addToCart = new EventEmitter<Product>();
+    @Output() viewDetail = new EventEmitter<string>();
 
-  decrement() {
-    this.count--;
-  }
+    // Component state
+    isAdded = false;
+    private timer: ReturnType<typeof setTimeout> | null = null;
+
+    // Lifecycle hooks
+    ngOnInit(): void {
+        console.log('Component mounted với product:', this.product?.name);
+    }
+
+    ngOnDestroy(): void {
+        if (this.timer) clearTimeout(this.timer);  // Cleanup
+    }
+
+    // Methods
+    handleAddToCart(): void {
+        this.isAdded = true;
+        this.addToCart.emit(this.product);
+        this.timer = setTimeout(() => { this.isAdded = false; }, 2000);
+    }
+
+    get formattedPrice(): string {
+        return this.product.price.toLocaleString('vi-VN') + 'đ';
+    }
+}
+
+// TypeScript interfaces
+interface Product {
+    id: number;
+    name: string;
+    price: number;
+    imageUrl: string;
 }
 ```
 
-**src/app/app.component.html:**
 ```html
-<div class="container">
-  <h1>{{ title }}</h1>
-  <p>Count: {{ count }}</p>
-  <button (click)="increment()">+</button>
-  <button (click)="decrement()">-</button>
+<!-- src/app/product-card/product-card.component.html -->
+<div class="card">
+    <!-- Property binding: [attribute]="expression" -->
+    <img [src]="product.imageUrl" [alt]="product.name" />
+
+    <div class="card-body">
+        <h3>{{ product.name }}</h3>
+
+        <!-- Interpolation: {{ expression }} -->
+        <p class="price">{{ formattedPrice }}</p>
+
+        <!-- Event binding: (event)="handler()" -->
+        <!-- Class binding: [class.name]="condition" -->
+        <button
+            (click)="handleAddToCart()"
+            [class.btn-success]="isAdded"
+            [disabled]="isAdded"
+        >
+            {{ isAdded ? '✅ Đã thêm' : 'Thêm vào giỏ' }}
+        </button>
+
+        <!-- Event binding với emit -->
+        <button (click)="viewDetail.emit(product.id.toString())">Xem chi tiết</button>
+    </div>
 </div>
 ```
 
-**src/app/app.component.css:**
-```css
-.container {
-  text-align: center;
-  padding: 2rem;
-}
+---
 
-button {
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-}
+### Angular Directives — Tương đương Vue
+
+```html
+<!-- Angular directives trong template -->
+
+<!-- *ngIf — Như v-if trong Vue -->
+<div *ngIf="isLoggedIn">Chào mừng, {{ user.name }}!</div>
+<div *ngIf="isLoggedIn; else guestBlock">...</div>
+<ng-template #guestBlock>
+    <p>Vui lòng <a routerLink="/login">đăng nhập</a></p>
+</ng-template>
+
+<!-- *ngFor — Như v-for trong Vue -->
+<ul>
+    <li *ngFor="let product of products; let i = index; trackBy: trackById">
+        {{ i + 1 }}. {{ product.name }}
+    </li>
+</ul>
+
+<!-- ngClass — Như :class trong Vue -->
+<div [ngClass]="{
+    'active': isActive,
+    'disabled': !isEnabled,
+    'sale': product.discount > 0
+}">
+
+<!-- ngStyle — Như :style trong Vue -->
+<div [ngStyle]="{
+    'color': brandColor,
+    'font-size': fontSize + 'px'
+}">
+
+<!-- ngModel — Như v-model trong Vue (cần FormsModule) -->
+<input [(ngModel)]="searchQuery" placeholder="Tìm kiếm..." />
+<!-- [()] = "banana in a box" syntax = two-way binding -->
+
+<!-- [ngSwitch] — Như v-if/v-else-if chain -->
+<div [ngSwitch]="userRole">
+    <app-admin-panel *ngSwitchCase="'admin'" />
+    <app-mod-panel *ngSwitchCase="'mod'" />
+    <app-user-panel *ngSwitchDefault />
+</div>
 ```
 
 ---
 
-## 7. **ANGULAR CLI COMMANDS**
-
-### 7.1. Generate components
+### Angular CLI — Công cụ sinh code
 
 ```bash
-# Generate component
-ng generate component my-component
-# Hoặc shorthand
-ng g c my-component
+# Generate component (tạo 4 files cùng lúc)
+ng generate component features/product-card
+# ng g c features/product-card --standalone --skip-tests
 
-# Với options
-ng g c my-component --skip-tests
-ng g c my-component --inline-style
-ng g c my-component --inline-template
-```
+# Generate service
+ng generate service services/product
+# ng g s services/product
 
-### 7.2. Generate services
+# Generate module
+ng generate module features/products --routing
 
-```bash
-ng generate service my-service
-ng g s my-service
-```
+# Generate directive
+ng g directive directives/highlight
 
-### 7.3. Generate modules
+# Generate pipe (filter)
+ng g pipe pipes/currency-vn
 
-```bash
-ng generate module my-module
-ng g m my-module
-```
+# Generate guard (route protection)
+ng g guard guards/auth
 
-### 7.4. Other useful commands
+# Build production
+ng build --configuration production
+# Output: dist/my-angular-app/
 
-```bash
 # Run tests
 ng test
 
-# Lint code
+# Lint
 ng lint
-
-# Build và analyze bundle
-ng build --stats-json
 ```
 
 ---
 
-## 8. **TỔNG KẾT**
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
 
-- ✅ **Angular** là full-featured framework cho enterprise apps
-- ✅ Sử dụng **TypeScript** làm ngôn ngữ chính
-- ✅ **Angular CLI** giúp generate code và build project
-- ✅ Cấu trúc project rõ ràng, dễ maintain
-- ✅ Phù hợp cho dự án lớn, dài hạn
+> **Angular component = TypeScript class + `@Component` decorator. Template (HTML) + class (logic) + styles (CSS) là 3 file tách biệt.**
+> **`[property]` = one-way binding. `(event)` = event listener. `[(ngModel)]` = two-way binding. `*ngIf`, `*ngFor` = structural directives.**
 
 ---
 
-**Bài tiếp theo:** [02. Components & Templates](../02_components/02_components_templates.md) - Học cách tạo và sử dụng components trong Angular.
+## 5. 🏭 Real-world Layer
+
+### Angular 17+ Standalone Components (Modern Angular)
+
+```typescript
+// main.ts — Bootstrap không cần NgModule
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { routes } from './app/app.routes';
+
+bootstrapApplication(AppComponent, {
+    providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+    ]
+});
+
+// app.routes.ts
+import { Routes } from '@angular/router';
+export const routes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'products', component: ProductsComponent },
+    { path: 'products/:id', component: ProductDetailComponent },
+    // Lazy loaded route
+    {
+        path: 'admin',
+        loadComponent: () => import('./features/admin/admin.component')
+            .then(m => m.AdminComponent),
+        canActivate: [authGuard],
+    },
+    { path: '**', component: NotFoundComponent }
+];
+```
+
+---
+
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
+
+### Bài tập: Tạo Angular App và Component (25 phút)
+
+```bash
+# 1. Tạo project
+ng new learn-angular --routing --style=css --standalone
+cd learn-angular
+ng serve --open
+
+# 2. Generate components
+ng g c features/product-list --standalone --skip-tests
+ng g c features/product-card --standalone --skip-tests
+```
+
+Tạo `ProductCardComponent` với:
+- `@Input() product` — nhận product object
+- `@Output() addToCart` — emit khi click
+- Template hiển thị: name, price (formatted), button
+
+```typescript
+// Fake data trong ProductListComponent
+products = [
+    { id: 1, name: 'iPhone 15', price: 25990000 },
+    { id: 2, name: 'MacBook Air M2', price: 32990000 },
+    { id: 3, name: 'AirPods Pro', price: 6490000 },
+];
+```
+
+---
+
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Angular là Angular.js"** | Hoàn toàn khác: **AngularJS** (2010) = version cũ, JavaScript, đã deprecated. **Angular** (2016+, từ version 2) = viết lại hoàn toàn, TypeScript, Modern framework. Khi nói Angular trong context này = Angular 2+ |
+| **"Angular chậm hơn React"** | Trong development mode: Angular chậm hơn do nhiều tính năng. Trong **production**: Angular AOT compilation → thường ngang hoặc nhanh hơn. Google dùng Angular cho Gmail = đủ nhanh |
+| **"`*ngIf` giống `v-if` hoàn toàn"** | Gần như vậy nhưng `*ngIf` dùng `ng-template` bên dưới. Quan trọng hơn: `*ngIf` và `*ngFor` không dùng cùng element (như Vue). Dùng `<ng-container>` để group |
+| **"Standalone components = không cần AppModule"** | Đúng trong Angular 17+ — standalone là hướng chính. Nhưng project cũ dùng NgModule vẫn valid. Cần biết cả hai khi làm việc với dự án thực tế |
+| **"Decorator `@Component` = class inheritance"** | Decorator là **metadata** — cung cấp thông tin cho Angular compiler (selector, template, styles). Không liên quan đến prototype chain. Là Angular-specific pattern dựa trên TypeScript decorators |
+
+---
+
+## 8. ✅ Checkpoint
+
+### Câu hỏi hiểu cơ bản:
+
+1. Angular khác React và Vue ở điểm căn bản nào? (Hint: opinionated vs flexible)
+2. `@Input()` và `@Output()` trong Angular tương đương với gì trong Vue?
+3. Tại sao Angular yêu cầu TypeScript bắt buộc? Lợi ích thực tế là gì?
+
+### Câu hỏi áp dụng:
+
+4. Viết Angular component `UserCard` với: `@Input() user: { name: string, email: string, role: 'admin' | 'user' }`. Hiển thị badge "Admin" nếu role = admin. Emit `@Output() viewProfile` khi click nút.
+5. Trong template Angular, làm thế nào để hiển thị danh sách products với `*ngFor` và chỉ hiển thị những sản phẩm có `price < 10000000` — không dùng thêm directive nào khác ngoài `*ngFor`?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. Angular = **full framework opinionated** — tự quyết định cách cấu trúc code (modules, services, DI, forms patterns). React/Vue = **library/progressive** — developer tự chọn cách tổ chức. Angular enforce: TypeScript bắt buộc, DI system chuẩn, folder structure convention, HTTP client chuẩn. Team lớn → Angular consistent hơn; team nhỏ linh hoạt hơn → React/Vue.
+2. `@Input()` = `defineProps` trong Vue (nhận data từ parent). `@Output() event = new EventEmitter<T>()` + `event.emit(data)` = `defineEmits` trong Vue + `emit('event', data)`. Parent bind: `<comp [propName]="data" (eventName)="handler($event)">`.
+3. TypeScript cung cấp: (1) **Type safety** — bắt lỗi lúc compile, không phải lúc runtime. (2) **IDE autocomplete** — IntelliSense cho component properties, method signatures. (3) **Refactoring** — rename class/interface → tất cả usages update. (4) **Documentation** qua types — `product: Product` tự document structure. Enterprise teams với 50+ người: 1 bug phát hiện lúc compile = tránh được 1 bug production.
+4. ```typescript
+   @Component({
+       selector: 'app-user-card',
+       template: `
+           <div class="card">
+               <span *ngIf="user.role === 'admin'" class="badge">Admin</span>
+               <h3>{{ user.name }}</h3>
+               <p>{{ user.email }}</p>
+               <button (click)="viewProfile.emit(user)">Xem hồ sơ</button>
+           </div>`,
+       standalone: true, imports: [CommonModule]
+   })
+   export class UserCardComponent {
+       @Input() user!: { name: string; email: string; role: 'admin' | 'user' };
+       @Output() viewProfile = new EventEmitter<typeof this.user>();
+   }
+   ```
+5. Dùng `*ngFor` với `| slice` pipe hoặc filter trong component. Cách đúng nhất: filter trong **component class** (không phải template): `get affordableProducts() { return this.products.filter(p => p.price < 10000000) }`, rồi `*ngFor="let p of affordableProducts"`. Không dùng `*ngIf` + `*ngFor` trên cùng element — dùng `<ng-container>`.
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **Angular = Full Framework** — TypeScript, DI, Router, Forms, HTTP đều built-in. Opinionated → consistent cho large teams
+2. **Component** = TypeScript class + `@Component` decorator. `selector`, `templateUrl`, `styleUrls` → 3 file riêng biệt
+3. **Template syntax**: `{{ }}` interpolation, `[prop]` one-way binding, `(event)` listener, `[(ngModel)]` two-way
+4. **Structural directives**: `*ngIf` (conditional), `*ngFor` (loop). Không dùng cả 2 trên cùng element
+5. **Angular CLI**: `ng generate component/service/guard` → code generation. `ng serve` → dev. `ng build` → production
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Angular CLI chạy được, component hiển thị được," Minh nói. "Nhưng Service là gì? Tại sao không chỉ dùng function trong component?"*
+
+*"Dependency Injection," chị Hà nói. "Service = singleton class, được inject vào bất kỳ component nào cần. API calls, business logic, shared state — đây là backbone của Angular app."*
+
+**→ [Bài 12: Components & Services](../02_components/) — Data binding chi tiết, Services, Dependency Injection: kiến trúc Angular thực sự.**

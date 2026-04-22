@@ -1,224 +1,356 @@
-# 🟩 CHƯƠNG 11
-# **THE BOX MODEL OF CSS**
-
-## 🎬 "Tại Sao Cái Div Của Mình Luôn Rộng Hơn 300px?!"
-
-*Minh dành 2 tiếng căn chỉnh layout trang Todo App.*
-
-*Anh đặt `width: 300px` cho sidebar. Bố cục tính toán chính xác: sidebar 300px + content 700px = 1000px vừa khít màn hình.*
-
-*Nhưng trên Chrome, sidebar lại rộng 350px. Tổng thành 1050px. Content bị đẩy xuống dòng mới. Layout vỡ.*
-
-> **Minh:** *"CSS lừa mình! Mình đặt 300 mà nó không chịu 300!"*
->
-> **Anh Hùng (nhìn code):** *"Không phải CSS lừa. Em đang dùng `content-box` — cái mode tính kích thước phiền toái nhất trong lịch sử web. Đây là bẫy mà 90% developer mới đều vấp."*
-
-**Sau chương này, bạn sẽ KHÔNG BAO GIỜ rơi vào bẫy này nữa.**
+# 🟩 TUẦN 2 - BÀI 11
+# **THE CSS BOX MODEL**
 
 ---
 
-# 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau chương này, bạn sẽ:
-- Hiểu cấu tạo 4 lớp của Box Model: **Content, Padding, Border, Margin**
-- Tính toán được kích thước thực tế của một phần tử
-- Biết sự khác biệt sống còn giữa `content-box` (cũ) và `border-box` (mới)
-- Biết cách reset CSS chuẩn (một dòng cứu ngàn dòng debug)
+*Minh tính toán layout: sidebar 300px + content 700px = 1000px. Vừa khít.*
+
+*Mở Chrome. Sidebar rộng 350px. Tổng thành 1050px. Content bị đẩy xuống dòng mới. Layout vỡ.*
+
+*"CSS lừa mình! Mình đặt 300px mà nó render 350px!"*
+
+*Anh Hùng nhìn code: "Không phải CSS lừa. Em đang dùng `content-box` — cách tính kích thước mặc định phiền toái nhất lịch sử web. Đây là bẫy mà 90% developer mới đều vấp phải đúng lần đầu layout."*
+
+**Sau bài này, bạn sẽ không bao giờ bị bẫy này nữa.**
 
 ---
 
-# 1. **CLASSIC BOX MODEL — "Hộp Carton Shopee"**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-Trong mắt CSS, **tất cả phần tử HTML đều là hình chữ nhật (boxes)**. Không có ngoại lệ. `<img>`, `<p>`, `<h1>`, `<button>` — tất cả đều là hộp.
+Box Model là **cơ sở toán học của mọi CSS layout**. Không hiểu Box Model:
+- Không giải thích được tại sao element to hơn/nhỏ hơn mong đợi
+- Không căn chỉnh được layout chính xác
+- Phải đoán mò padding/margin cho đến khi "có vẻ đúng"
 
-### Ẩn dụ: Đóng Hàng Gửi Shopee
+Hiểu Box Model:
+- Tính được kích thước thực tế của bất kỳ element nào
+- Layout chính xác từ lần đầu tiên
+- Debug layout trong 30 giây thay vì 2 tiếng
 
-Mỗi hộp gồm 4 lớp, giống đóng gói hàng online:
+---
+
+## 2. 🌐 Big Picture — Mọi element HTML là một "hộp"
 
 ```
-┌──────────────────────────────────────────────┐
-│              MARGIN (khoảng cách)             │  ← Khoảng cách giữa thùng
-│                                              │     trên xe tải (trong suốt)
-│  ┌────────────────────────────────────────┐  │
-│  │         BORDER (thùng carton)          │  │  ← Vỏ thùng hàng
-│  │                                        │  │
-│  │  ┌──────────────────────────────────┐  │  │
-│  │  │      PADDING (xốp chống sốc)    │  │  │  ← Bọc xốp bảo vệ
-│  │  │                                  │  │  │
-│  │  │  ┌──────────────────────────┐   │  │  │
-│  │  │  │   CONTENT (sản phẩm)    │   │  │  │  ← Sản phẩm bên trong
-│  │  │  │   (Text, Ảnh)           │   │  │  │
-│  │  │  └──────────────────────────┘   │  │  │
-│  │  └──────────────────────────────────┘  │  │
-│  └────────────────────────────────────────┘  │
-└──────────────────────────────────────────────┘
+Tất cả element HTML — <h1>, <p>, <button>, <img>, <div> — đều là hộp chữ nhật.
+
+┌────────────────────────────────────────────────────────┐
+│                    MARGIN                              │  ← Khoảng cách với element khác
+│    ┌──────────────────────────────────────────────┐    │     (trong suốt, không có màu)
+│    │                  BORDER                      │    │  ← Đường viền nhìn thấy được
+│    │    ┌────────────────────────────────────┐    │    │
+│    │    │              PADDING               │    │    │  ← Khoảng đệm trong (ăn background)
+│    │    │    ┌──────────────────────────┐    │    │    │
+│    │    │    │         CONTENT          │    │    │    │  ← Text, ảnh, elements con
+│    │    │    │   (width × height)       │    │    │    │
+│    │    │    └──────────────────────────┘    │    │    │
+│    │    └────────────────────────────────────┘    │    │
+│    └──────────────────────────────────────────────┘    │
+└────────────────────────────────────────────────────────┘
 ```
 
-| Lớp | Ẩn dụ đóng hàng | CSS | Ví dụ |
-|---|---|---|---|
-| **Content** | 📱 Sản phẩm | `width`, `height` | Text, ảnh bên trong |
-| **Padding** | 🧽 Xốp chống sốc | `padding` | Khoảng đệm giữa nội dung và viền |
-| **Border** | 📦 Thùng carton | `border` | Đường viền nhìn thấy được |
-| **Margin** | 📏 Khoảng cách giữa thùng | `margin` | Khoảng trống đẩy elements khác ra xa |
+**Mỗi lớp có vai trò riêng:**
+
+| Lớp | CSS Property | Đặc điểm |
+|---|---|---|
+| **Content** | `width`, `height` | Nội dung thật (text, ảnh) |
+| **Padding** | `padding` | Khoảng đệm **bên trong** — ăn màu background |
+| **Border** | `border` | Đường viền nhìn thấy được |
+| **Margin** | `margin` | Khoảng cách với element khác — **trong suốt** |
 
 ---
 
-## 🧮 Cách tính kích thước — NGUYÊN NHÂN CỦA MỌI BUG LAYOUT
+## 3. ⚙️ Core Technical Truth
 
-Trong Box Model mặc định (`box-sizing: content-box`):
-
-**Chiều rộng THỰC TẾ = width + padding×2 + border×2**
+### `content-box` (mặc định) — Nguồn gốc mọi bug layout
 
 ```css
-.box {
-  width: 300px;        /* ← Bạn muốn 300px */
-  padding: 20px;       /* ← +40px (2 bên) */
-  border: 5px solid;   /* ← +10px (2 bên) */
+.sidebar {
+    width: 300px;        /* Bạn muốn 300px */
+    padding: 20px;       /* Thêm 40px (2 bên) */
+    border: 5px solid;   /* Thêm 10px (2 bên) */
 }
-/* → Kích thước THỰC TẾ = 300 + 40 + 10 = 350px 😱 */
-/* → Layout vỡ vì bạn tính 300 nhưng nó chiếm 350! */
+
+/* ❌ Kích thước THỰC TẾ = 300 + 40 + 10 = 350px */
+/* Bạn tính 300, browser render 350 → layout vỡ */
 ```
 
-> *Đây chính là nguyên nhân* Minh *mất 2 tiếng debug. Anh đặt 300px nhưng browser render 350px. Và anh không hiểu tại sao.*
+**Tại sao CSS làm thế?** `content-box` là hành vi HTML4/CSS2 cũ — `width` chỉ apply cho content area. Padding và border "phình ra ngoài" thêm vào.
 
 ---
 
-# 2. **BORDER-BOX — Giải Pháp "Một Dòng Cứu Ngàn Dòng"**
-
-CSS hiện đại giới thiệu `box-sizing: border-box` để giải quyết nỗi đau này:
-
-**Khi dùng `border-box`: Chiều rộng THỰC TẾ = `width` bạn đặt. Chấm hết.**
-
-*Padding và Border sẽ co VÀO TRONG, làm Content nhỏ lại, chứ KHÔNG làm hộp to ra.*
+### `border-box` — Giải pháp "1 dòng cứu toàn bộ project"
 
 ```css
-/* 🔥 DÒNG CODE QUAN TRỌNG NHẤT TRONG ĐỜI CSS CỦA BẠN */
+/* 🔥 DÒNG ĐẦU TIÊN TRONG MỌI FILE CSS */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.box {
-  width: 300px;        /* → Hộp CHÍNH XÁC 300px */
-  padding: 20px;       /* → Padding co vào trong */
-  border: 5px solid;   /* → Border co vào trong */
+.sidebar {
+    width: 300px;        /* Hộp CHÍNH XÁC 300px */
+    padding: 20px;       /* Padding co VÀO TRONG */
+    border: 5px solid;   /* Border co VÀO TRONG */
 }
-/* → Content tự = 300 - 40 - 10 = 250px */
-/* → Tổng vẫn = 300px ✅ */
+/* Content tự = 300 - 40 - 10 = 250px */
+/* Tổng vẫn = 300px ✅ */
 ```
 
-### So sánh trực quan:
-
+**So sánh trực quan:**
 ```
-content-box (CŨ):                    border-box (MỚI):
-┌──── 350px ──────────────┐          ┌──── 300px ────────────┐
-│ border 5px               │          │ border 5px             │
-│ ┌─ padding 20px ──────┐ │          │ ┌─ padding 20px ────┐ │
-│ │ content = 300px      │ │          │ │ content = 250px    │ │
-│ └──────────────────────┘ │          │ └────────────────────┘ │
-└──────────────────────────┘          └────────────────────────┘
-
-Bạn muốn 300 → nó cho 350 😭        Bạn muốn 300 → nó cho 300 ✅
+content-box (mặc định ❌):     border-box (hiện đại ✅):
+┌──────── 350px ──────────┐    ┌──────── 300px ──────┐
+│ border 5px              │    │ border 5px           │
+│  ┌── padding 20px ───┐  │    │  ┌── padding 20px ┐  │
+│  │ content = 300px   │  │    │  │ content = 250px│  │
+│  └───────────────────┘  │    │  └────────────────┘  │
+└─────────────────────────┘    └──────────────────────┘
+Muốn 300 → bị 350 😭          Muốn 300 → được 300 ✅
 ```
-
-> **Anh Hùng:** *"Mọi dự án tại FPT, Shopee, VNG đều có dòng `* { box-sizing: border-box; }` ở file CSS đầu tiên. Thiếu nó = mọi layout đều sai. Đây là dòng 'bảo hiểm' cho toàn bộ project."*
 
 ---
 
-# 3. **DESIGNING BOXES — Các kỹ thuật thực tế**
+### Margin, Padding — Cách viết shorthand
 
-## 3.1. Margin Collapse — Hiện tượng "Margin bị nuốt"
+```css
+/* 4 giá trị: top right bottom left (theo chiều kim đồng hồ) */
+margin: 10px 20px 10px 20px;
 
-Khi hai thẻ block nằm **chồng dọc**, margin của chúng **KHÔNG CỘNG DỒN** mà gộp làm một (lấy cái lớn hơn):
+/* 2 giá trị: top&bottom left&right */
+margin: 10px 20px;        /* top/bottom = 10px, left/right = 20px */
+
+/* 1 giá trị: tất cả 4 chiều */
+padding: 20px;             /* Tất cả = 20px */
+
+/* Từng chiều riêng lẻ */
+margin-top: 10px;
+padding-left: 20px;
+```
+
+---
+
+### Margin Collapse — Hiện tượng "Margin bị nuốt"
 
 ```css
 .box-a { margin-bottom: 20px; }
 .box-b { margin-top: 30px; }
-/* → Khoảng cách = 30px (KHÔNG PHẢI 50px) */
-/* → CSS lấy giá trị LỚN HƠN */
+/* → Khoảng cách = 30px (KHÔNG phải 20+30=50px) */
+/* → Margin dọc giữa 2 block element GỘPLẠI = lấy cái LỚN HƠN */
 ```
 
-> ⚠️ **Lưu ý:** Margin ngang (trái/phải) KHÔNG bị collapse. Chỉ margin dọc (trên/dưới) mới bị.
+**Khi nào margin collapse xảy ra:**
+- Giữa hai block elements nằm dọc (không có border/padding giữa chúng)
+- Margin con với margin cha (khi cha không có border/padding/overflow)
 
-## 3.2. `margin: auto` — Căn giữa phần tử dễ nhất
+**Khi nào KHÔNG xảy ra:**
+- Margin ngang (trái/phải) không bao giờ collapse
+- Flex/Grid items không collapse
+- Element có `overflow: hidden/auto` không collapse với con
+
+---
+
+### `margin: auto` — Căn giữa đơn giản nhất
 
 ```css
 .container {
-  width: 800px;
-  margin: 0 auto;   /* Trên/dưới = 0, Trái/phải = auto (tự chia đều) */
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;    /* auto = browser tự chia đều trái/phải */
 }
-/* → Container nằm chính giữa màn hình */
+/* → Container luôn căn giữa màn hình */
 ```
 
-> *Minh dùng `margin: 0 auto` cho container todo-app, lập tức nội dung nhảy ra giữa trang. "Sao đơn giản vậy?!" anh hào hứng.*
+---
 
-## 3.3. Padding vs Margin — Khi nào dùng cái nào?
+### Padding vs Margin — Khi nào dùng cái nào?
 
-| | Padding | Margin |
-|---|---|---|
-| Vị trí | Bên TRONG element | Bên NGOÀI element |
-| Background | Kế thừa background-color | Luôn trong suốt |
-| Collapse | Không bao giờ | Có (dọc) |
-| Dùng khi | Tạo khoảng đệm bên trong | Tạo khoảng cách với element khác |
+```
+Muốn khoảng cách bên TRONG element (nội dung xa viền)?
+→ PADDING
+
+Muốn khoảng cách giữa element này với element KHÁC?
+→ MARGIN
+```
 
 ```css
-/* Ví dụ: Nút bấm đẹp */
+/* Button: padding cho chữ xa viền, margin cho button xa nhau */
 .btn {
-  padding: 12px 24px;     /* ← Padding: chữ cách viền nút */
-  margin: 8px;            /* ← Margin: nút cách các element khác */
-  border: 2px solid #333;
-  border-radius: 8px;
+    padding: 12px 24px;    /* Chữ "Lưu" cách viền nút 12px/24px */
+    margin: 8px;           /* Nút cách nút khác 8px */
+}
+
+/* Card: padding cho content trong card, margin giữa các card */
+.card {
+    padding: 24px;         /* Nội dung cách viền card 24px */
+    margin-bottom: 16px;   /* Card cách card dưới 16px */
+}
+```
+
+**Background color — cách phân biệt:**
+```css
+.box {
+    background: lightblue;
+    padding: 20px;    /* Lightblue bao phủ cả padding */
+    margin: 20px;     /* Margin luôn transparent */
 }
 ```
 
 ---
 
-## 🏪 ÁP DỤNG: Layout Sidebar + Content cho Todo App
+## 4. 🟢 Simplified Layer — Một câu nhớ mãi
+
+> **`* { box-sizing: border-box; }` — dòng đầu tiên trong mọi file CSS.**
+> **Padding bên trong. Margin bên ngoài. Border là biên giới.**
+
+---
+
+## 5. 🏭 Real-world Layer
+
+### CSS Reset chuẩn — dùng cho mọi project
 
 ```css
-* { box-sizing: border-box; }   /* ← BẮT BUỘC! */
-
-.page {
-  width: 1000px;
-  margin: 0 auto;        /* Căn giữa */
+/* ===== CSS RESET + BASE ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.sidebar {
-  width: 300px;           /* → Đúng 300px, kể cả có padding */
-  padding: 20px;
-  border-right: 1px solid #ddd;
-  float: left;
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;  /* Font mượt trên macOS */
 }
 
-.content {
-  width: 700px;           /* → Đúng 700px */
-  padding: 20px;
-  float: left;
+img, video {
+    max-width: 100%;     /* Ảnh không vỡ khung */
+    height: auto;
 }
-/* 300 + 700 = 1000 ✅ Layout không vỡ! */
 ```
 
-> *Minh thử lại layout sau khi thêm `border-box`: sidebar 300, content 700, tổng 1000. Vừa khít!* 🎉
+### DevTools Box Model Inspector
+
+```
+F12 → Elements → click element → tab "Computed"
+
+Hiện hình hộp lồng nhau:
+┌── margin ──────────────────────────────┐
+│  ┌── border ──────────────────────────┐│
+│  │  ┌── padding ────────────────────┐ ││
+│  │  │  width × height               │ ││
+│  │  └───────────────────────────────┘ ││
+│  └────────────────────────────────────┘│
+└────────────────────────────────────────┘
+
+Hover vào từng vùng → highlight trên trang
+```
 
 ---
 
-# 5. **TỔNG KẾT**
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
 
-| Khái niệm | Nhớ |
+### Bài tập: Kiểm chứng Box Model (20 phút)
+
+1. Tạo file `box-test.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Box Model Test</title>
+    <style>
+        /* Test 1: content-box (mặc định) */
+        .content-box {
+            width: 200px;
+            padding: 20px;
+            border: 5px solid red;
+            background: lightblue;
+            margin-bottom: 20px;
+        }
+
+        /* Test 2: border-box */
+        .border-box {
+            box-sizing: border-box;
+            width: 200px;
+            padding: 20px;
+            border: 5px solid green;
+            background: lightyellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-box">Content-box (mặc định)</div>
+    <div class="border-box">Border-box</div>
+</body>
+</html>
+```
+
+2. **Trước khi mở browser:** Tính kích thước thực tế của mỗi div
+3. Mở DevTools → Computed tab → kiểm tra kết quả
+4. Thêm `* { box-sizing: border-box; }` vào `<style>` → cả hai div giờ bằng nhau không?
+
+**Bonus:** Thêm 2 div cạnh nhau với `.box-a { margin-bottom: 30px }` và `.box-b { margin-top: 20px }` → đo khoảng cách thực tế trong DevTools.
+
+---
+
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
 |---|---|
-| **Content** | Sản phẩm trong thùng |
-| **Padding** | Xốp chống sốc (ăn theo background-color) |
-| **Border** | Thùng carton (nhìn thấy được) |
-| **Margin** | Khoảng cách giữa các thùng (luôn trong suốt) |
-| **content-box** | ❌ Phình to khi thêm padding/border |
-| **border-box** | ✅ Kích thước luôn đúng như bạn đặt |
-| **`* { box-sizing: border-box; }`** | 🔥 Dòng đầu tiên mọi file CSS |
+| **"Margin và padding làm cùng một thứ"** | Khác hoàn toàn: padding bên TRONG (ăn background), margin bên NGOÀI (luôn trong suốt). Dùng nhầm → layout sai, UX xấu |
+| **"Margin collapse chỉ xảy ra khi margin bằng nhau"** | Không — xảy ra khi 2 block margin DỌC gặp nhau, và lấy giá trị LỚN HƠN (không cộng) |
+| **"Có thể dùng `width: 100%` + padding mà không bị vỡ"** | Với `content-box` → vỡ. Với `border-box` → OK. Đây là lý do mọi project phải có `* { box-sizing: border-box }` |
+| **"`margin: auto` căn giữa theo chiều dọc"** | `margin: 0 auto` CHỈ căn giữa theo chiều **ngang**. Căn giữa dọc cần Flexbox hoặc Grid |
+| **"Inline elements có margin/padding như block"** | Inline elements (`<span>`, `<a>`) KHÔNG respond với margin-top/bottom và height. Chỉ margin/padding ngang hoạt động |
 
 ---
 
-## ➡️ Chuyện tiếp theo...
+## 8. ✅ Checkpoint
 
-*Minh đã làm được sidebar + content nằm cạnh nhau. Nhưng khi thu nhỏ trình duyệt, sidebar đè lên content. Khi mở trên điện thoại, mọi thứ vỡ tung.*
+### Câu hỏi hiểu cơ bản:
 
-*"Làm sao để cái hộp này sang phải, cái hộp kia dính vào góc màn hình? Và làm sao để website đẹp trên cả laptop lẫn mobile?"*
+1. Một element có `width: 400px; padding: 30px; border: 10px solid`. Kích thước thực tế là bao nhiêu khi dùng `content-box`? Khi dùng `border-box`?
+2. Hai element stack dọc: element A có `margin-bottom: 40px`, element B có `margin-top: 25px`. Khoảng cách thực tế giữa chúng là bao nhiêu?
+3. Tại sao `margin: auto` KHÔNG căn giữa theo chiều dọc?
 
-**Chương tiếp theo:** CSS Positioning — Làm chủ vị trí của mọi element trên trang web. Từ `static` → `relative` → `absolute` → `fixed` → `sticky`. Và tại sao Flexbox là "vũ khí bí mật" của layout hiện đại.
+### Câu hỏi áp dụng:
+
+4. Bạn có `.card { width: 300px; padding: 24px; }` (với `border-box`). Muốn thêm `border: 2px solid`. Content area thu hẹp xuống bao nhiêu?
+5. Layout 3 cột mỗi cột 33.33%, nhưng có `padding: 16px`. Với `content-box` thì layout có vỡ không? Sửa thế nào?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **content-box**: 400 + 30×2 + 10×2 = **480px**. **border-box**: vẫn **400px** (padding và border co vào trong, content = 400 - 60 - 20 = 320px).
+2. **40px** — margin collapse lấy giá trị LỚN HƠN (40 > 25 → chỉ tính 40, không cộng).
+3. `margin: auto` chỉ hoạt động ngang khi browser có thể tính "phần còn lại để chia đều". Chiều dọc — browser không biết chiều cao container là bao nhiêu (có thể vô hạn khi scroll) nên không tính được auto.
+4. Content area = 300 - 24×2 - 2×2 = 300 - 48 - 4 = **248px** (border-box đảm bảo tổng vẫn 300px).
+5. **Có vỡ** — `content-box`: mỗi cột thực tế = 33.33% + 32px padding = vượt 100%. **Sửa**: Thêm `* { box-sizing: border-box }` → padding nằm trong 33.33% → không vỡ.
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **`* { box-sizing: border-box; }`** — dòng đầu tiên, mọi project, không ngoại lệ
+2. **4 lớp Box Model**: Content → Padding (trong, ăn background) → Border (nhìn thấy) → Margin (ngoài, trong suốt)
+3. **content-box**: width = chỉ content. **border-box**: width = content + padding + border
+4. **Margin collapse**: 2 margin dọc gộp lại = cái LỚN HƠN (không cộng)
+5. **`margin: 0 auto`** = căn giữa ngang. Không dùng cho căn giữa dọc
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*Sidebar 300px + content 700px = 1000px. Vừa khít rồi! Nhưng khi thu nhỏ browser, sidebar đè lên content. Khi mở trên điện thoại, mọi thứ vỡ.*
+
+*"Làm sao để element 'dính' vào góc màn hình? Làm sao để header luôn hiện trên cùng khi scroll?"*
+
+**→ [Bài 12: CSS Positioning](./12_css_positioning.md) — static, relative, absolute, fixed, sticky: 5 giá trị làm chủ vị trí mọi element.**

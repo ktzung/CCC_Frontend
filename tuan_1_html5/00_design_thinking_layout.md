@@ -1,284 +1,246 @@
-# 🟦 CHƯƠNG 00
+# 🟦 TUẦN 1 - BÀI 00
 # **TƯ DUY PHÂN TÍCH & XÁC ĐỊNH BỐ CỤC WEB**
 
-## 🎬 "Figma File 50 Màn Hình — Bắt Đầu Từ Đâu?" — Kỹ Năng #1 Mà Junior Thiếu
+---
 
-*Ngày đầu thực tập. Chị Hà gửi Minh link Figma: "Em code lại trang Landing Page này nhé."*
+## 0. 🎬 Opening Hook
 
-*Minh mở Figma. 50 màn hình. Hero section, navbar, card grid, testimonials, footer, responsive variants... Minh đơ.*
+*Ngày đầu thực tập. Chị Hà gửi Minh file Figma: "Em code lại trang Landing Page này nhé."*
+
+*Minh mở Figma. Hero section, navbar, card grid, testimonials, footer, responsive variants... Minh đơ.*
 
 *"Bắt đầu từ đâu hả chị?"*
 
-*Chị Hà cười: "Em đang phạm lỗi kinh điển — NHÌN VÀO MÀU SẮC trước. Quên màu đi. Quên font đi. Quên ảnh đi. Chỉ nhìn BỐ CỤC. Em sẽ thấy trang web nào cũng chỉ là... NHỮNG CHIẾC HỘP LỒNG NHAU."*
+*Chị Hà không trả lời ngay. Cô nheo mắt nhìn màn hình: "Em nhìn trang này và thấy gì đầu tiên?"*
 
-> 💡 **Tư duy phân tích bố cục là kỹ năng QUAN TRỌNG NHẤT** mà hầu hết tài liệu HTML không dạy. Trước khi viết `<div>` đầu tiên, bạn phải biết **NHÌN**.
+*"Màu sắc? Font chữ?"*
 
----
-
-# 🎯 MỤC TIÊU HỌC TẬP
-
-Sau bài này, bạn sẽ:
-- Hiểu tư duy **"Xây nhà → Xây Website"** — vai trò của HTML, CSS, JS
-- Nắm phương pháp **"Những chiếc hộp lồng nhau"** (Box Thinking) để phân tích bất kỳ giao diện nào
-- Biết quy trình **Figma → Phân tích bố cục → HTML Structure** chuyên nghiệp
-- Sử dụng **DevTools (Inspect)** để "mổ xẻ" cấu trúc website thật
+*"Sai. Em thấy... **những chiếc hộp chữ nhật**. Mờ hết màu đi — mọi trang web trên thế giới chỉ là hộp trong hộp."*
 
 ---
 
-# 1. **TƯ DUY: XÂY NHÀ VÀ XÂY WEBSITE**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-## 1.1. Ngôi Nhà Và Trang Web
+**Đây là kỹ năng #1 mà Junior Developer thiếu — nhưng không có tài liệu nào dạy.**
 
-> *Anh Hùng: "Em muốn xây nhà. Em bắt đầu bằng gì?"*
-> 
-> *Minh: "Dĩ nhiên là... bản thiết kế?"*
-> 
-> *"Đúng! Bản thiết kế = Figma/Sketch. Nhưng rồi sao? Em có sơn tường trước khi đổ móng không?"*
-> 
-> *"Không... phải làm móng, dựng khung trước."*
-> 
-> *"Đó chính là HTML."*
+Biết cú pháp HTML nhưng không biết phân tích bố cục = biết cầm bút nhưng không biết viết gì.
 
-### 🏗️ Bảng So Sánh: Xây Nhà ↔ Xây Web
-
-| Xây Nhà | Xây Web | Vai trò |
-|---------|---------|---------|
-| **Bản thiết kế kiến trúc** | **Figma / Adobe XD** | Thiết kế giao diện |
-| **Móng + Khung sườn** | **HTML** | Cấu trúc, bộ xương |
-| **Trang trí nội thất, sơn tường** | **CSS** | Màu sắc, bố cục, đẹp |
-| **Điện, nước, IoT thông minh** | **JavaScript** | Tương tác, chức năng |
-| **Các phòng chức năng** | **Semantic Tags** | Phân chia khu vực |
-
-### 🏠 Mapping Chi Tiết
-
-```
-🏠 NGÔI NHÀ                    🌐 WEBSITE
-┌─────────────────────┐         ┌─────────────────────┐
-│  Mái hiên / Biển số │         │  <header>           │
-│  → Tên nhà, số nhà  │         │  → Logo, Navigation │
-├─────────────────────┤         ├─────────────────────┤
-│  Hành lang / Lối đi │         │  <nav>              │
-│  → Dẫn đến các phòng│         │  → Menu điều hướng  │
-├─────────────────────┤         ├─────────────────────┤
-│  Phòng khách        │         │  <main>             │
-│  → Khu vực chính    │         │  → Nội dung chính   │
-│  ┌───────┐ ┌──────┐ │         │  ┌───────┐ ┌──────┐ │
-│  │Sofa   │ │Tivi  │ │         │  │Text   │ │Image │ │
-│  └───────┘ └──────┘ │         │  └───────┘ └──────┘ │
-├─────────────────────┤         ├─────────────────────┤
-│  Phòng bên          │         │  <aside>            │
-│  → Kho, phụ trợ     │         │  → Sidebar          │
-├─────────────────────┤         ├─────────────────────┤
-│  Bậc tam cấp        │         │  <footer>           │
-│  → Cuối nhà         │         │  → Copyright, liên hệ│
-└─────────────────────┘         └─────────────────────┘
-```
-
-> 💡 **Quy tắc vàng:** Xây ngôi nhà nào cũng phải **đổ móng, dựng khung** trước. Website cũng vậy — phải **"dựng HTML" trước** khi làm đẹp với CSS và thêm chức năng bằng JavaScript. Website mạnh và dễ mở rộng = website có cấu trúc HTML hợp lý, giống nhà bền nhờ móng chắc.
+Sau bài này, bạn có thể:
+- Nhìn bất kỳ giao diện nào → biết ngay phải viết HTML như thế nào
+- Chuyển từ Figma/screenshot → code structure trong vài phút
+- Đọc được code HTML của người khác mà không bị lạc
 
 ---
 
-# 2. **"NHỮNG CHIẾC HỘP LỒNG NHAU" — BOX THINKING**
+## 2. 🌐 Big Picture — Bức tranh tổng thể
 
-## 2.1. Nguyên Tắc Cốt Lõi
-
-> *Chị Hà kéo Minh lại màn hình: "Em nheo mắt lại. Mờ hết chữ và ảnh đi. Em thấy gì?"*
->
-> *Minh nheo mắt: "...Các khối hình chữ nhật?"*
->
-> *"CHÍNH XÁC! Mọi trang web trên thế giới — Facebook, Shopee, Netflix — khi nheo mắt lại, chỉ là NHỮNG CHIẾC HỘP LỒNG NHAU."*
-
-### 📦 Mọi Trang Web = Hộp Trong Hộp
+**Quy trình làm việc thực tế của Frontend Developer:**
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│ HỘP LỚN NHẤT: <html>                                     │
-│ ┌──────────────────────────────────────────────────────┐  │
-│ │ HỘP HEADER: <header>                                 │  │
-│ │ ┌────────┐  ┌──────────────────────────────────────┐ │  │
-│ │ │ Logo   │  │ Navigation: Home | About | Contact   │ │  │
-│ │ └────────┘  └──────────────────────────────────────┘ │  │
-│ └──────────────────────────────────────────────────────┘  │
-│ ┌──────────────────────────────────────────────────────┐  │
-│ │ HỘP MAIN: <main>                                     │  │
-│ │ ┌──────────────────────┐ ┌────────────────────────┐  │  │
-│ │ │ HỘP TEXT             │ │ HỘP HÌNH ẢNH          │  │  │
-│ │ │ ┌──────────────────┐ │ │                        │  │  │
-│ │ │ │ <h1> Tiêu đề    │ │ │   ┌──────────────┐    │  │  │
-│ │ │ └──────────────────┘ │ │   │  <img>       │    │  │  │
-│ │ │ ┌──────────────────┐ │ │   │  Hình minh   │    │  │  │
-│ │ │ │ <p> Mô tả        │ │ │   │  họa         │    │  │  │
-│ │ │ └──────────────────┘ │ │   └──────────────┘    │  │  │
-│ │ │ ┌──────────────────┐ │ │                        │  │  │
-│ │ │ │ <button> CTA     │ │ │                        │  │  │
-│ │ │ └──────────────────┘ │ │                        │  │  │
-│ │ └──────────────────────┘ └────────────────────────┘  │  │
-│ └──────────────────────────────────────────────────────┘  │
-│ ┌──────────────────────────────────────────────────────┐  │
-│ │ HỘP FOOTER: <footer>                                 │  │
-│ │        "© 2026 - Contact us @company.com"             │  │
-│ └──────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────┘
+[Designer]           [Frontend Dev]          [Browser]
+    |                      |                      |
+Figma Design    →   Phân tích bố cục   →   Viết HTML   →   Render
+                    (Box Thinking)          Structure
 ```
 
-## 2.2. Quy Trình 3 Bước: Figma → HTML
-
-### 📋 Bước 1: Nhìn Tổng Thể → Chia Vùng Lớn
-
-Mở bản thiết kế (Figma/screenshot), **bỏ qua màu sắc và font chữ**, chỉ hỏi:
-- Trang này có mấy **khu vực lớn**?
-- Thường là: **Header** (đầu trang) → **Main** (nội dung chính) → **Footer** (cuối trang)
+Ba câu hỏi cần trả lời trước khi gõ dòng code đầu tiên:
 
 ```
-Bản thiết kế gốc:          Sau khi "nheo mắt":
-┌─────────────────┐         ┌─────────────────┐
-│ Logo    Menu    │         │ 📦 HEADER        │
-├─────────────────┤         ├─────────────────┤
-│                 │         │                 │
-│  Nội dung chính │         │ 📦 MAIN          │
-│  (text, ảnh...) │         │                 │
-│                 │         │                 │
-├─────────────────┤         ├─────────────────┤
-│ Copyright info  │         │ 📦 FOOTER        │
-└─────────────────┘         └─────────────────┘
+1. Trang có bao nhiêu "vùng lớn"?     → header / main / footer
+2. Mỗi vùng có bao nhiêu "hộp con"?  → section / article / div
+3. Mỗi hộp cần thẻ HTML nào?         → semantic tags
 ```
 
-### 📋 Bước 2: Mỗi Vùng Lớn → Chia Nhỏ Hơn
+---
 
-Zoom vào từng vùng, tiếp tục hỏi: "Vùng này có bao nhiêu **hộp con**?"
+## 3. ⚙️ Core Technical Truth — Sự thật kỹ thuật
+
+### Mọi trang web = Hộp lồng nhau (Box Model)
+
+Đây không chỉ là cách nhìn — đây là cách browser **thực sự render**:
+
+```
+┌──────────────────────────────────────────────────────┐
+│ <html>  (hộp lớn nhất)                              │
+│ ┌────────────────────────────────────────────────┐   │
+│ │ <header>                                       │   │
+│ │  ┌──────────┐   ┌────────────────────────────┐ │   │
+│ │  │ Logo     │   │ <nav> Home | About | Contact│ │   │
+│ │  └──────────┘   └────────────────────────────┘ │   │
+│ └────────────────────────────────────────────────┘   │
+│ ┌────────────────────────────────────────────────┐   │
+│ │ <main>                                         │   │
+│ │  ┌──────────────────┐  ┌──────────────────┐   │   │
+│ │  │ <section>        │  │ <aside>          │   │   │
+│ │  │  <article>       │  │  Sidebar         │   │   │
+│ │  │  </article>      │  │                  │   │   │
+│ │  └──────────────────┘  └──────────────────┘   │   │
+│ └────────────────────────────────────────────────┘   │
+│ ┌────────────────────────────────────────────────┐   │
+│ │ <footer>  © 2026 - Contact                     │   │
+│ └────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────┘
+```
+
+> 💡 **Box Model trong DevTools:** Khi inspect một element, bạn thấy **Margin → Border → Padding → Content** — chứng minh browser nghĩ về mọi thứ như hộp.
+
+---
+
+### Quy trình 3 bước: Figma → HTML
+
+#### Bước 1 — Chia vùng lớn (nheo mắt)
+
+```
+Figma Design:              Sau khi "nheo mắt":
+┌─────────────────┐        ┌─────────────────┐
+│ Logo    Menu    │        │ 📦 HEADER        │
+├─────────────────┤        ├─────────────────┤
+│                 │        │                 │
+│  Nội dung chính │        │ 📦 MAIN          │
+│                 │        │                 │
+├─────────────────┤        ├─────────────────┤
+│ Copyright       │        │ 📦 FOOTER        │
+└─────────────────┘        └─────────────────┘
+```
+
+#### Bước 2 — Chia hộp con (zoom vào từng vùng)
 
 ```
 📦 HEADER gồm:
-├── 📦 Logo (hình ảnh hoặc text)
-└── 📦 Navigation (danh sách links: Home | About | Contact)
+  ├── 📦 Logo (img hoặc text)
+  └── 📦 Navigation (danh sách links)
 
 📦 MAIN gồm:
-├── 📦 Phần Text (bên trái)
-│   ├── 📦 Tiêu đề lớn (h1)
-│   ├── 📦 Đoạn mô tả (p)
-│   └── 📦 Nút bấm CTA (button)
-└── 📦 Phần Hình ảnh (bên phải)
-    └── 📦 Ảnh minh họa (img)
-
-📦 FOOTER gồm:
-└── 📦 Dòng text copyright (p hoặc span)
+  ├── 📦 Hero Section
+  │    ├── 📦 Text (h1 + p + button)
+  │    └── 📦 Image (img)
+  └── 📦 Features Section
+       ├── 📦 Card 1 (article)
+       ├── 📦 Card 2 (article)
+       └── 📦 Card 3 (article)
 ```
 
-### 📋 Bước 3: Gán Thẻ HTML (Semantic Tags)
-
-Mỗi "hộp" giờ đây **có tên** — đó chính là thẻ HTML:
+#### Bước 3 — Gán thẻ HTML (semantic tags)
 
 ```html
-<!-- Bước 3: Chuyển boxes thành code -->
 <header>
-    <img src="logo.png" alt="Logo">
+    <a href="/" class="logo">Brand</a>
     <nav>
         <a href="/">Home</a>
         <a href="/about">About</a>
-        <a href="/contact">Contact</a>
     </nav>
 </header>
 
 <main>
     <section class="hero">
         <div class="hero-text">
-            <h1>WORKOUTS MADE EXCLUSIVE FOR <span class="highlight">YOU</span>!</h1>
-            <p>Chương trình tập luyện được thiết kế riêng...</p>
-            <button>Start now</button>
+            <h1>Tiêu đề chính</h1>
+            <p>Mô tả ngắn</p>
+            <button>Call to Action</button>
         </div>
         <div class="hero-image">
-            <img src="athlete.png" alt="Vận động viên">
+            <img src="hero.jpg" alt="Hero image">
         </div>
     </section>
 </main>
 
 <footer>
-    <p>Send us a message @company.com</p>
+    <p>© 2026 - Company</p>
 </footer>
 ```
 
-> 💡 **Nhận ra pattern chưa?** Quy trình luôn là: **Nhìn → Chia hộp → Gán thẻ**. Không bao giờ ngược lại. Đây là cách mọi Frontend Developer chuyên nghiệp làm việc.
+---
+
+### Semantic Tags — "Hộp có tên" vs "Hộp không tên"
+
+| Thẻ generic ❌ | Thẻ semantic ✅ | Ý nghĩa |
+|---|---|---|
+| `<div class="header">` | `<header>` | Đầu trang — logo, navigation |
+| `<div class="nav">` | `<nav>` | Thanh điều hướng |
+| `<div class="content">` | `<main>` | Nội dung chính (CHỈ 1 per page) |
+| `<div class="section">` | `<section>` | Phân đoạn nội dung có tiêu đề |
+| `<div class="article">` | `<article>` | Nội dung độc lập (bài viết, sản phẩm, comment) |
+| `<div class="sidebar">` | `<aside>` | Nội dung phụ, sidebar |
+| `<div class="footer">` | `<footer>` | Cuối trang — copyright, liên hệ |
+
+**Tại sao semantic quan trọng:**
+- **Google** đọc semantic tags để hiểu nội dung → **SEO tốt hơn**
+- **Screen reader** dùng semantic để điều hướng → **Accessibility**
+- **Team** đọc code dễ hơn vì tên thẻ nói lên chức năng
 
 ---
 
-# 3. **CASE STUDY: PHÂN TÍCH TRANG TREINE.ME**
+### Block vs Inline — Hai loại hộp
 
-## 3.1. Giao Diện Gốc
+| Block Element | Inline Element |
+|---|---|
+| Chiếm **CẢ DÒNG** — tự xuống dòng mới | Chỉ chiếm **NỘI DUNG** — nằm cùng dòng |
+| `<div>`, `<p>`, `<h1–h6>`, `<section>`, `<header>` | `<span>`, `<a>`, `<strong>`, `<em>`, `<img>` |
+| Có thể set width/height | Không set width/height trực tiếp được |
 
-> *Chị Hà mở một landing page fitness lên: "Phân tích đi em."*
+```html
+<!-- Block: mỗi thẻ xuống dòng mới -->
+<h1>Tiêu đề</h1>
+<p>Đoạn văn 1</p>
+<p>Đoạn văn 2</p>
 
-Giả sử giao diện gồm:
-- Trên cùng: Logo "treine.me" + menu (Home, About, Training)
-- Giữa: Tiêu đề lớn "WORKOUTS MADE EXCLUSIVE FOR YOU!" + ảnh vận động viên + nút "Start now"
-- Cuối: Dòng text "send us a message @treine.me"
-
-## 3.2. Áp Dụng 3 Bước
-
-### Bước 1 — Chia vùng lớn:
-```
-┌──────────────────────────────────────────┐
-│ HEADER: Logo + Menu điều hướng           │  ← <header>
-├──────────────────────────────────────────┤
-│                                          │
-│ MAIN: Hero Section                       │  ← <main>
-│   Left: Tiêu đề + Mô tả + CTA Button   │
-│   Right: Hình minh họa                   │
-│                                          │
-├──────────────────────────────────────────┤
-│ FOOTER: "send us a message..."           │  ← <footer>
-└──────────────────────────────────────────┘
+<!-- Inline: nằm cùng dòng nhau -->
+<p>Đây là <strong>chữ đậm</strong> và <em>chữ nghiêng</em> trong cùng một dòng.</p>
 ```
 
-### Bước 2 — Chi tiết từng vùng:
+---
 
-**Header giải mã:**
-```
-┌─────────────────────────────────────────────────┐
-│ <header>                                         │
-│  ┌──────────┐    ┌────────────────────────────┐  │
-│  │ <a>      │    │ <nav>                      │  │
-│  │ Logo     │    │ <ul>                       │  │
-│  │ "treine" │    │   <li><a>Home</a></li>     │  │
-│  │          │    │   <li><a>About</a></li>    │  │
-│  └──────────┘    │   <li><a>Training</a></li> │  │
-│                  │ </ul>                      │  │
-│                  └────────────────────────────┘  │
-└─────────────────────────────────────────────────┘
+### `class` vs `id` — Thẻ định danh
+
+```html
+<!-- class = tên nhóm → nhiều element có thể dùng cùng class -->
+<div class="product-card">Sản phẩm 1</div>
+<div class="product-card">Sản phẩm 2</div>
+<div class="product-card">Sản phẩm 3</div>
+
+<!-- id = định danh duy nhất → MỖI TRANG CHỈ CÓ 1 element với id đó -->
+<div id="hero-section">Hero duy nhất</div>
+<div id="contact-form">Form liên hệ duy nhất</div>
 ```
 
-**Main giải mã:**
+| | `class` | `id` |
+|---|---|---|
+| Số lượng | Nhiều element cùng class | DUY NHẤT trong trang |
+| CSS selector | `.product-card` | `#hero-section` |
+| Dùng cho | Style nhóm, component lặp lại | Định danh cụ thể, anchor link, JS target |
+
+---
+
+## 4. 🟢 Simplified Layer — Một câu nhớ mãi
+
+> **"Nheo mắt → thấy hộp → đặt tên → viết code."**
+
+Thứ tự không bao giờ đảo ngược. **Junior code trước, nghĩ sau — nên rối. Senior nghĩ trước, code sau — nên gọn.**
+
+---
+
+## 5. 🏭 Real-world Layer — Case Study thực tế
+
+### Phân tích Landing Page Fitness (ví dụ từ thực tập)
+
+**Bản thiết kế:** Logo + Menu (Header) → Tiêu đề lớn + Ảnh vận động viên + Nút CTA (Hero) → Footer
+
+**Bước 1 — Phân tích:**
 ```
-┌──────────────────────────────────────────────────┐
-│ <main>                                            │
-│  ┌─────────────────────┐  ┌────────────────────┐  │
-│  │ <div class="text">  │  │ <div class="img">  │  │
-│  │                     │  │                    │  │
-│  │ <h1>WORKOUTS MADE   │  │  ┌──────────────┐  │  │
-│  │ EXCLUSIVE FOR       │  │  │              │  │  │
-│  │ <span>YOU</span>!</h1>│  │  │   <img>      │  │  │
-│  │                     │  │  │   athlete     │  │  │
-│  │ <p>Chương trình...  │  │  │              │  │  │
-│  │ <strong>cá nhân hóa │  │  └──────────────┘  │  │
-│  │ </strong>...</p>    │  │                    │  │
-│  │                     │  │                    │  │
-│  │ <button>Start now   │  │                    │  │
-│  │ </button>           │  │                    │  │
-│  └─────────────────────┘  └────────────────────┘  │
-└──────────────────────────────────────────────────┘
+HEADER: Logo "treine.me" + Nav (Home, About, Training)
+MAIN:   Hero section = Text-Left + Image-Right
+FOOTER: "send us a message @treine.me"
 ```
 
-### Bước 3 — Code HTML hoàn chỉnh:
-
+**Bước 3 — Code:**
 ```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>treine.me - Workouts Made Exclusive For You</title>
 </head>
 <body>
-    <!-- ===== HEADER: Logo + Navigation ===== -->
     <header>
         <a href="/" class="logo">treine.me</a>
         <nav>
@@ -290,27 +252,19 @@ Giả sử giao diện gồm:
         </nav>
     </header>
 
-    <!-- ===== MAIN: Hero Section ===== -->
     <main>
         <section class="hero">
-            <!-- Phần Text bên trái -->
             <div class="hero-content">
                 <h1>WORKOUTS MADE EXCLUSIVE FOR <span class="highlight">YOU</span>!</h1>
-                <p>
-                    Chương trình tập luyện được thiết kế 
-                    <strong>riêng cho bạn</strong>, dựa trên 
-                    thể trạng và mục tiêu cá nhân.
-                </p>
+                <p>Chương trình tập luyện được thiết kế <strong>riêng cho bạn</strong>.</p>
                 <button class="cta-button">Start now</button>
             </div>
-            <!-- Phần Hình ảnh bên phải -->
             <div class="hero-image">
                 <img src="images/athlete.png" alt="Vận động viên đang tập luyện">
             </div>
         </section>
     </main>
 
-    <!-- ===== FOOTER ===== -->
     <footer>
         <p>send us a message <a href="mailto:hello@treine.me">@treine.me</a></p>
     </footer>
@@ -319,232 +273,95 @@ Giả sử giao diện gồm:
 ```
 
 > **Minh:** *"Ồ! Khi chia hộp xong, viết code dễ hơn hẳn!"*
->
-> **Chị Hà:** *"Đúng. 80% công việc Frontend là PHÂN TÍCH. 20% mới là viết code. Junior code trước, nghĩ sau — nên rối. Senior nghĩ trước, code sau — nên gọn."*
+> **Chị Hà:** *"80% công việc Frontend là PHÂN TÍCH. 20% mới là viết code."*
 
 ---
 
-# 4. **DEVTOOLS: CHUỘT PHẢI → INSPECT**
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
 
-## 4.1. Công Cụ "Kính Hiển Vi" Của Web Developer
+### Bài tập 1: Mổ xẻ website thật bằng DevTools (10 phút)
 
-> *Anh Hùng: "Em muốn học cách Facebook viết HTML? Không cần xin source code — INSPECT!"*
+1. Mở Chrome → vào `shopee.vn`
+2. Chuột phải vào thanh tìm kiếm → chọn **"Inspect"**
+3. Trả lời:
+   - Thanh tìm kiếm nằm trong thẻ gì? (`<header>`? `<div>`? `<form>`?)
+   - Input ô tìm kiếm có attribute nào đặc biệt không?
+   - Kéo lên phần header — Shopee dùng thẻ semantic hay `<div>`?
 
-### Cách mở DevTools:
-1. Mở bất kỳ trang web nào (ví dụ: `facebook.com`, `shopee.vn`)
-2. **Chuột phải** vào phần tử muốn xem → chọn **"Inspect"** (hoặc "Kiểm tra")
-3. Hoặc nhấn `F12` / `Ctrl + Shift + I`
+4. Lặp lại với: Footer của shopee.vn → Mỗi card sản phẩm → Banner quảng cáo
 
-### Tab Elements — Xem "Bộ Xương" HTML
-
-```
-DevTools sẽ hiển thị cấu trúc HTML:
-
-▼ <body>
-  ▼ <header class="global-nav">
-    ▼ <nav>
-      ▼ <ul class="nav-links">
-        ► <li><a href="/">Home</a></li>
-        ► <li><a href="/about">About</a></li>
-  ▼ <main id="content">
-    ▼ <section class="hero">
-      ► <h1>Welcome</h1>
-      ► <p>Description...</p>
-  ▼ <footer>
-    ► <p>© 2026</p>
-```
-
-### Tab Elements — Xem Box Model
-
-Khi click vào một phần tử, panel bên phải hiển thị **Box Model**:
-
-```
-         ┌─── margin ───────────────────┐
-         │  ┌─── border ─────────────┐  │
-         │  │  ┌─── padding ──────┐  │  │
-         │  │  │                  │  │  │
-         │  │  │    CONTENT       │  │  │
-         │  │  │    (nội dung)    │  │  │
-         │  │  │                  │  │  │
-         │  │  └──────────────────┘  │  │
-         │  └────────────────────────┘  │
-         └──────────────────────────────┘
-```
-
-> 💡 **Box Model** chính là minh chứng: **Mọi phần tử HTML đều là HỘP!** Margin → Border → Padding → Content. Tư duy "hộp lồng nhau" không chỉ là cách nhìn — mà là cách browser THỰC SỰ render.
-
-## 4.2. Bài Tập: "Mổ Xẻ" Website Thật
-
-**Bước 1:** Mở [shopee.vn](https://shopee.vn) trên Chrome
-
-**Bước 2:** Chuột phải vào thanh tìm kiếm → Inspect
-
-**Bước 3:** Trả lời các câu hỏi:
-- Thanh tìm kiếm nằm trong thẻ gì? (`<header>`? `<div>`? `<form>`?)
-- Nó có bao nhiêu "hộp cha" bao bọc bên ngoài?
-- Input search dùng thẻ gì? Có attribute nào đặc biệt?
-
-**Bước 4:** Thử với Navbar → Footer → Banner quảng cáo
-
-> *Anh Hùng: "Inspect 10 trang web. Em sẽ thấy pattern: mọi trang đều dùng header → main → footer. Semantic tags giống nhau. Chỉ khác CSS."*
+**Nhận xét:** Shopee dùng `<div>` hay semantic tags nhiều hơn? Điều này nói lên điều gì?
 
 ---
 
-# 5. **SEMANTIC TAGS — CHỌN "TÊN HỘP" ĐÚNG**
+### Bài tập 2: Figma → HTML (15 phút)
 
-## 5.1. Tại Sao Không Dùng `<div>` Cho Mọi Thứ?
+Cho mô tả layout sau:
 
-> *Minh viết web đầu: `<div>` cho header, `<div>` cho nav, `<div>` cho main, `<div>` cho footer. Chạy tốt.*
->
-> *Chị Hà: "Code em chạy — nhưng Google Bot đọc = thấy 50 cái div, không biết cái nào là gì. Accessibility tool đọc = người khiếm thị không biết đang ở đâu. Dùng div cho mọi thứ giống viết thư không có tiêu đề."*
+> *Landing page: Navbar (logo trái, 3 links phải), Hero (tiêu đề + mô tả + nút CTA bên trái, ảnh bên phải), Features (3 card ngang hàng), Footer (1 dòng copyright)*
 
-### 🏷️ Semantic Tags = "Hộp Có Tên"
-
-| Thẻ Generic (❌) | Thẻ Semantic (✅) | Ý nghĩa |
-|-------------------|-------------------|---------|
-| `<div class="header">` | `<header>` | Đầu trang — logo, navigation |
-| `<div class="nav">` | `<nav>` | Thanh điều hướng |
-| `<div class="content">` | `<main>` | Nội dung chính (chỉ 1 cái/trang) |
-| `<div class="section">` | `<section>` | Một phân đoạn nội dung |
-| `<div class="article">` | `<article>` | Nội dung độc lập (bài viết, sản phẩm) |
-| `<div class="sidebar">` | `<aside>` | Nội dung phụ, sidebar |
-| `<div class="footer">` | `<footer>` | Cuối trang — copyright, liên hệ |
-
-### 🏗 Layout Chuẩn Semantic HTML5
-
-```html
-<body>
-    <header>         <!-- Đầu trang -->
-        <nav>        <!-- Menu điều hướng -->
-        </nav>
-    </header>
-    
-    <main>           <!-- Nội dung chính (CHỈ 1 CÁI) -->
-        <section>    <!-- Phân đoạn 1: Hero -->
-        </section>
-        <section>    <!-- Phân đoạn 2: Features -->
-            <article><!-- Một feature card --></article>
-            <article><!-- Một feature card --></article>
-        </section>
-    </main>
-    
-    <aside>          <!-- Sidebar (nếu có) -->
-    </aside>
-    
-    <footer>         <!-- Cuối trang -->
-    </footer>
-</body>
-```
-
-> 💡 **Quy tắc:** Dùng `<div>` CHỈ KHI không có thẻ semantic nào phù hợp. `<div>` là "hộp không tên" — dùng khi cần gom nhóm thuần túy cho CSS.
+**Yêu cầu:** Viết file `index.html` chỉ có **HTML structure** — KHÔNG viết CSS. Dùng semantic tags đúng chỗ. Comment mỗi section.
 
 ---
 
-# 6. **BLOCK VS INLINE — HAI LOẠI HỘP**
+### Bài tập 3: Phân tích bằng tay (5 phút)
 
-## 6.1. Hai Tính Cách Của Hộp
-
-| Block Element | Inline Element |
-|:---:|:---:|
-| Chiếm **CẢ DÒNG** | Chỉ chiếm **NỘI DUNG** |
-| Tự xuống dòng | Nằm cùng dòng |
-| `<div>`, `<p>`, `<h1-h6>`, `<section>`, `<header>`, `<ul>` | `<span>`, `<a>`, `<strong>`, `<em>`, `<img>`, `<button>` |
-| Giống **viên gạch xây tường** — mỗi viên = 1 hàng | Giống **chữ trong sách** — nối liền nhau |
-
-```html
-<!-- Block: mỗi thẻ TỰ XUỐNG DÒNG -->
-<h1>Tiêu đề</h1>
-<p>Đoạn văn 1</p>
-<p>Đoạn văn 2</p>
-
-<!-- Kết quả:
-Tiêu đề
-Đoạn văn 1
-Đoạn văn 2
--->
-
-<!-- Inline: các thẻ NẰM CÙNG DÒNG -->
-<p>Đây là <strong>chữ đậm</strong> và <em>chữ nghiêng</em> trong <a href="#">cùng một dòng</a>.</p>
-
-<!-- Kết quả:
-Đây là **chữ đậm** và *chữ nghiêng* trong cùng một dòng.
--->
-```
-
-## 6.2. class và id — "Thẻ Tên" Cho Hộp
-
-```html
-<!-- class = "Họ" → nhiều phần tử có cùng class -->
-<div class="product-card">Sản phẩm 1</div>
-<div class="product-card">Sản phẩm 2</div>
-<div class="product-card">Sản phẩm 3</div>
-
-<!-- id = "CMND" → MỖI phần tử có id DUY NHẤT -->
-<div id="hero-section">Chỉ có 1 hero section</div>
-<div id="contact-form">Chỉ có 1 form liên hệ</div>
-```
-
-| Thuộc tính | Số lượng | Ví dụ | Dùng khi |
-|-----------|---------|-------|---------|
-| `class` | Nhiều phần tử có cùng class | `.product-card` — 100 cards | Style nhóm phần tử giống nhau |
-| `id` | DUY NHẤT trong trang | `#hero-section` — chỉ 1 | Truy cập phần tử cụ thể (CSS/JS/anchor link) |
+Nhìn một trang web bất kỳ đang mở trong browser. Lấy tờ giấy, vẽ sơ đồ "hộp lồng nhau" của nó. Ghi tên thẻ HTML lên mỗi hộp.
 
 ---
 
-# 7. **BÀI TẬP THỰC HÀNH**
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
-## BT1: Phân tích bố cục (Giấy + Bút)
-Mở 3 trang web sau và **vẽ sơ đồ hộp lồng nhau** trên giấy:
-1. [google.com](https://google.com) — trang đơn giản nhất
-2. [wikipedia.org](https://wikipedia.org) — trang có sidebar
-3. [shopee.vn](https://shopee.vn) — trang phức tạp (header, search, grid sản phẩm, footer)
-
-## BT2: Inspect & Ghi chép
-Dùng DevTools Inspect trên [youtube.com](https://youtube.com):
-- Header dùng thẻ gì?
-- Video list nằm trong thẻ gì?
-- Mỗi video card dùng `<div>` hay `<article>`?
-- Tìm ít nhất 3 semantic tags
-
-## BT3: Figma → HTML
-Cho bản thiết kế sau (mô tả bằng text):
-> *Landing page gồm: Navbar (logo trái, 3 menu links phải), Hero section (tiêu đề + subtitle + 2 buttons bên trái, ảnh bên phải), Features section (3 cards ngang hàng, mỗi card có icon + title + description), Footer (3 cột: About, Links, Contact)*
-
-**Yêu cầu:** Viết file `index.html` hoàn chỉnh với semantic tags (KHÔNG cần CSS, chỉ HTML structure).
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Dùng `<div>` cho mọi thứ cũng được"** | `<div>` không có semantic meaning → Google và Screen Reader không hiểu cấu trúc → SEO kém, Accessibility kém |
+| **"`<section>` và `<div>` giống nhau"** | `<section>` ngụ ý nội dung có liên quan và thường có tiêu đề. `<div>` chỉ là container trung tính |
+| **"`<article>` chỉ dùng cho bài báo"** | `<article>` dùng cho bất kỳ nội dung **độc lập, tái sử dụng được** — bao gồm sản phẩm trong shop, comment, card |
+| **"Phân tích bố cục mất thời gian"** | Không phân tích → code xong rồi phải viết lại → mất nhiều thời gian hơn |
+| **"`id` và `class` chỉ dùng cho CSS"** | `id` còn dùng cho: anchor link (`href="#section"`), JavaScript target (`getElementById`), form `label[for]` |
 
 ---
 
-# 📝 MINI TEST
+## 8. ✅ Checkpoint
 
-1. So sánh HTML, CSS, JavaScript qua tư duy "xây nhà" — mỗi cái đóng vai trò gì?
-2. Giải thích phương pháp "Những chiếc hộp lồng nhau" — áp dụng thế nào khi nhìn Figma?
-3. Quy trình 3 bước **Figma → HTML** là gì?
-4. Tại sao nên dùng `<header>` thay vì `<div class="header">`?
-5. `class` khác `id` như thế nào? Cho ví dụ thực tế.
-6. Block element và inline element khác nhau ra sao?
+### Câu hỏi hiểu cơ bản:
+
+1. Quy trình 3 bước Figma → HTML là gì? Thứ tự có thể đảo không?
+2. Tại sao nên dùng `<header>` thay vì `<div class="header">`? Nêu ít nhất 2 lý do.
+3. Sự khác biệt giữa `class` và `id` là gì? Cho ví dụ mỗi loại nên dùng khi nào.
+
+### Câu hỏi áp dụng:
+
+4. Trang Shopee có: thanh tìm kiếm, danh mục sản phẩm, banner quảng cáo, giỏ hàng, footer. Bạn sẽ dùng thẻ nào cho: thanh tìm kiếm, mỗi sản phẩm, footer?
+5. Một trang blog có: 10 bài viết, mỗi bài có tiêu đề + ngày đăng + nội dung + tags. Bạn dùng `<article>` hay `<section>` cho mỗi bài? Tại sao?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **Nhìn tổng thể → Chia hộp nhỏ → Gán thẻ HTML.** KHÔNG đảo thứ tự — phải phân tích xong rồi mới viết code, không phải ngược lại.
+2. `<header>` giúp: (1) **Google/SEO** hiểu đây là phần đầu trang, (2) **Screen Reader** điều hướng đúng, (3) **Code dễ đọc** hơn cho team.
+3. `class` dùng cho nhiều element (component lặp lại như card, button). `id` dùng cho element DUY NHẤT (hero section, main form, một section cụ thể để anchor link).
+4. Thanh tìm kiếm: trong `<header>` bằng `<form>`. Mỗi sản phẩm: `<article>` (nội dung độc lập). Footer: `<footer>`.
+5. **`<article>`** — vì mỗi bài viết là nội dung **độc lập**, có thể share riêng, tái sử dụng ở nơi khác (RSS feed, featured post). `<section>` dùng khi các phần liên quan chặt chẽ với nhau.
+
+</details>
 
 ---
 
-# 💾 TỔNG KẾT
+## 9. 📌 Summary — 5 điều quan trọng nhất
 
-| Khái niệm | Ghi nhớ |
-|-----------|---------|
-| **Tư duy xây nhà** | HTML = móng khung, CSS = nội thất, JS = điện nước |
-| **Box Thinking** | Mọi trang web = hộp lồng nhau. Nheo mắt → thấy boxes |
-| **Quy trình 3 bước** | Nhìn tổng thể → Chia hộp nhỏ → Gán thẻ HTML |
-| **DevTools Inspect** | Chuột phải → Inspect = "kính hiển vi" web |
-| **Semantic Tags** | header, nav, main, section, article, aside, footer |
-| **Block vs Inline** | Block = cả dòng, Inline = vừa nội dung |
-| **class vs id** | class = "Họ" (nhiều), id = "CMND" (duy nhất) |
+1. **Box Thinking** = kỹ năng cốt lõi: nheo mắt → thấy hộp → đặt tên → viết code
+2. **Quy trình 3 bước**: Chia vùng lớn → Chia hộp con → Gán semantic tags
+3. **Semantic > `<div>`** — `<header>`, `<nav>`, `<main>`, `<article>`, `<footer>` giúp SEO + Accessibility
+4. **Block vs Inline**: Block chiếm cả dòng, Inline chỉ chiếm nội dung
+5. **`class` = nhóm, `id` = duy nhất** — không bao giờ đặt cùng `id` cho hai element
 
 ---
 
-## ➡️ Chương tiếp theo...
+## 10. ➡️ Next Lesson Bridge
 
-*Minh nhìn lại bản phân tích hộp của mình. Gọn gàng. Logic.*
+*Minh nhìn sơ đồ hộp trên giấy: "Ổn. Mình biết phải xây gì rồi."*
 
-*"Giờ em hiểu rồi. Trước khi viết code, phải NHÌN trước."*
+*"Nhưng cú pháp HTML hoạt động thế nào? `<!DOCTYPE html>` là gì? `<head>` khác `<body>` ở chỗ nào? Tại sao cần `<meta charset='UTF-8'>`?"*
 
-*Anh Hùng gật đầu: "Đúng. Và bây giờ em đã sẵn sàng viết dòng code HTML đầu tiên."*
-
-**Chương tiếp theo:** [01. Introduction to the HTML Universe](./01_introduction_html_universe.md) — Bắt đầu hành trình viết code, từ `<!DOCTYPE html>` đến trang web đầu tiên.
+**→ [Bài 01: Introduction to the HTML Universe](./01_introduction_html_universe.md) — Cú pháp, Client-Server, và dòng code đầu tiên.**

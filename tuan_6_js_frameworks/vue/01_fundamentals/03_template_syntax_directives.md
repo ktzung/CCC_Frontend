@@ -1,564 +1,559 @@
-# 🟢 MODULE 1 - BÀI 03
-# **TEMPLATE SYNTAX & DIRECTIVES**
-
-## 🎬 "v-if, v-for, v-bind — HTML Biết Suy Nghĩ" — Template Syntax Của Vue
-
-*Minh viết React: `{isLoggedIn && <Welcome />}` — JavaScript thuần. Vue? `<div v-if="isLoggedIn">Welcome</div>` — đọc như HTML! Anh Hùng: "Vue template = HTML + superpowers. `v-if` = if/else, `v-for` = loop, `v-bind` = dynamic attributes. Không cần học JSX."*
+# 🟢 TUẦN 6 - BÀI 05 (VUE.JS)
+# **TEMPLATE SYNTAX & DIRECTIVES — Deep Dive**
 
 ---
 
-## 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau bài này, bạn sẽ:
-- Hiểu và sử dụng được **Interpolation** (`{{ }}`)
-- Nắm vững các **Directives** cơ bản: `v-if`, `v-show`, `v-for`, `v-bind`, `v-model`
-- Biết cách sử dụng **Shorthand** (`:`, `@`)
-- Hiểu sự khác biệt giữa các directives tương tự
+*React: `{isLoggedIn && <p>Chào mừng!</p>}` — JavaScript thuần.*
+
+*Vue: `<p v-if="isLoggedIn">Chào mừng!</p>` — HTML với superpower.*
+
+*Minh: "Cái nào dễ đọc hơn?"*
+
+*"Tuỳ người. Nhưng đa số designer và backend developer chuyển sang làm frontend thấy Vue dễ tiếp cận hơn vì template trông quen thuộc," anh Hùng nói. "v-if, v-for, v-model, :bind, @event — 5 directives này = 90% template code Vue hàng ngày."*
 
 ---
 
-## 1. **INTERPOLATION (CHÈN DỮ LIỆU)**
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-Interpolation là cách đơn giản nhất để hiển thị data trong template.
+Directives là ngôn ngữ của Vue templates. Không biết directives → không viết được component Vue. Bài này cover:
+- **Rendering**: `v-if/v-show/v-for` — hiển thị data
+- **Binding**: `v-bind (:)` — connect data với HTML attributes
+- **Input**: `v-model` — two-way binding cho forms
+- **Events**: `v-on (@)` — xử lý user interactions
 
-### 1.1. Text Interpolation
+---
+
+## 2. 🌐 Big Picture — Directives Map
+
+```
+VUE DIRECTIVES
+─────────────────────────────────────────────────────────
+RENDERING
+  v-if / v-else-if / v-else  → Conditional (add/remove DOM)
+  v-show                     → Conditional (display:none)
+  v-for                      → Loop rendering
+
+DATA BINDING
+  v-bind (:)                 → One-way: data → attribute
+  v-model                    → Two-way: data ↔ input
+
+EVENTS
+  v-on (@)                   → Event listener
+
+SPECIAL
+  v-text                     → Text content (= {{ }})
+  v-html                     → Raw HTML (⚠️ XSS risk)
+  v-once                     → Render once, không update
+  v-pre                      → Skip compilation
+  v-cloak                    → Ẩn khi chưa compile xong
+
+SHORTHAND
+  v-bind:src  → :src
+  v-on:click  → @click
+```
+
+---
+
+## 3. ⚙️ Core Technical Truth
+
+### Interpolation & Expressions
 
 ```vue
 <template>
-  <div>
+    <!-- {{ expression }} — Chỉ dùng expression, không phải statement -->
     <p>{{ message }}</p>
-    <p>Hello, {{ name }}!</p>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const message = ref('Welcome to Vue!')
-const name = ref('Khoa')
-</script>
-```
-
-**Kết quả:**
-```
-Welcome to Vue!
-Hello, Khoa!
-```
-
-### 1.2. JavaScript Expressions
-
-Bạn có thể sử dụng JavaScript expressions trong `{{ }}`:
-
-```vue
-<template>
-  <div>
-    <!-- Toán tử -->
-    <p>{{ count + 1 }}</p>
     <p>{{ price * quantity }}</p>
-    
-    <!-- Method calls -->
     <p>{{ message.toUpperCase() }}</p>
-    <p>{{ new Date().toLocaleDateString() }}</p>
-    
-    <!-- Ternary operator -->
-    <p>{{ isActive ? 'Active' : 'Inactive' }}</p>
-    
-    <!-- Array/Object methods -->
-    <p>{{ items.length }} items</p>
-    <p>{{ user.name || 'Guest' }}</p>
-  </div>
+    <p>{{ isActive ? "Hoạt động" : "Tạm dừng" }}</p>
+    <p>{{ items.length }} sản phẩm</p>
+    <p>{{ new Date().toLocaleDateString("vi-VN") }}</p>
+
+    <!-- ✅ Expression — OK -->
+    <!-- ❌ Statement — KHÔNG ĐƯỢC: {{ if (x > 0) return x }} -->
+
+    <!-- v-html — Render HTML thuần (NGUY HIỂM nếu từ user input) -->
+    <div v-html="richTextFromTrustedSource"></div>
+
+    <!-- v-once — Render 1 lần, không update dù state thay đổi (tối ưu static content) -->
+    <h1 v-once>{{ appTitle }}</h1>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-const count = ref(5)
-const price = ref(100)
-const quantity = ref(3)
-const message = ref('hello vue')
-const isActive = ref(true)
-const items = ref([1, 2, 3])
-const user = ref({ name: 'Khoa' })
-</script>
 ```
-
-**⚠️ Lưu ý:**
-- Chỉ có thể dùng **expressions**, không thể dùng **statements**
-- ✅ Đúng: `{{ count + 1 }}`, `{{ isActive ? 'Yes' : 'No' }}`
-- ❌ Sai: `{{ if (count > 0) return count }}`, `{{ let x = 1 }}`
-
-### 1.3. v-text và v-html
-
-**v-text:** Tương đương với `{{ }}`
-```vue
-<p v-text="message"></p>
-<!-- Tương đương -->
-<p>{{ message }}</p>
-```
-
-**v-html:** Render HTML (cẩn thận với XSS attacks!)
-```vue
-<template>
-  <div>
-    <!-- Hiển thị text thuần -->
-    <p>{{ htmlContent }}</p>
-    <!-- Kết quả: <strong>Bold</strong> -->
-    
-    <!-- Render HTML -->
-    <p v-html="htmlContent"></p>
-    <!-- Kết quả: Bold (in đậm) -->
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const htmlContent = ref('<strong>Bold</strong>')
-</script>
-```
-
-**⚠️ Cảnh báo:** Chỉ dùng `v-html` với data tin cậy. Không bao giờ dùng với user input!
 
 ---
 
-## 2. **DIRECTIVES CƠ BẢN**
-
-Directives là các attributes đặc biệt bắt đầu bằng `v-` để điều khiển DOM.
-
-### 2.1. v-if, v-else-if, v-else
-
-Điều kiện render element (thêm/xóa element khỏi DOM).
+### v-if / v-show — Conditional Rendering
 
 ```vue
 <template>
-  <div>
-    <p v-if="score >= 90">Excellent!</p>
-    <p v-else-if="score >= 70">Good!</p>
-    <p v-else-if="score >= 50">Pass</p>
-    <p v-else>Fail</p>
-  </div>
+    <!-- v-if: Thêm/xóa khỏi DOM hoàn toàn -->
+    <div v-if="userRole === 'admin'">
+        <AdminPanel />
+    </div>
+    <div v-else-if="userRole === 'mod'">
+        <ModPanel />
+    </div>
+    <div v-else>
+        <UserPanel />
+    </div>
+
+    <!-- v-if trên <template> — Group nhiều elements không tạo DOM node -->
+    <template v-if="isLoggedIn">
+        <h2>Dashboard</h2>
+        <p>Chào {{ user.name }}</p>
+        <UserStats />
+    </template>
+
+    <!-- v-show: Toggle display:none — Element luôn trong DOM -->
+    <div v-show="isExpanded" class="expandable-content">
+        Nội dung mở rộng...
+    </div>
+    <button @click="isExpanded = !isExpanded">
+        {{ isExpanded ? "Thu gọn ▲" : "Mở rộng ▼" }}
+    </button>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-
-const score = ref(85)
-</script>
+<!-- RULE: Khi nào dùng v-if vs v-show?
+     v-if:   Điều kiện ít thay đổi (user role, feature flags)
+             Component nặng cần lazy mounting
+     v-show: Toggle thường xuyên (accordion, dropdown, tooltip)
+             Animation cần element sẵn trong DOM -->
 ```
 
-**Lưu ý:**
-- `v-if` có thể dùng trên `<template>` để group nhiều elements:
-```vue
-<template v-if="isVisible">
-  <h1>Title</h1>
-  <p>Content</p>
-</template>
-```
+---
 
-### 2.2. v-show
-
-Ẩn/hiện element bằng CSS `display: none` (element vẫn tồn tại trong DOM).
+### v-for — List Rendering
 
 ```vue
 <template>
-  <div>
-    <p v-show="isVisible">This is visible</p>
-    <button @click="toggle">Toggle</button>
-  </div>
+    <!-- Array → items -->
+    <ul>
+        <li v-for="product in products" :key="product.id">
+            {{ product.name }} — {{ product.price.toLocaleString("vi-VN") }}đ
+        </li>
+    </ul>
+
+    <!-- Array với index -->
+    <ol>
+        <li v-for="(item, index) in cartItems" :key="item.id">
+            {{ index + 1 }}. {{ item.name }} × {{ item.qty }}
+        </li>
+    </ol>
+
+    <!-- Object → key/value pairs -->
+    <dl>
+        <template v-for="(value, key) in userProfile" :key="key">
+            <dt>{{ key }}</dt>
+            <dd>{{ value }}</dd>
+        </template>
+    </dl>
+
+    <!-- Number range: 1, 2, 3, ... n -->
+    <div class="pagination">
+        <button v-for="page in totalPages" :key="page"
+                :class="{ active: page === currentPage }"
+                @click="currentPage = page">
+            {{ page }}
+        </button>
+    </div>
+
+    <!-- v-for với component -->
+    <ProductCard
+        v-for="product in filteredProducts"
+        :key="product.id"
+        :product="product"
+        @add-to-cart="handleAddToCart"
+    />
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-const isVisible = ref(true)
-
-function toggle() {
-  isVisible.value = !isVisible.value
-}
-</script>
 ```
 
-**v-if vs v-show:**
-| Tiêu chí | v-if | v-show |
-|----------|------|--------|
-| **DOM** | Thêm/xóa element | Chỉ thay đổi CSS |
-| **Performance** | Tốt khi ít toggle | Tốt khi thường xuyên toggle |
-| **Initial render** | Lazy (chỉ render khi true) | Luôn render |
-| **Use case** | Điều kiện ít thay đổi | Điều kiện thường xuyên thay đổi |
-
-**Ví dụ:**
+**⚠️ v-for + v-if trên cùng element — TRÁNH:**
 ```vue
-<!-- Dùng v-if khi điều kiện ít thay đổi -->
-<div v-if="user.isAdmin">
-  <AdminPanel />
-</div>
-
-<!-- Dùng v-show khi toggle thường xuyên -->
-<button v-show="isLoggedIn">Logout</button>
-```
-
-### 2.3. v-for
-
-Render danh sách (loop).
-
-```vue
-<template>
-  <div>
-    <!-- Loop qua array -->
-    <ul>
-      <li v-for="item in items" :key="item.id">
-        {{ item.name }}
-      </li>
-    </ul>
-    
-    <!-- Loop với index -->
-    <ul>
-      <li v-for="(item, index) in items" :key="item.id">
-        {{ index + 1 }}. {{ item.name }}
-      </li>
-    </ul>
-    
-    <!-- Loop qua object -->
-    <ul>
-      <li v-for="(value, key) in user" :key="key">
-        {{ key }}: {{ value }}
-      </li>
-    </ul>
-    
-    <!-- Loop qua số -->
-    <span v-for="n in 5" :key="n">{{ n }}</span>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const items = ref([
-  { id: 1, name: 'Apple' },
-  { id: 2, name: 'Banana' },
-  { id: 3, name: 'Orange' }
-])
-
-const user = ref({
-  name: 'Khoa',
-  age: 25,
-  email: 'khoa@example.com'
-})
-</script>
-```
-
-**⚠️ Quan trọng:** Luôn dùng `:key` với `v-for` để Vue track elements hiệu quả:
-```vue
-<!-- ✅ Đúng -->
-<li v-for="item in items" :key="item.id">{{ item.name }}</li>
-
-<!-- ❌ Sai (không có key) -->
-<li v-for="item in items">{{ item.name }}</li>
-```
-
-**v-for với v-if:**
-```vue
-<!-- ❌ Không nên dùng trên cùng element -->
+<!-- ❌ Sai: v-if chạy trước v-for ở Vue 2, ngược lại Vue 3. Dễ bug -->
 <li v-for="item in items" v-if="item.isActive" :key="item.id">
-  {{ item.name }}
-</li>
 
-<!-- ✅ Dùng template wrapper -->
+<!-- ✅ Đúng cách 1: Wrap với <template> -->
 <template v-for="item in items" :key="item.id">
-  <li v-if="item.isActive">{{ item.name }}</li>
+    <li v-if="item.isActive">{{ item.name }}</li>
 </template>
 
-<!-- ✅ Hoặc filter trong computed -->
-<li v-for="item in activeItems" :key="item.id">
-  {{ item.name }}
-</li>
-```
-
-### 2.4. v-bind (Binding Attributes)
-
-Bind data vào HTML attributes.
-
-```vue
-<template>
-  <div>
-    <!-- Bind attribute -->
-    <img v-bind:src="imageSrc" v-bind:alt="imageAlt" />
-    
-    <!-- Shorthand: dùng : -->
-    <img :src="imageSrc" :alt="imageAlt" />
-    
-    <!-- Bind class -->
-    <div :class="{ active: isActive, 'text-danger': hasError }">
-      Content
-    </div>
-    
-    <!-- Bind style -->
-    <div :style="{ color: textColor, fontSize: fontSize + 'px' }">
-      Styled text
-    </div>
-    
-    <!-- Bind multiple attributes -->
-    <button v-bind="buttonProps">Click me</button>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const imageSrc = ref('/logo.png')
-const imageAlt = ref('Logo')
-const isActive = ref(true)
-const hasError = ref(false)
-const textColor = ref('blue')
-const fontSize = ref(16)
-const buttonProps = ref({
-  type: 'button',
-  disabled: false,
-  class: 'btn-primary'
-})
-</script>
-```
-
-**Class binding:**
-```vue
-<!-- Object syntax -->
-<div :class="{ active: isActive, disabled: isDisabled }"></div>
-
-<!-- Array syntax -->
-<div :class="[activeClass, errorClass]"></div>
-
-<!-- Mixed -->
-<div :class="[{ active: isActive }, errorClass]"></div>
-
-<!-- Computed -->
-<div :class="computedClass"></div>
-```
-
-**Style binding:**
-```vue
-<!-- Object syntax -->
-<div :style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
-
-<!-- Array syntax (merge multiple objects) -->
-<div :style="[baseStyles, overridingStyles]"></div>
-
-<!-- Auto-prefixed -->
-<div :style="{ display: '-webkit-box' }"></div>
-```
-
-### 2.5. v-model (Two-way Data Binding)
-
-Two-way binding cho form inputs.
-
-```vue
-<template>
-  <div>
-    <!-- Text input -->
-    <input v-model="message" placeholder="Type something" />
-    <p>Message: {{ message }}</p>
-    
-    <!-- Textarea -->
-    <textarea v-model="description"></textarea>
-    
-    <!-- Checkbox -->
-    <input type="checkbox" v-model="isChecked" />
-    <label>I agree</label>
-    
-    <!-- Multiple checkboxes -->
-    <input type="checkbox" value="vue" v-model="frameworks" />
-    <input type="checkbox" value="react" v-model="frameworks" />
-    <input type="checkbox" value="angular" v-model="frameworks" />
-    <p>Selected: {{ frameworks }}</p>
-    
-    <!-- Radio -->
-    <input type="radio" value="male" v-model="gender" />
-    <input type="radio" value="female" v-model="gender" />
-    <p>Gender: {{ gender }}</p>
-    
-    <!-- Select -->
-    <select v-model="selected">
-      <option disabled value="">Please select</option>
-      <option value="option1">Option 1</option>
-      <option value="option2">Option 2</option>
-    </select>
-    <p>Selected: {{ selected }}</p>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const message = ref('')
-const description = ref('')
-const isChecked = ref(false)
-const frameworks = ref([])
-const gender = ref('')
-const selected = ref('')
-</script>
-```
-
-**v-model modifiers:**
-```vue
-<!-- .lazy - Update on change event thay vì input event -->
-<input v-model.lazy="message" />
-
-<!-- .number - Convert to number -->
-<input v-model.number="age" type="number" />
-
-<!-- .trim - Remove whitespace -->
-<input v-model.trim="username" />
+<!-- ✅ Đúng cách 2: Dùng computed property (TỐTHƠN) -->
+<li v-for="item in activeItems" :key="item.id">{{ item.name }}</li>
+<!-- activeItems = computed(() => items.value.filter(i => i.isActive)) -->
 ```
 
 ---
 
-## 3. **SHORTHAND SYNTAX**
-
-Vue cung cấp shorthand cho các directives phổ biến:
-
-```vue
-<!-- v-bind shorthand -->
-<img :src="imageSrc" :alt="imageAlt" />
-<!-- Tương đương -->
-<img v-bind:src="imageSrc" v-bind:alt="imageAlt" />
-
-<!-- v-on shorthand -->
-<button @click="handleClick">Click</button>
-<!-- Tương đương -->
-<button v-on:click="handleClick">Click</button>
-```
-
----
-
-## 4. **VÍ DỤ TỔNG HỢP**
+### v-bind (:) — Dynamic Attribute Binding
 
 ```vue
 <template>
-  <div class="todo-app">
-    <h1>Todo List</h1>
-    
-    <!-- Add new todo -->
-    <div class="add-todo">
-      <input 
-        v-model.trim="newTodo" 
-        @keyup.enter="addTodo"
-        placeholder="Add a new todo..."
-      />
-      <button @click="addTodo">Add</button>
-    </div>
-    
-    <!-- Filter buttons -->
-    <div class="filters">
-      <button 
-        :class="{ active: filter === 'all' }"
-        @click="filter = 'all'"
-      >
-        All ({{ todos.length }})
-      </button>
-      <button 
-        :class="{ active: filter === 'active' }"
-        @click="filter = 'active'"
-      >
-        Active ({{ activeTodos.length }})
-      </button>
-      <button 
-        :class="{ active: filter === 'completed' }"
-        @click="filter = 'completed'"
-      >
-        Completed ({{ completedTodos.length }})
-      </button>
-    </div>
-    
-    <!-- Todo list -->
-    <ul v-if="filteredTodos.length > 0">
-      <li 
-        v-for="todo in filteredTodos" 
-        :key="todo.id"
-        :class="{ completed: todo.completed }"
-      >
-        <input 
-          type="checkbox" 
-          v-model="todo.completed"
-        />
-        <span>{{ todo.text }}</span>
-        <button @click="removeTodo(todo.id)">Delete</button>
-      </li>
-    </ul>
-    <p v-else>No todos found</p>
-  </div>
+    <!-- Basic binding -->
+    <img :src="product.imageUrl" :alt="product.name" />
+    <a :href="`/products/${product.id}`">Chi tiết</a>
+    <button :disabled="isLoading || !isValid">Gửi</button>
+    <input :type="inputType" :placeholder="placeholder" />
+
+    <!-- Class binding — 3 syntaxes -->
+    <!-- Object: key = class name, value = condition -->
+    <div :class="{
+        'card': true,
+        'card--active': isActive,
+        'card--disabled': !isEnabled,
+        'card--sale': product.onSale
+    }">
+
+    <!-- Array -->
+    <div :class="['base-class', isActive ? 'active' : 'inactive', extraClass]">
+
+    <!-- Computed class -->
+    <div :class="cardClass">  <!-- cardClass = computed() → string or object -->
+
+    <!-- Style binding -->
+    <div :style="{
+        backgroundColor: brandColor,
+        fontSize: `${fontSize}px`,
+        opacity: isVisible ? 1 : 0,
+    }">
+
+    <!-- Array style (merge multiple objects) -->
+    <div :style="[baseStyles, conditionalStyles]">
+
+    <!-- Spread object — bind nhiều attributes cùng lúc -->
+    <input v-bind="inputAttrs" />
+    <!-- inputAttrs = { type: 'email', required: true, autocomplete: 'email' } -->
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 
-const newTodo = ref('')
-const todos = ref([
-  { id: 1, text: 'Learn Vue.js', completed: false },
-  { id: 2, text: 'Build a project', completed: true }
-])
-const filter = ref('all')
-let nextId = 3
+const product = ref({ id: 1, name: 'iPhone', imageUrl: '/iphone.jpg', onSale: true })
+const isActive = ref(true)
+const isEnabled = ref(false)
+const isLoading = ref(false)
+const brandColor = ref('#e63946')
 
-const activeTodos = computed(() => 
-  todos.value.filter(t => !t.completed)
-)
-
-const completedTodos = computed(() => 
-  todos.value.filter(t => t.completed)
-)
-
-const filteredTodos = computed(() => {
-  if (filter.value === 'active') return activeTodos.value
-  if (filter.value === 'completed') return completedTodos.value
-  return todos.value
-})
-
-function addTodo() {
-  if (newTodo.value.trim()) {
-    todos.value.push({
-      id: nextId++,
-      text: newTodo.value,
-      completed: false
-    })
-    newTodo.value = ''
-  }
-}
-
-function removeTodo(id) {
-  todos.value = todos.value.filter(t => t.id !== id)
-}
+const cardClass = computed(() => ({
+    'card': true,
+    'card--active': isActive.value,
+    'card--loading': isLoading.value,
+}))
 </script>
-
-<style scoped>
-.todo-app {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.completed {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.filters button.active {
-  background-color: #42b983;
-  color: white;
-}
-</style>
 ```
 
 ---
 
-## 5. **TỔNG KẾT**
+### v-model — Two-way Binding
 
-- ✅ **Interpolation** (`{{ }}`) để hiển thị data
-- ✅ **v-if/v-else** để điều kiện render
-- ✅ **v-show** để ẩn/hiện (CSS)
-- ✅ **v-for** để loop qua arrays/objects
-- ✅ **v-bind** (`:`) để bind attributes
-- ✅ **v-model** để two-way binding với forms
-- ✅ **v-on** (`@`) để bắt events (sẽ học ở bài tiếp theo)
+```vue
+<template>
+    <form @submit.prevent="handleSubmit">
+        <!-- Text, email, password -->
+        <input v-model="form.name" type="text" placeholder="Họ tên" />
+        <input v-model="form.email" type="email" placeholder="Email" />
+        <input v-model="form.password" type="password" />
+
+        <!-- Textarea -->
+        <textarea v-model="form.bio" rows="4" placeholder="Giới thiệu..."></textarea>
+
+        <!-- Checkbox (boolean) -->
+        <input type="checkbox" id="terms" v-model="form.agreeTerms" />
+        <label for="terms">Đồng ý với điều khoản</label>
+
+        <!-- Checkbox group (array) -->
+        <div v-for="opt in interestOptions" :key="opt.value">
+            <input type="checkbox" :id="opt.value" :value="opt.value" v-model="form.interests" />
+            <label :for="opt.value">{{ opt.label }}</label>
+        </div>
+
+        <!-- Radio group -->
+        <label v-for="role in roles" :key="role.value">
+            <input type="radio" :value="role.value" v-model="form.role" />
+            {{ role.label }}
+        </label>
+
+        <!-- Select -->
+        <select v-model="form.city">
+            <option value="">-- Chọn thành phố --</option>
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+                {{ city.name }}
+            </option>
+        </select>
+
+        <!-- v-model modifiers -->
+        <input v-model.trim="form.name" />      <!-- Auto trim whitespace -->
+        <input v-model.number="form.age" type="number" />  <!-- String → Number -->
+        <input v-model.lazy="form.search" />    <!-- Update on "change" not "input" -->
+
+        <button type="submit" :disabled="!isFormValid">Lưu</button>
+    </form>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const form = ref({
+    name: '',
+    email: '',
+    password: '',
+    bio: '',
+    agreeTerms: false,
+    interests: [],
+    role: 'user',
+    city: '',
+    age: 0,
+    search: '',
+})
+
+const interestOptions = [
+    { value: 'tech', label: 'Công nghệ' },
+    { value: 'design', label: 'Thiết kế' },
+    { value: 'business', label: 'Kinh doanh' },
+]
+
+const roles = [
+    { value: 'user', label: 'Người dùng' },
+    { value: 'mod', label: 'Moderator' },
+]
+
+const cities = ref([
+    { id: 'hn', name: 'Hà Nội' },
+    { id: 'hcm', name: 'TP.HCM' },
+    { id: 'dn', name: 'Đà Nẵng' },
+])
+
+const isFormValid = computed(() =>
+    form.value.name.trim() &&
+    form.value.email.includes('@') &&
+    form.value.agreeTerms
+)
+
+function handleSubmit() {
+    console.log('Form data:', form.value)
+}
+</script>
+```
 
 ---
 
-**Bài tiếp theo:** [04. Event Handling](./04_event_handling.md) - Học cách xử lý sự kiện với v-on và các event modifiers.
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
+
+> **`v-if` = add/remove DOM (cho ít thay đổi). `v-show` = CSS hide (cho toggle thường xuyên). Luôn dùng `:key` trong `v-for`.**
+> **`:attr="value"` = bind data vào attribute. `v-model="data"` = two-way sync với input. `@event="handler"` = listen event.**
+
+---
+
+## 5. 🏭 Real-world Layer
+
+### Product Filter Component hoàn chỉnh
+
+```vue
+<template>
+    <div class="product-page">
+        <!-- Filter sidebar -->
+        <aside class="filters">
+            <h3>Lọc sản phẩm</h3>
+
+            <input v-model.trim="searchQuery"
+                   @input="resetPage"
+                   placeholder="Tìm kiếm..." />
+
+            <select v-model="selectedCategory" @change="resetPage">
+                <option value="">Tất cả danh mục</option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                    {{ cat.name }}
+                </option>
+            </select>
+
+            <div class="price-range">
+                <label>Giá: {{ priceRange[0].toLocaleString('vi-VN') }}đ
+                       — {{ priceRange[1].toLocaleString('vi-VN') }}đ</label>
+                <input type="range" v-model.number="priceRange[0]" :min="0" :max="50000000" step="500000" />
+                <input type="range" v-model.number="priceRange[1]" :min="priceRange[0]" :max="100000000" step="500000" />
+            </div>
+
+            <div class="sort">
+                <label v-for="opt in sortOptions" :key="opt.value">
+                    <input type="radio" :value="opt.value" v-model="sortBy" />
+                    {{ opt.label }}
+                </label>
+            </div>
+        </aside>
+
+        <!-- Product grid -->
+        <main class="product-grid">
+            <p v-if="isLoading">⏳ Đang tải...</p>
+
+            <template v-else>
+                <p class="result-count">{{ filteredProducts.length }} sản phẩm</p>
+
+                <div v-if="filteredProducts.length > 0" class="grid">
+                    <ProductCard
+                        v-for="product in paginatedProducts"
+                        :key="product.id"
+                        :product="product"
+                        :class="{ 'on-sale': product.discount > 0 }"
+                        @add-to-cart="handleAddToCart"
+                    />
+                </div>
+
+                <div v-else class="empty-state">
+                    <p>Không tìm thấy sản phẩm phù hợp</p>
+                    <button @click="resetFilters">Xóa bộ lọc</button>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" v-if="totalPages > 1">
+                    <button
+                        v-for="page in totalPages"
+                        :key="page"
+                        :class="{ active: page === currentPage }"
+                        @click="currentPage = page">
+                        {{ page }}
+                    </button>
+                </div>
+            </template>
+        </main>
+    </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const searchQuery = ref('')
+const selectedCategory = ref('')
+const priceRange = ref([0, 100000000])
+const sortBy = ref('name-asc')
+const currentPage = ref(1)
+const pageSize = 12
+const isLoading = ref(false)
+const products = ref([]) // từ API
+
+const categories = ref([
+    { id: 'phone', name: 'Điện thoại' },
+    { id: 'laptop', name: 'Laptop' },
+])
+
+const sortOptions = [
+    { value: 'name-asc', label: 'Tên A-Z' },
+    { value: 'price-asc', label: 'Giá tăng dần' },
+    { value: 'price-desc', label: 'Giá giảm dần' },
+]
+
+const filteredProducts = computed(() => {
+    let result = products.value
+    if (searchQuery.value) {
+        result = result.filter(p => p.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
+    }
+    if (selectedCategory.value) {
+        result = result.filter(p => p.category === selectedCategory.value)
+    }
+    result = result.filter(p => p.price >= priceRange.value[0] && p.price <= priceRange.value[1])
+
+    const [field, dir] = sortBy.value.split('-')
+    result.sort((a, b) => dir === 'asc' ? (a[field] > b[field] ? 1 : -1) : (a[field] < b[field] ? 1 : -1))
+    return result
+})
+
+const totalPages = computed(() => Math.ceil(filteredProducts.value.length / pageSize))
+
+const paginatedProducts = computed(() => {
+    const start = (currentPage.value - 1) * pageSize
+    return filteredProducts.value.slice(start, start + pageSize)
+})
+
+function resetPage() { currentPage.value = 1 }
+function resetFilters() {
+    searchQuery.value = ''
+    selectedCategory.value = ''
+    priceRange.value = [0, 100000000]
+    sortBy.value = 'name-asc'
+    resetPage()
+}
+function handleAddToCart(product) { /* dispatch to Pinia */ }
+</script>
+```
+
+---
+
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
+
+### Bài tập: Registration Form (20 phút)
+
+Xây form đăng ký có:
+- Các fields: `username`, `email`, `password`, `confirmPassword`, `role` (radio), `newsletter` (checkbox)
+- `v-model` cho tất cả inputs
+- Validation với `computed`: username ≥ 3 ký tự, email hợp lệ, password ≥ 8 ký tự, passwords match
+- Hiện lỗi với `v-if`, disable submit button khi form invalid
+- Hiện preview JSON của form data bên dưới
+
+---
+
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"`v-for` phải có `:key`"** | Không bắt buộc về mặt kỹ thuật, nhưng **bắt buộc về mặt best practice**. Thiếu key → Vue không track được element nào là element nào khi list thay đổi → bugs về state, wrong animations |
+| **"`v-if` ưu tiên hơn `v-for` khi trên cùng element"** | Ngược lại trong **Vue 3**: `v-if` có priority cao hơn `v-for`. Nghĩa là `v-if` không thể access biến của `v-for`. Đây là lý do tại sao không dùng chúng trên cùng element |
+| **"`v-model` là shorthand `@input + :value`"** | Đúng với text input. Nhưng Vue thông minh hơn: với checkbox → dùng `checked` + `change`. Với select → dùng `value` + `change`. v-model chọn đúng event theo input type |
+| **"`:class` và `class` loại trừ nhau"** | Không — Vue **merge** static và dynamic class. `class="base" :class="{ active: isActive }"` → element có cả "base" và "active" (nếu isActive = true) |
+| **"`v-model.number` parse số float"** | Đúng nếu input value là valid number. Nhưng khi input rỗng → trả về `NaN`, không phải `0`. Xử lý NaN bằng `v-model.number` + validation |
+
+---
+
+## 8. ✅ Checkpoint
+
+### Câu hỏi hiểu cơ bản:
+
+1. Điểm khác biệt quan trọng nhất giữa `v-if` và `v-show` là gì? Khi nào dùng cái nào?
+2. Tại sao `:key` trong `v-for` phải là **unique và stable** (ổn định qua các lần render)?
+3. `v-model.lazy` khác `v-model` như thế nào? Khi nào `.lazy` hữu ích?
+
+### Câu hỏi áp dụng:
+
+4. Viết template hiển thị danh sách students, mỗi student có badge màu khác nhau theo grade: A=green, B=blue, C=yellow, F=red. Dùng `:class` binding.
+5. Form có input `age` dùng `v-model.number`. User nhập "abc" và xóa đi để trống. Value là gì? Làm thế nào để handle?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. `v-if` = thêm/xóa element khỏi DOM (mount/unmount component). `false` → không tồn tại trong DOM, không consume memory, component lifecycle không chạy. `v-show` = `display: none`, element vẫn trong DOM, vẫn consume memory. Dùng `v-if` khi: condition ít thay đổi, component nặng cần lazy init. Dùng `v-show` khi: toggle thường xuyên, cần animation (element phải trong DOM để animate).
+2. Key giúp Vue nhận dạng element khi list thay đổi. **Unique**: Hai element cùng key → Vue không biết nên update cái nào. **Stable**: Nếu key thay đổi (ví dụ dùng index khi thêm/xóa phần tử đầu list) → Vue nghĩ là element mới → re-mount toàn bộ → state trong component con bị reset, animations bị kích hoạt sai.
+3. `v-model` update state mỗi lần input event (mỗi keystroke). `v-model.lazy` update khi change event (khi blur hoặc Enter). `.lazy` hữu ích khi: validate sau khi user rời khỏi field (không validate từng chữ), search query (kết hợp với debounce logic), expensive computed operations.
+4. ```vue
+   <ul>
+       <li v-for="student in students" :key="student.id">
+           {{ student.name }}
+           <span :class="{
+               'badge-green': student.grade === 'A',
+               'badge-blue':  student.grade === 'B',
+               'badge-yellow':student.grade === 'C',
+               'badge-red':   student.grade === 'F',
+           }" class="badge">{{ student.grade }}</span>
+       </li>
+   </ul>
+   ```
+5. Khi user nhập "abc" → `NaN`. Khi xóa hết → `NaN`. Cần handle: ```vue const safeAge = computed(() => isNaN(form.value.age) ? 0 : form.value.age) ``` Hoặc validate: ```vue const isAgeValid = computed(() => !isNaN(form.value.age) && form.value.age >= 0 && form.value.age <= 150) ```
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **`v-if`** = DOM add/remove (ít thay đổi). **`v-show`** = CSS hide (toggle thường xuyên). **`:key` bắt buộc** trong `v-for`
+2. **Không dùng `v-if` + `v-for` trên cùng element** — Dùng `<template>` wrapper hoặc computed filter
+3. **`:class` object syntax** = `{ 'class-name': condition }`. Merge được với static `class` attribute
+4. **`v-model`** = two-way binding thông minh — tự chọn event đúng theo input type
+5. **`v-model` modifiers**: `.trim` (xóa whitespace), `.number` (convert type), `.lazy` (update on change, không input)
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Template directives clear," Minh nói. "Nhưng event handling trong Vue — modifier `.prevent`, `.stop`, `.once` — vẫn chưa rõ."*
+
+*"Đó là bài tiếp theo. Event modifiers = Vue shorthand cho `e.preventDefault()`, `e.stopPropagation()`. 1 dòng thay 3 dòng."*
+
+**→ [Bài 06: Event Handling](./04_event_handling.md) — Event modifiers, key modifiers, custom events: xử lý tương tác người dùng trong Vue.**

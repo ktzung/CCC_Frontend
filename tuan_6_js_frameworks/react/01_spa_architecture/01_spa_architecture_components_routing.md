@@ -1,643 +1,373 @@
-# 🟫 CHƯƠNG 11
-# **SPA ARCHITECTURE — COMPONENT & ROUTING**
-
-## 🎬 "Tại Sao Gmail Không Bao Giờ Reload Trang?" — Bí Mật SPA
-
-*Minh dùng Gmail cả ngày: mở email, soạn thư, chuyển tab — ZERO trang trắng. Nhưng web PHP của Minh? Click link = trang trắng 2 giây → load lại từ đầu. Mỗi lần.*
-
-*Anh Hùng: "Gmail, Facebook, Google Docs — tất cả là SPA. Single Page Application. Tải 1 lần → JavaScript quản lý MỌI THỨ. Browser không hỏi server mỗi lần click."*
-
-> 💡 **MPA → SPA = Tivi analog → Smart TV.** Cùng nội dung, trải nghiệm KHÁC HOÀN TOÀN.
+# 🟩 TUẦN 6 - BÀI 01 (JS FRAMEWORKS)
+# **SPA ARCHITECTURE — Component, Routing & State**
 
 ---
 
-# 🎯 MỤC TIÊU HỌC TẬP
+## 0. 🎬 Opening Hook
 
-Sau chương này, bạn sẽ:
+*Minh dùng Gmail cả ngày: mở email, soạn thư, chuyển thư mục, tìm kiếm — **không một lần nào thấy màn hình trắng**.*
 
-- Hiểu sự khác biệt MPA vs SPA
-- Biết Virtual DOM là gì
-- Component-based architecture
-- Client-side routing
-- State management basics
+*Minh mở trang web trường để đăng ký môn học. Click "Đăng ký" → màn hình trắng 3 giây → trang reload từ đầu → mất đi lựa chọn vừa nhập.*
 
----
+*"Tại sao Gmail mượt vậy?" Minh hỏi.*
 
-# 1. **MPA vs SPA**
+*"Vì Gmail là SPA — Single Page Application. Load 1 lần, JavaScript quản lý mọi thứ sau đó. Trang web trường là MPA — mỗi click = 1 request mới = 1 trang trắng." Anh Hùng nói.*
 
-## 1.1. Multi-Page Application (MPA) - Old way
+*"Mình học React để làm Gmail tiếp theo?" Minh hỏi.*
 
-```
-User click link
-    ↓
-Browser request full HTML from server
-    ↓
-Server renders entire page
-    ↓
-Browser reloads & displays new page
-    ↓
-Page flashes! 😫
-```
-
-**Example: Traditional PHP/JSP sites**
-
-```
-/index.html    → Server renders full HTML
-/products.html → Server renders full HTML
-/contact.html  → Server renders full HTML
-```
-
-**Problems:**
-- Full page reload = slow
-- Page flickers
-- Poor user experience
+*"Không — để không bao giờ làm trang web kiểu trường nữa."*
 
 ---
 
-## 1.2. Single Page Application (SPA) - New way
+## 1. 🎯 Why This Matters — Tại sao bạn cần học bài này?
 
-```
-User click link
-    ↓
-JavaScript intercepts click
-    ↓
-JavaScript updates only changed parts
-    ↓
-No full page reload! ⚡
-```
+Bài này là **nền tảng tư duy** trước khi học React/Vue:
+- Hiểu **tại sao** frameworks tồn tại (MPA vs SPA)
+- Hiểu **Virtual DOM** — lý do React nhanh hơn DOM thuần
+- Hiểu **Component thinking** — cách tổ chức UI như LEGO
+- Hiểu **State** — khái niệm cốt lõi nhất của mọi framework
 
-**Example: Gmail, Google Docs, Facebook**
-
-```
-/       (same HTML file)
-  ├─ /inbox
-  ├─ /compose
-  └─ /settings
-(All served from single index.html, JavaScript handles routing)
-```
-
-**Benefits:**
-- Fast (no full page reload)
-- Smooth (no flicker)
-- Better UX (like native app)
+Không nắm bài này → học React như học ngôn ngữ mà không hiểu tại sao người ta nói ngôn ngữ đó.
 
 ---
 
-## 1.3. How SPA works
+## 2. 🌐 Big Picture — MPA vs SPA vs SSR
+
+```
+MPA (Multi-Page App)         SPA (Single-Page App)       SSR (Server-Side Render)
+────────────────────         ─────────────────────       ────────────────────────
+User click link              User click link             User click link
+       ↓                            ↓                           ↓
+Browser → Server             JS intercepts               Browser → Server
+       ↓                            ↓                           ↓
+Server builds HTML           Fetch data từ API           Server renders HTML
+       ↓                            ↓                           ↓
+Browser nhận HTML mới        Update DOM (no reload)      Browser nhận HTML đầy đủ
+       ↓                            ↓                           ↓
+Trang TRẮNG → load lại       Smooth, instant ⚡          Trang đầy ngay (SEO tốt)
+
+Ví dụ:                       Ví dụ:                      Ví dụ:
+WordPress, web trường        Gmail, Facebook, Shopee     Next.js, Nuxt.js
+```
+
+**Tại sao SPA chiếm ưu thế 2015-2023:**
+- UX mượt mà như mobile app
+- Ít tải lại server (server chỉ cần cung cấp API)
+- Offline-capable (PWA)
+
+**Tại sao SSR đang quay lại (2024+):**
+- SEO tốt hơn SPA thuần
+- First load nhanh hơn (HTML đến ngay, JS hydrate sau)
+- React Server Components, Next.js 14+
+
+---
+
+## 3. ⚙️ Core Technical Truth
+
+### Virtual DOM — Tại sao React nhanh hơn DOM thuần
 
 ```javascript
-// 1. Load single index.html once
-// 2. JavaScript runs in browser
-// 3. User interaction → JavaScript updates page
+// DOM THUẦN — Vấn đề hiệu suất
 
-// Traditional navigation
-// Link click → Browser request server → HTML from server
+// ❌ Cập nhật DOM trực tiếp nhiều lần = slow
+for (let i = 0; i < 1000; i++) {
+    document.getElementById("list").innerHTML += `<li>${i}</li>`;
+    // Mỗi lần innerHTML thay đổi → browser reparse, reflow, repaint
+    // 1000 lần DOM cập nhật = 1000 lần browser "tính lại" layout
+}
 
-// SPA navigation
-// Link click → JavaScript intercepts → 
-// Get data from API → Update HTML → No server request for page
+// ✅ Tốt hơn — nhưng vẫn thủ công
+const fragment = document.createDocumentFragment();
+for (let i = 0; i < 1000; i++) {
+    const li = document.createElement("li");
+    li.textContent = i;
+    fragment.appendChild(li);
+}
+document.getElementById("list").appendChild(fragment);
+// 1 lần DOM cập nhật — nhưng bạn phải tự làm
+```
+
+```
+VIRTUAL DOM (React/Vue tự làm cho bạn)
+
+State thay đổi
+       ↓
+Tạo Virtual DOM mới (JavaScript object, rất nhanh)
+       ↓
+So sánh Virtual DOM cũ vs mới (Diffing Algorithm)
+       ↓
+Tìm ra chỉ NHỮNG CHỖ THAY ĐỔI
+       ↓
+Cập nhật REAL DOM một cách tối thiểu
+
+Kết quả: Bạn viết code đơn giản → React tự tối ưu DOM
 ```
 
 ---
 
-# 2. **VIRTUAL DOM**
+### Component-Based Architecture — Tư duy LEGO
 
-## 2.1. Real DOM problems
+```
+TRANG E-COMMERCE
+────────────────────────────────────────────────────────
+<App>
+  <Header>          ← Component dùng lại trên mọi trang
+    <Logo>
+    <SearchBar>
+    <CartIcon badge={cartCount}>
+  </Header>
+
+  <ProductList>     ← Render danh sách
+    <ProductCard>   ← 1 card = 1 component, dùng lại N lần
+    <ProductCard>   ← Truyền data khác nhau qua props
+    <ProductCard>
+  </ProductList>
+
+  <Footer>
+</App>
+
+Lợi ích:
+- ProductCard viết 1 lần → dùng 1000 lần
+- Bug trong ProductCard → sửa 1 chỗ → fix 1000 chỗ
+- Test từng component độc lập
+```
 
 ```javascript
-// If you update real DOM many times = SLOW!
-
-// ❌ Bad: 10 DOM updates = 10 browser reflows
-for (let i = 0; i < 10; i++) {
-  document.body.innerHTML += `<div>Item ${i}</div>`;
-  // Each += causes full page reparse!
-}
-
-// ✅ Good: Build string first, then one DOM update
-let html = '';
-for (let i = 0; i < 10; i++) {
-  html += `<div>Item ${i}</div>`;
-}
-document.body.innerHTML = html;
-```
-
----
-
-## 2.2. Virtual DOM concept
-
-```
-Real DOM (Browser)
-├─ Slow to update (triggers reflow/repaint)
-└─ Direct manipulation is expensive
-
-Virtual DOM (React/Vue in memory)
-├─ Fast to update (JavaScript in memory)
-├─ Compare old vs new version (diffing)
-└─ Update only changed parts in Real DOM
-```
-
-**Example:**
-
-```javascript
-// Update happens in memory first
-oldVirtualDOM = { title: 'Hello' }
-newVirtualDOM = { title: 'Hello', subtitle: 'World' }
-
-// React compares (diff algorithm)
-changes = { subtitle: 'World' }
-
-// Only changed part updates Real DOM
-document.querySelector('title').textContent = 'Hello'
-document.querySelector('subtitle').textContent = 'World'  // NEW!
-```
-
----
-
-## 2.3. Benefits of Virtual DOM
-
-```
-1. Performance
-   └─ Smart diffing = minimal Real DOM updates
-
-2. Predictability
-   └─ Declarative syntax (describe what UI should be)
-
-3. Easy testing
-   └─ Test Virtual DOM, not Real DOM
-
-4. Code organization
-   └─ Component-based (reusable, maintainable)
-```
-
----
-
-# 3. **COMPONENT-BASED ARCHITECTURE**
-
-## 3.1. What is a component?
-
-```
-Component = Reusable UI building block
-```
-
-**Example: E-Commerce website**
-
-```
-┌─────────────────────────────────────────────┐
-│           Header Component                  │
-├──────┬────────────────┬─────────┬───────────┤
-│ Logo │   Search Box   │  Menu   │  User     │
-└──────┴────────────────┴─────────┴───────────┘
-
-┌─────────────────────────────────────────────┐
-│     Product List Component (repeated)       │
-├─────────────────────────────────────────────┤
-│ ┌──────────────┐  ┌──────────────┐         │
-│ │ ProductCard  │  │ ProductCard  │  ...    │
-│ │ Component    │  │ Component    │         │
-│ └──────────────┘  └──────────────┘         │
-└─────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────┐
-│           Footer Component                  │
-└─────────────────────────────────────────────┘
-```
-
----
-
-## 3.2. Component structure
-
-```javascript
-// Traditional: HTML + JS mixed together
-<div id="product">
-  <h3></h3>
-  <p></p>
-</div>
-
-<script>
-  const product = { name: 'Apple', price: 5 };
-  document.querySelector('h3').textContent = product.name;
-  document.querySelector('p').textContent = product.price;
-</script>
-
-// ❌ Problem: Tightly coupled, hard to reuse
-
-
-// ✅ Component approach (React example)
-function ProductCard({ name, price }) {
-  return (
-    <div className="product">
-      <h3>{name}</h3>
-      <p>${price}</p>
-    </div>
-  );
-}
-
-// Reuse component
-<ProductCard name="Apple" price={5} />
-<ProductCard name="Orange" price={3} />
-<ProductCard name="Banana" price={2} />
-```
-
----
-
-## 3.3. Component composition
-
-```javascript
-// Small components → Large components
-
-// 1. Button Component
-function Button({ text, onClick }) {
-  return <button onClick={onClick}>{text}</button>;
-}
-
-// 2. Product Component
-function Product({ product, onAddToCart }) {
-  return (
-    <div>
-      <h3>{product.name}</h3>
-      <p>${product.price}</p>
-      <Button text="Add to Cart" onClick={() => onAddToCart(product.id)} />
-    </div>
-  );
-}
-
-// 3. Product List Component
-function ProductList({ products }) {
-  return (
-    <div>
-      {products.map(product => (
-        <Product 
-          key={product.id} 
-          product={product}
-          onAddToCart={handleAddToCart}
-        />
-      ))}
-    </div>
-  );
-}
-
-// 4. App Component
-function App() {
-  const products = [
-    { id: 1, name: 'Apple', price: 5 },
-    { id: 2, name: 'Orange', price: 3 },
-  ];
-
-  return <ProductList products={products} />;
-}
-```
-
----
-
-# 4. **CLIENT-SIDE ROUTING**
-
-## 4.1. Traditional routing (Server-side)
-
-```
-User visits: http://example.com/products
-
-Server:
-  if (url === '/products') {
-    return products.html
-  } else if (url === '/contact') {
-    return contact.html
-  }
-
-Problem: Full page reload each time
-```
-
----
-
-## 4.2. Client-side routing (SPA)
-
-```
-User visits: http://example.com/
-
-Server returns: index.html (same every time!)
-
-JavaScript runs in browser:
-  
-  Check URL path
-    ↓
-  Load appropriate component
-    ↓
-  Render component
-    ↓
-  No full page reload!
-```
-
----
-
-## 4.3. History API
-
-```javascript
-// Change URL without reloading
-window.history.pushState(
-  { page: 1 },           // State object
-  'title',               // Page title
-  '/products'            // New URL
-);
-
-// Browser back button
-window.addEventListener('popstate', (event) => {
-  console.log('State:', event.state);
-  // Re-render based on new URL
-});
-
-// Current URL
-console.log(window.location.pathname);  // '/products'
-```
-
----
-
-## 4.4. Simple client-side router
-
-```javascript
-// Pages
-const pages = {
-  '/': renderHome,
-  '/products': renderProducts,
-  '/about': renderAbout,
-};
-
-// Navigate function
-function navigate(path) {
-  // 1. Update URL
-  window.history.pushState({}, '', path);
-
-  // 2. Get page function
-  const pageFunc = pages[path] || pages['/'];
-
-  // 3. Clear and render
-  const app = document.getElementById('app');
-  app.innerHTML = '';
-  pageFunc(app);
-}
-
-// Handle link clicks
-document.addEventListener('click', (e) => {
-  if (e.target.tagName === 'A') {
-    e.preventDefault();
-    const href = e.target.getAttribute('href');
-    navigate(href);
-  }
-});
-
-// Navigation functions
-function renderHome(container) {
-  container.innerHTML = `
-    <h1>Home</h1>
-    <a href="/products">View Products</a>
-  `;
-}
-
-function renderProducts(container) {
-  container.innerHTML = `
-    <h1>Products</h1>
-    <a href="/">Back to Home</a>
-  `;
-}
-
-function renderAbout(container) {
-  container.innerHTML = `
-    <h1>About Us</h1>
-    <a href="/">Back to Home</a>
-  `;
-}
-
-// Initial render
-navigate(window.location.pathname || '/');
-```
-
----
-
-# 5. **STATE MANAGEMENT BASICS**
-
-## 5.1. What is state?
-
-```javascript
-// State = Data that affects UI
-
-// Example: Cart
-const cartState = {
-  items: [
-    { id: 1, name: 'Apple', quantity: 3 },
-    { id: 2, name: 'Orange', quantity: 2 },
-  ],
-  total: 18.50,
-};
-
-// If cart changes → UI updates
-// UI = f(state)
-```
-
----
-
-## 5.2. State flow
-
-```
-User action (click button)
-    ↓
-Update state
-    ↓
-Re-render component
-    ↓
-UI updates
-```
-
-**Example:**
-
-```javascript
-// 1. Initial state
-let state = {
-  items: [],
-  total: 0,
-};
-
-// 2. Action: Add to cart
-function addToCart(product) {
-  state.items.push(product);
-  state.total += product.price;
-  
-  render();  // Re-render
-}
-
-// 3. Render
-function render() {
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <h1>Cart (${state.items.length} items)</h1>
-    <p>Total: $${state.total}</p>
-  `;
-}
-
-// Initial render
-render();
-
-// User click
-addToCart({ id: 1, name: 'Apple', price: 5 });
-```
-
----
-
-## 5.3. Centralized vs distributed state
-
-```javascript
-// ❌ Distributed (hard to manage)
-// State scattered everywhere
-component1.state = ...
-component2.state = ...
-component3.state = ...
-// Problem: Updating becomes messy!
-
-// ✅ Centralized (easy to manage)
-const appState = {
-  user: { id: 1, name: 'John' },
-  cart: { items: [], total: 0 },
-  products: [],
-};
-
-// All components read from appState
-// All updates go through centralized functions
-function updateCart(action) {
-  appState.cart = ...;
-  render();
-}
-```
-
----
-
-# 6. **REACT VS VUE - PREVIEW**
-
-## Quick comparison
-
-| Feature | React | Vue |
-|---------|-------|-----|
-| **Syntax** | JSX (JavaScript + HTML) | Templates (HTML + Vue directives) |
-| **Learning** | Steeper | Easier |
-| **Bundle size** | Larger | Smaller |
-| **Popularity** | More jobs | Growing |
-| **Companies** | Facebook, Netflix, Airbnb | Laravel ecosystem, StartUps |
-
----
-
-# 7. **PRACTICAL EXAMPLE: SIMPLE SPA**
-
-```javascript
-// State
-let state = {
-  page: 'home',
-  products: [
-    { id: 1, name: 'Apple', price: 5 },
-    { id: 2, name: 'Orange', price: 3 },
-  ],
-  cart: [],
-};
-
-// Pages
-function HomePage() {
-  return `
-    <div>
-      <h1>Welcome to E-Shop</h1>
-      <a href="/products">View Products</a>
-    </div>
-  `;
-}
-
-function ProductsPage() {
-  return `
-    <div>
-      <h1>Products</h1>
-      ${state.products.map(p => `
-        <div class="product">
-          <h3>${p.name}</h3>
-          <p>$${p.price}</p>
-          <button onclick="addToCart(${p.id})">Add to Cart</button>
+// Cách cũ — HTML template + JS tách biệt
+// products.html:
+// <div id="product-1">...</div>
+// <div id="product-2">...</div>
+// products.js:
+// document.getElementById("product-1").innerHTML = ...
+// ❌ Vấn đề: Tighly coupled, không tái sử dụng được
+
+// React Component — UI + Logic + State trong 1 chỗ
+function ProductCard({ name, price, imageUrl, onAddToCart }) {
+    return (
+        <div className="product-card">
+            <img src={imageUrl} alt={name} />
+            <h3>{name}</h3>
+            <p className="price">{price.toLocaleString("vi-VN")}đ</p>
+            <button onClick={() => onAddToCart({ name, price })}>
+                Thêm vào giỏ
+            </button>
         </div>
-      `).join('')}
-      <a href="/">Back to Home</a>
-    </div>
-  `;
+    );
 }
 
-function CartPage() {
-  const total = state.cart.reduce((sum, item) => sum + item.price, 0);
-  return `
-    <div>
-      <h1>Cart (${state.cart.length} items)</h1>
-      <p>Total: $${total}</p>
-      <a href="/products">Continue Shopping</a>
-    </div>
-  `;
-}
-
-// Router
-function navigate(path) {
-  window.history.pushState({}, '', path);
-  
-  let html;
-  if (path === '/products') {
-    html = ProductsPage();
-  } else if (path === '/cart') {
-    html = CartPage();
-  } else {
-    html = HomePage();
-  }
-
-  document.getElementById('app').innerHTML = html;
-}
-
-// Actions
-function addToCart(productId) {
-  const product = state.products.find(p => p.id === productId);
-  state.cart.push(product);
-  alert(`Added ${product.name} to cart!`);
-}
-
-// Link click handler
-document.addEventListener('click', (e) => {
-  if (e.target.tagName === 'A') {
-    e.preventDefault();
-    navigate(e.target.href.split('/').slice(2).join('/') || '/');
-  }
-});
-
-// Initial render
-navigate(window.location.pathname || '/');
+// Dùng lại với data khác nhau
+<ProductCard name="iPhone 15" price={25990000} imageUrl="..." onAddToCart={handleCart} />
+<ProductCard name="MacBook Air" price={32990000} imageUrl="..." onAddToCart={handleCart} />
 ```
 
 ---
 
-# 🎯 BÀI TẬP THỰC HÀNH
+### State — Khái niệm cốt lõi của mọi framework
 
-## BT1: Simple SPA
-Tạo SPA với 3 pages: Home, Products, About
+```javascript
+// State = Dữ liệu thay đổi theo thời gian và ảnh hưởng đến UI
 
-## BT2: Add routing
-Implement client-side routing theo ví dụ trên
+// CÔNG THỨC: UI = f(State)
+// Giao diện = Hàm của Dữ liệu
 
-## BT3: Add to cart feature
-Thêm cart state, add to cart, view cart
+// Ví dụ — Không có framework:
+let count = 0;  // ← State
+
+function increment() {
+    count++;
+    // Phải tự cập nhật DOM thủ công!
+    document.getElementById("counter").textContent = count;
+}
+
+// Với React (useState hook):
+const [count, setCount] = useState(0);
+// Khi setCount(count + 1) → React tự re-render component
+// UI luôn phản ánh đúng state — không cần update DOM thủ công
+
+// State types trong app thực tế:
+const [isLoggedIn, setIsLoggedIn] = useState(false);  // Boolean
+const [cartItems, setCartItems] = useState([]);         // Array
+const [user, setUser] = useState(null);                 // Object/null
+const [searchQuery, setSearchQuery] = useState("");     // String
+const [isLoading, setIsLoading] = useState(false);     // Loading state
+
+// State flow:
+// User action → Update state → React re-render → UI cập nhật
+```
 
 ---
 
-# 📝 MINI TEST
+### Client-Side Routing — Điều hướng không reload
 
-1. MPA vs SPA khác gì?
-2. Virtual DOM là gì, tại sao cần?
-3. Component composition là gì?
-4. Client-side routing dùng API nào?
-5. State là gì?
+```javascript
+// History API — Browser native API cho SPA routing
+window.history.pushState({}, "", "/products");
+// URL đổi thành /products — KHÔNG reload trang!
+
+// Simple router từ đầu (để hiểu nguyên lý)
+const routes = {
+    "/":         HomePage,
+    "/products": ProductsPage,
+    "/cart":     CartPage,
+};
+
+function navigate(path) {
+    window.history.pushState({}, "", path);  // Đổi URL
+    const PageComponent = routes[path] ?? routes["/"];
+    render(PageComponent);                    // Render component mới
+}
+
+// React Router (thư viện): Tự động hóa tất cả điều này
+// <Link to="/products"> thay vì <a href="/products">
+// Không reload, có animation transitions, manage history
+```
 
 ---
 
-# 💾 TỔNG KẾT
+## 4. 🟢 Simplified Layer — Hai câu nhớ mãi
 
-**MPA:** Full page reload, old way  
-**SPA:** JavaScript routing, fast, modern  
-**Virtual DOM:** In-memory representation, smart diffing  
-**Components:** Reusable UI blocks, composition  
-**Routing:** History API, client-side navigation  
-**State:** Centralized data, triggers re-render  
+> **SPA = Load 1 lần, JavaScript thay đổi content. MPA = Mỗi trang = 1 request server = 1 lần reload.**
+> **UI = f(State). Khi State thay đổi → Framework tự cập nhật UI. Bạn quản lý State, Framework quản lý DOM.**
 
-**Next:** React Fundamentals!
+---
+
+## 5. 🏭 Real-world Layer
+
+### Framework nào? React, Vue, hay Angular?
+
+| | React | Vue | Angular |
+|---|---|---|---|
+| **Cha đẻ** | Meta (Facebook) | Cộng đồng | Google |
+| **Loại** | UI Library | Progressive Framework | Full Framework |
+| **Cú pháp** | JSX (JS + HTML) | Template (HTML + directives) | TypeScript + Templates |
+| **Độ khó học** | Trung bình | Dễ nhất | Khó nhất |
+| **Job market VN** | ~65% | ~20% | ~10% |
+| **Dùng tốt cho** | Mọi loại app | Project vừa, team nhỏ | Enterprise |
+
+**Khuyến nghị cho CSE391:**
+- **Học React trước** — job market lớn nhất, ecosystem phong phú nhất
+- Vue nếu thích syntax gần HTML hơn
+- Angular nếu hướng tới doanh nghiệp
+
+---
+
+## 6. 🛠️ Hands-on Practice — Làm ngay bây giờ
+
+### Bài tập: Xây mini-SPA bằng Vanilla JS (20 phút)
+
+```javascript
+// Hiểu SPA concept trước khi học framework
+// File: spa.html
+
+const routes = {
+    "#home": `
+        <h1>🏠 Trang chủ</h1>
+        <p>Chào mừng đến với Mini SPA</p>
+        <nav>
+            <a href="#products">Xem sản phẩm</a> |
+            <a href="#cart">Giỏ hàng</a>
+        </nav>
+    `,
+    "#products": `
+        <h1>🛒 Sản phẩm</h1>
+        <div id="product-list">
+            ${["iPhone 15", "MacBook Air", "AirPods Pro"].map((name, i) => `
+                <div>
+                    <h3>${name}</h3>
+                    <button onclick="addToCart('${name}')">Thêm vào giỏ</button>
+                </div>
+            `).join("")}
+        </div>
+        <a href="#home">← Về trang chủ</a>
+    `,
+    "#cart": `<h1>🛒 Giỏ hàng</h1><div id="cart-content"></div>`,
+};
+
+let cart = [];
+
+function navigate() {
+    const hash = window.location.hash || "#home";
+    document.getElementById("app").innerHTML = routes[hash] || routes["#home"];
+
+    if (hash === "#cart") {
+        document.getElementById("cart-content").innerHTML = cart.length
+            ? cart.map(item => `<p>✅ ${item}</p>`).join("") + `<p>Tổng: ${cart.length} sản phẩm</p>`
+            : "<p>Giỏ hàng trống</p>";
+    }
+}
+
+function addToCart(name) {
+    cart.push(name);
+    alert(`Đã thêm ${name}`);
+}
+
+window.addEventListener("hashchange", navigate);
+navigate();
+```
+
+**Thực nghiệm:** Click các link — URL thay đổi không? Trang có reload không?
+
+---
+
+## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"SPA luôn tốt hơn MPA"** | SPA khó SEO hơn (Google cần chờ JS render), first load chậm hơn. Với blog, e-commerce → SSR/SSG (Next.js) tốt hơn SPA thuần |
+| **"Virtual DOM nhanh hơn Real DOM mọi lúc"** | Virtual DOM thêm overhead (tạo VDOM + diffing). Chỉ thực sự nhanh khi update **phức tạp và thường xuyên**. Đơn giản như counter app → DOM thuần có thể nhanh hơn |
+| **"Component = File HTML riêng"** | Component = JavaScript function hoặc class. Bao gồm logic, markup (JSX/template), và styles. Không phải chỉ HTML |
+| **"State là database của frontend"** | State là **tạm thời** — reload trang là mất. Database (localStorage, API) mới là persistent. State = dữ liệu UI tạm thời |
+| **"React, Vue, Angular đều làm được như nhau"** | Về mặt kỹ thuật đúng. Nhưng Angular có learning curve dốc hơn nhiều, bundle lớn hơn. React ecosystem lớn nhất. Vue syntax dễ tiếp cận nhất |
+
+---
+
+## 8. ✅ Checkpoint
+
+### Câu hỏi hiểu cơ bản:
+
+1. SPA và MPA khác nhau ở điểm gì cơ bản? Cho 1 ví dụ thực tế mỗi loại.
+2. Virtual DOM là gì? Tại sao React dùng Virtual DOM thay vì update Real DOM trực tiếp?
+3. "UI = f(State)" có nghĩa là gì? Giải thích bằng ví dụ đơn giản.
+
+### Câu hỏi áp dụng:
+
+4. Bạn xây trang blog cho tác giả — chứa 200 bài viết, cần SEO tốt, không có tương tác phức tạp. Nên dùng SPA hay SSR? Tại sao?
+5. Một ứng dụng có `cartCount = 5`. Khi user xóa 1 item, `cartCount` đổi thành `4`. Trong framework, bạn cần làm gì để UI badge giỏ hàng tự cập nhật?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **SPA**: Load HTML một lần, JavaScript thay đổi nội dung khi navigate (không reload). Ví dụ: Gmail, Facebook. **MPA**: Mỗi trang = 1 request đến server → nhận HTML mới → reload. Ví dụ: Website trường học, WordPress blog cơ bản.
+2. Virtual DOM = Object JavaScript biểu diễn cấu trúc DOM. React build Virtual DOM mới mỗi lần state thay đổi, **so sánh (diff)** với Virtual DOM cũ, rồi chỉ update những phần thay đổi trong Real DOM. Ưu điểm: Bạn viết code đơn giản ("tôi muốn UI trông như này"), React tự tối ưu cách update DOM.
+3. Công thức: **Giao diện = hàm của Dữ liệu**. Ví dụ: `cartCount = 3` → badge hiện "3". Khi `cartCount` đổi thành `4` → badge tự đổi thành "4". Bạn không cần viết "hãy tìm badge và đổi text". Bạn chỉ cần đổi state, UI tự cập nhật.
+4. **SSR (Next.js)** — Blog cần: SEO tốt (Google index nội dung), first load nhanh (độc giả không chờ JS), ít tương tác phức tạp. SPA thuần khó SEO vì Google cần JS render trước khi thấy nội dung.
+5. Chỉ cần gọi hàm cập nhật state: `setCartCount(cartCount - 1)` (React) hoặc `cartCount--` (Vue reactive). Framework tự detect thay đổi → re-render badge với giá trị mới. Bạn không cần `document.querySelector(".badge").textContent = 4`.
+
+</details>
+
+---
+
+## 9. 📌 Summary — 5 điều quan trọng nhất
+
+1. **SPA** = Load 1 lần, JS thay content. **MPA** = Mỗi page = 1 server round-trip. **SSR** = HTML từ server + JS hydrate
+2. **Virtual DOM** = React/Vue tự tối ưu DOM updates. Bạn viết code "muốn gì", framework quyết định "làm thế nào"
+3. **Component** = Reusable UI block có logic + markup + state. Xây web như LEGO
+4. **State** = Dữ liệu thay đổi theo thời gian. **UI = f(State)** — đây là tư duy cốt lõi của mọi framework
+5. **React** = 65% job VN. **Vue** = học nhanh hơn. **Angular** = enterprise. Học React trước
+
+---
+
+## 10. ➡️ Next Lesson Bridge
+
+*"Concept rõ rồi," Minh nói. "Giờ muốn code React thật. Làm thế nào để bắt đầu?"*
+
+*"3 lệnh," anh Hùng nói:*
+```bash
+npm create vite@latest my-app -- --template react
+cd my-app
+npm run dev
+```
+
+*"Sau đó học JSX — HTML viết trong JavaScript. Kỳ lạ lúc đầu, quen rất nhanh."*
+
+**→ [Bài 02: React Fundamentals & Hooks](./02_react_fundamentals_hooks.md) — JSX, Components, Props, useState, useEffect: 5 thứ cần biết để làm React.**
