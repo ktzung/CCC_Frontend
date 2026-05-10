@@ -872,4 +872,17 @@ export class ProductListComponent {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Can't bind to 'ngIf' since it isn't a known property` | Quên import `CommonModule` (standalone) hoặc `BrowserModule` | Thêm `CommonModule` vào `imports` |
+| `Unexpected token` trong template `{{ }}` | Sai cú pháp expression hoặc dùng `{{ }}` trong attribute | Dùng `[prop]="expr"` cho attribute, không `{{ }}` |
+| `*ngFor` không hiển thị gì | Array rỗng hoặc sai tên biến | Kiểm tra `console.log(data)`, đảm bảo `*ngFor="let item of items"` |
+| `ExpressionChangedAfterItHasBeenCheckedError` | Giá trị thay đổi trong CD cycle | Dùng `setTimeout()` hoặc chuyển sang `OnPush` + `markForCheck()` |
+| Pipe `date` không format đúng locale | Thiếu locale config | Import `registerLocaleData` từ `@angular/common` |
+| Component tạo rồi nhưng không hiển thị | Chưa selector trong template cha hoặc thiếu `imports` | Đảm bảo `<app-xxx></app-xxx>` xuất hiện trong template cha |
+
+---
+
 **Bài tiếp theo:** [03. TypeScript in Angular](../03_typescript/03_typescript_angular.md) - TypeScript essentials.

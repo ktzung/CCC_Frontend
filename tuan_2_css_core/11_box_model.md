@@ -197,6 +197,56 @@ Muốn khoảng cách giữa element này với element KHÁC?
 }
 ```
 
+### Inline vs Block — Margin/Padding khác nhau!
+
+```css
+/* Block elements: margin/padding hoạt động bình thường mọi chiều */
+div {
+    margin: 20px;      /* ✅ Top, right, bottom, left đều hoạt động */
+    padding: 20px;     /* ✅ Mọi chiều */
+    width: 300px;      /* ✅ Set được */
+    height: 200px;     /* ✅ Set được */
+}
+
+/* Inline elements: CHỈ margin/padding NGANG hoạt động */
+span {
+    margin: 20px;      /* ⚠️ Chỉ left/right có tác dụng. Top/bottom bị BỎ QUA */
+    padding: 20px;     /* ⚠️ Left/right OK. Top/bottom "nhìn thấy" nhưng không đẩy content khác */
+    width: 300px;      /* ❌ Bị bỏ qua hoàn toàn */
+    height: 200px;     /* ❌ Bị bỏ qua hoàn toàn */
+}
+
+/* Giải pháp: đổi sang inline-block hoặc block */
+span.highlight {
+    display: inline-block;  /* ✅ Giữ inline nhưng chấp nhận width/height/margin mọi chiều */
+    margin: 20px;
+    padding: 4px 8px;
+    width: auto;            /* ✅ Giờ set được */
+}
+```
+
+### `outline` vs `border` — Phân biệt quan trọng
+
+```css
+.box {
+    border: 2px solid blue;    /* Chiếm không gian — đẩy content ra */
+    outline: 2px solid red;    /* KHÔNG chiếm không gian — vẽ đè lên */
+    margin: 10px;
+}
+
+/* Outline không ảnh hưởng layout — rất hữu ích cho focus indicator */
+input:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;    /* Khoảng cách giữa outline và border */
+    /* KHÔNG làm layout nhảy — an toàn hơn border */
+}
+
+/* ❌ Anti-pattern: dùng border cho focus → layout nhảy */
+input:focus {
+    border: 2px solid #2563eb;  /* Layout nhảy vì border thay đổi kích thước */
+}
+```
+
 ---
 
 ## 4. 🟢 Simplified Layer — Một câu nhớ mãi

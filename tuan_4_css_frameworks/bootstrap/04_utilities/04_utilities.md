@@ -377,6 +377,128 @@ Sau đó: tạo thêm 2 item tương tự với trạng thái khác nhau (Warnin
 
 ---
 
+### 🪜 Step-by-Step: Utilities trong thực tế (20 phút)
+
+**Bước 1: Spacing patterns (5 phút)**
+```html
+<!-- Section spacing chuẩn -->
+<section class="py-5">           <!-- padding top+bottom = 3rem -->
+    <div class="container">
+        <h2 class="mb-4">Tiêu đề</h2>   <!-- margin-bottom = 1.5rem -->
+        <div class="row g-4">            <!-- gap 1.5rem giữa cols -->
+            <div class="col-md-4">
+                <div class="p-3 bg-light rounded">Card 1</div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 bg-light rounded">Card 2</div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 bg-light rounded">Card 3</div>
+            </div>
+        </div>
+    </div>
+</section>
+```
+
+> **💡 `py-5` = padding vertical 3rem.** Section lớn dùng `py-5`, section nhỏ dùng `py-3`. Nhất quán spacing → trang trông professional.
+
+**Bước 2: Responsive display (5 phút)**
+```html
+<!-- Desktop: 3-column layout với sidebar -->
+<div class="container">
+    <div class="row">
+        <!-- Sidebar: hiện trên desktop, ẩn trên mobile -->
+        <aside class="col-lg-3 d-none d-lg-block bg-light p-3 rounded">
+            <h5>📂 Danh mục</h5>
+            <ul class="list-unstyled">
+                <li class="mb-2"><a href="#" class="text-decoration-none">Điện thoại</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none">Laptop</a></li>
+                <li class="mb-2"><a href="#" class="text-decoration-none">Phụ kiện</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main content: full trên mobile, 9/12 trên desktop -->
+        <main class="col-12 col-lg-9">
+            <h2>Sản phẩm</h2>
+            <!-- Product grid -->
+        </main>
+    </div>
+</div>
+
+<!-- Mobile menu button: hiện trên mobile, ẩn trên desktop -->
+<button class="btn btn-primary d-lg-none mb-3">
+    ☰ Hiện danh mục
+</button>
+```
+
+**Bước 3: Flexbox utility patterns (5 phút)**
+```html
+<!-- Pattern 1: Navbar với logo trái, menu phải -->
+<nav class="d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+    <span class="fw-bold fs-5">🛒 ShopVN</span>
+    <div class="d-flex gap-3">
+        <a href="#" class="text-white text-decoration-none">Trang chủ</a>
+        <a href="#" class="text-white text-decoration-none">Sản phẩm</a>
+    </div>
+</nav>
+
+<!-- Pattern 2: Card footer với text trái, button phải -->
+<div class="card mt-3">
+    <div class="card-body">
+        <h5>Sản phẩm hot</h5>
+        <p class="text-muted">Mô tả ngắn gọn...</p>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-danger">299.000đ</span>
+        <button class="btn btn-primary btn-sm">Mua ngay</button>
+    </div>
+</div>
+
+<!-- Pattern 3: Center everything (hero, empty state) -->
+<div class="d-flex flex-column align-items-center justify-content-center text-center"
+     style="min-height: 300px;">
+    <h3>📭 Không có sản phẩm</h3>
+    <p class="text-muted">Hãy thử tìm kiếm với từ khóa khác</p>
+    <button class="btn btn-outline-primary mt-3">Xem tất cả</button>
+</div>
+```
+
+**Bước 4: Build hero section chỉ dùng Utilities (5 phút)**
+```html
+<!-- Hero section — KHÔNG cần file CSS riêng -->
+<section class="min-vh-100 d-flex align-items-center justify-content-center
+                text-center text-white bg-primary bg-gradient">
+    <div class="container px-4">
+        <h1 class="display-2 fw-bold mb-3">
+            Chào mừng đến <span class="text-warning">ShopVN</span>
+        </h1>
+        <p class="lead mb-4 opacity-75">
+            Nơi mua sắm trực tuyến đáng tin cậy nhất Việt Nam
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="#" class="btn btn-light btn-lg px-5 fw-semibold">Mua sắm ngay</a>
+            <a href="#" class="btn btn-outline-light btn-lg px-5">Tìm hiểu thêm</a>
+        </div>
+    </div>
+</section>
+```
+
+> **💡 Không cần CSS riêng!** Toàn bộ hero section này chỉ dùng Bootstrap utilities. `min-vh-100` = full height, `d-flex align-items-center justify-content-center` = căn giữa, `bg-gradient` = gradient effect.
+
+---
+
+### 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `ms-auto` không đẩy element sang phải | Parent không phải flex container | Thêm `d-flex` vào parent |
+| `mx-auto` không căn giữa | Element không có width xác định | Thêm `w-50` hoặc `style="width: 300px"` |
+| `d-none d-md-block` không hiện trên tablet | Dùng sai breakpoint | `md` = ≥ 768px. Nếu tablet nhỏ hơn → dùng `sm` |
+| Utilities bị override bởi CSS custom | CSS custom có specificity cao hơn | Dùng `!important` hoặc tăng specificity |
+| `invisible` vẫn chiếm chỗ | Nhầm lẫn với `d-none` | `d-none` = không chiếm chỗ. `invisible` = ẩn nhưng vẫn chiếm chỗ |
+
+---
+
 ## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
 | Hiểu sai | Sự thật |
@@ -437,6 +559,177 @@ Sau đó: tạo thêm 2 item tương tự với trạng thái khác nhau (Warnin
 3. **Display responsive**: `d-none d-md-block` (ẩn mobile), `d-block d-md-none` (hiện mobile)
 4. **Flexbox**: `d-flex` + `justify-content-*` + `align-items-*` + `gap-*` — layout linh hoạt
 5. **`d-none` ≠ `invisible`** — chiếm chỗ hay không là khác biệt quan trọng
+
+---
+
+## 10. 📎 Phụ lục: Complete Utility Quick Reference
+
+### Spacing — `m/p` + `t/b/s/e/x/y` + `0-5/auto`
+
+| Class | CSS | Pixels |
+|-------|-----|--------|
+| `m-0`, `p-0` | 0 | 0px |
+| `m-1`, `p-1` | 0.25rem | 4px |
+| `m-2`, `p-2` | 0.5rem | 8px |
+| `m-3`, `p-3` | 1rem | 16px |
+| `m-4`, `p-4` | 1.5rem | 24px |
+| `m-5`, `p-5` | 3rem | 48px |
+| `mx-auto` | margin: 0 auto | Căn giữa (cần width) |
+
+### Typography
+
+| Class | CSS | Dùng cho |
+|-------|-----|----------|
+| `fs-1` → `fs-6` | 2.5rem → 1rem | Font size |
+| `fw-bold` | font-weight: 700 | In đậm |
+| `fw-semibold` | font-weight: 600 | Semi-bold |
+| `fst-italic` | font-style: italic | In nghiêng |
+| `text-start/center/end` | text-align | Căn chữ |
+| `text-uppercase` | text-transform: uppercase | IN HOA |
+| `text-decoration-none` | text-decoration: none | Bỏ gạch chân |
+| `text-truncate` | text-overflow: ellipsis | Cắt chữ dài... |
+
+### Display & Visibility
+
+| Class | CSS | Dùng cho |
+|-------|-----|----------|
+| `d-none` | display: none | Ẩn hoàn toàn |
+| `d-block` | display: block | Block element |
+| `d-flex` | display: flex | Flex container |
+| `d-grid` | display: grid | Grid container |
+| `d-inline` | display: inline | Inline element |
+| `d-inline-block` | display: inline-block | Inline + width/height |
+| `invisible` | visibility: hidden | Ẩn nhưng vẫn chiếm chỗ |
+| `visible` | visibility: visible | Hiện |
+
+### Responsive Display Patterns
+
+```html
+<!-- Ẩn mobile, hiện tablet+ -->
+<div class="d-none d-md-block">
+
+<!-- Hiện mobile, ẩn tablet+ -->
+<div class="d-block d-md-none">
+
+<!-- Flex trên desktop, block trên mobile -->
+<div class="d-block d-lg-flex">
+
+<!-- Ẩn trên mobile, hiện trên desktop -->
+<div class="d-none d-lg-block">
+```
+
+### Flexbox Quick Reference
+
+```html
+<!-- Container -->
+<div class="d-flex">                           <!-- flex container -->
+<div class="d-flex flex-column">               <!-- stack dọc -->
+<div class="d-flex flex-wrap">                 <!-- wrap xuống dòng -->
+
+<!-- Justify (ngang) -->
+<div class="d-flex justify-content-start">     <!-- trái -->
+<div class="d-flex justify-content-center">    <!-- giữa -->
+<div class="d-flex justify-content-end">       <!-- phải -->
+<div class="d-flex justify-content-between">   <!-- hai đầu -->
+<div class="d-flex justify-content-around">    <!-- đều nhau -->
+
+<!-- Align (dọc) -->
+<div class="d-flex align-items-start">         <!-- trên -->
+<div class="d-flex align-items-center">        <!-- giữa -->
+<div class="d-flex align-items-end">           <!-- dưới -->
+
+<!-- Item -->
+<div class="flex-grow-1">                      <!-- chiếm hết space -->
+<div class="flex-shrink-0">                    <!-- không co -->
+<div class="ms-auto">                          <!-- đẩy sang phải -->
+```
+
+### Borders & Shadows
+
+| Class | CSS | Dùng cho |
+|-------|-----|----------|
+| `border` | 1px solid #dee2e6 | Viền nhẹ |
+| `border-0` | border: 0 | Bỏ viền |
+| `border-primary` | border-color: primary | Viền màu |
+| `rounded` | border-radius: 0.25rem | Bo nhẹ |
+| `rounded-3` | border-radius: 0.5rem | Bo vừa |
+| `rounded-pill` | border-radius: 50rem | Pill shape |
+| `rounded-circle` | border-radius: 50% | Hình tròn |
+| `shadow-sm` | box-shadow nhỏ | Bóng nhẹ |
+| `shadow` | box-shadow vừa | Bóng mặc định |
+| `shadow-lg` | box-shadow lớn | Bóng đậm |
+
+---
+
+## 11. ♿ Accessibility Utilities
+
+```html
+<!-- ✅ Visually hidden nhưng screen reader vẫn đọc -->
+<span class="visually-hidden">Nội dung chỉ dành cho screen reader</span>
+
+<!-- ✅ Focus visible khi dùng Tab (không dùng chuột) -->
+<button class="btn btn-primary focus-ring">Button</button>
+
+<!-- ✅ Skip link (ẩn, hiện khi Tab) -->
+<a href="#main" class="visually-hidden-focusable">Skip to main content</a>
+
+<!-- ✅ Text contrast: luôn đảm bảo đủ contrast ratio -->
+<!-- ❌ ĐỪNG: text-white trên bg-warning (contrast thấp) -->
+<!-- ✅ NÊN: text-dark trên bg-warning -->
+<p class="bg-warning text-dark p-2">Cảnh báo quan trọng</p>
+
+<!-- ✅ ARIA live region cho dynamic content -->
+<div class="d-none" aria-live="polite" id="status">
+    Đã thêm vào giỏ hàng
+</div>
+```
+
+**Contrast Ratio tối thiểu (WCAG 2.1):**
+- Text thường: **4.5:1**
+- Text lớn (≥18pt bold, ≥24pt): **3:1**
+- F12 → Lighthouse → Accessibility → kiểm tra contrast
+
+---
+
+## 12. 🇻🇳 Vietnamese-Context Examples
+
+```html
+<!-- Shopee-style product card -->
+<div class="card shadow-sm border-0">
+    <div class="position-relative">
+        <img src="phone.jpg" class="card-img-top" alt="iPhone 15 Pro Max 256GB">
+        <span class="position-absolute top-0 start-0 m-2 badge bg-danger">-16%</span>
+    </div>
+    <div class="card-body p-2">
+        <h6 class="card-title text-truncate mb-1">iPhone 15 Pro Max 256GB Titan Tự Nhiên</h6>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="fw-bold text-danger fs-6">25.990.000đ</span>
+            <small class="text-muted text-decoration-line-through">30.990.000đ</small>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+            <span class="text-warning small">★★★★★</span>
+            <small class="text-muted">(1.234)</small>
+            <span class="badge bg-info text-dark ms-auto small">Hà Nội</span>
+        </div>
+    </div>
+</div>
+
+<!-- VnExpress-style news card -->
+<article class="card border-0 shadow-sm">
+    <div class="row g-0">
+        <div class="col-4">
+            <img src="news.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="Tin tức">
+        </div>
+        <div class="col-8">
+            <div class="card-body py-2 px-3">
+                <h6 class="card-title mb-1">FPT Software tuyển 500 lập trình viên React</h6>
+                <p class="card-text small text-muted mb-1">Công ty FPT Software thông báo tuyển dụng lớn...</p>
+                <small class="text-muted">2 giờ trước · Tin tức</small>
+            </div>
+        </div>
+    </div>
+</article>
+```
 
 ---
 

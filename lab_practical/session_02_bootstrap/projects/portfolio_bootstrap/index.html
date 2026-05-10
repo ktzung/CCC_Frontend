@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Bootstrap Conversion</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Theme -->
+    <link href="css/custom-theme.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <span class="text-primary">Dev</span>Portfolio
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-primary" href="blog.html">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section bg-gradient text-white py-5">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-7">
+                    <h1 class="display-3 fw-bold mb-4">
+                        Hi, I'm <span class="text-primary">John Doe</span>
+                        <br>Full Stack Developer
+                    </h1>
+                    <p class="lead text-light mb-4">
+                        I create beautiful, functional, and user-friendly web applications
+                        that help businesses grow and succeed online.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#portfolio" class="btn btn-primary btn-lg px-4">
+                            View My Work
+                        </a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg px-4">
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                    <div class="hero-image-wrapper">
+                        <img src="https://picsum.photos/400/400?random=20"
+                             alt="John Doe" class="rounded-circle img-fluid shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <img src="https://picsum.photos/500/400?random=21"
+                         alt="About me" class="img-fluid rounded-3 shadow">
+                </div>
+                <div class="col-lg-7">
+                    <h2 class="display-5 fw-bold mb-4">About Me</h2>
+                    <p class="text-muted mb-4">
+                        I'm a passionate full-stack developer with over 5 years of experience
+                        building web applications. I specialize in JavaScript, React, Node.js,
+                        and modern web technologies.
+                    </p>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <h4 class="fw-bold text-primary mb-1">50+</h4>
+                                <p class="mb-0 text-muted">Projects Completed</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <h4 class="fw-bold text-primary mb-1">5+</h4>
+                                <p class="mb-0 text-muted">Years Experience</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-primary">JavaScript</span>
+                        <span class="badge bg-secondary">React</span>
+                        <span class="badge bg-success">Node.js</span>
+                        <span class="badge bg-info">TypeScript</span>
+                        <span class="badge bg-warning text-dark">Bootstrap</span>
+                        <span class="badge bg-danger">MongoDB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">My Skills</h2>
+                <p class="text-muted">Technologies I work with</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="skill-card p-4 bg-white rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-semibold">Frontend Development</span>
+                            <span class="text-primary fw-bold">95%</span>
+                        </div>
+                        <div class="progress" style="height: 12px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="skill-card p-4 bg-white rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-semibold">Backend Development</span>
+                            <span class="text-success fw-bold">85%</span>
+                        </div>
+                        <div class="progress" style="height: 12px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="skill-card p-4 bg-white rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-semibold">UI/UX Design</span>
+                            <span class="text-info fw-bold">80%</span>
+                        </div>
+                        <div class="progress" style="height: 12px;">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="skill-card p-4 bg-white rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-semibold">Database Management</span>
+                            <span class="text-warning fw-bold">75%</span>
+                        </div>
+                        <div class="progress" style="height: 12px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">My Portfolio</h2>
+                <p class="text-muted">Recent projects I've worked on</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="portfolio-card card h-100 border-0 shadow-sm overflow-hidden">
+                        <img src="https://picsum.photos/400/250?random=22"
+                             class="card-img-top" alt="Project 1">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">Web App</span>
+                            <h5 class="card-title fw-bold">E-Commerce Platform</h5>
+                            <p class="card-text text-muted">Full-stack e-commerce solution with React and Node.js</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="#" class="btn btn-outline-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="portfolio-card card h-100 border-0 shadow-sm overflow-hidden">
+                        <img src="https://picsum.photos/400/250?random=23"
+                             class="card-img-top" alt="Project 2">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">Dashboard</span>
+                            <h5 class="card-title fw-bold">Analytics Dashboard</h5>
+                            <p class="card-text text-muted">Real-time data visualization dashboard</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="#" class="btn btn-outline-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="portfolio-card card h-100 border-0 shadow-sm overflow-hidden">
+                        <img src="https://picsum.photos/400/250?random=24"
+                             class="card-img-top" alt="Project 3">
+                        <div class="card-body">
+                            <span class="badge bg-info mb-2">Mobile</span>
+                            <h5 class="card-title fw-bold">Health Tracker App</h5>
+                            <p class="card-text text-muted">Cross-platform mobile app for fitness tracking</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="#" class="btn btn-outline-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5">
+                        <h2 class="display-5 fw-bold">Get In Touch</h2>
+                        <p class="text-muted">Have a project in mind? Let's talk!</p>
+                    </div>
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <form id="contactForm">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name" class="form-label fw-semibold">Full Name</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                   id="name" placeholder="John Doe" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="email" class="form-label fw-semibold">Email Address</label>
+                                            <input type="email" class="form-control form-control-lg"
+                                                   id="email" placeholder="john@example.com" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="subject" class="form-label fw-semibold">Subject</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                   id="subject" placeholder="Project Inquiry" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="message" class="form-label fw-semibold">Message</label>
+                                            <textarea class="form-control form-control-lg" id="message"
+                                                      rows="5" placeholder="Tell me about your project..."
+                                                      required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <i class="bi bi-send me-2"></i>Send Message
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0 text-muted">&copy; 2024 DevPortfolio. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3">
+                        <a href="#" class="btn btn-outline-light btn-sm rounded-circle">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-sm rounded-circle">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-sm rounded-circle">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>

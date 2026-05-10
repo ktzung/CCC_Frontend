@@ -563,6 +563,19 @@ function decrease(item) {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Vue is not defined` | Chạy Vue mà không import hoặc không dùng CDN | Thêm `<script src="https://unpkg.com/vue@3"></script>` hoặc `import { createApp } from 'vue'` |
+| `[Vue warn]: Property "xxx" was accessed during render but is not defined` | Dùng biến trong template mà chưa khai báo trong `setup()` hoặc `<script setup>` | Khai báo với `ref()` hoặc `reactive()` trước khi dùng trong template |
+| `Cannot read properties of undefined (reading 'value')` | Quên `.value` khi truy cập `ref` trong `<script setup>` | Dùng `myRef.value` trong JS, template tự unwrap nên không cần `.value` |
+| `[Vue warn]: Component is missing template or render function` | File `.vue` thiếu thẻ `<template>` | Thêm `<template>` hợp lệ — tối thiểu 1 root element |
+| `Uncaught SyntaxError: Cannot use import statement outside a module` | Import ESM trong file `<script>` thường (không có `type="module"`) | Dùng `<script type="module">` hoặc chuyển sang `<script setup>` |
+| `[Vue warn]: Extraneous non-emits event listeners` | Parent lắng nghe event mà child không `defineEmits` | Thêm `const emit = defineEmits(['eventName'])` trong child component |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **Composition API** (`<script setup>`) = cách viết Vue 3 mới, concise và reusable

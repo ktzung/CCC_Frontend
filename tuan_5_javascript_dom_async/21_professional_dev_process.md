@@ -397,6 +397,47 @@ vercel
 | **"README chỉ là tài liệu cho người khác"** | README là tài liệu cho BẠN sau 6 tháng khi bạn quên cách chạy project của mình. Viết README ngay khi setup. |
 | **"PR cần code review trước khi merge là rào cản"** | Code review = phát hiện bug trước khi đến production. Giảm cost sửa bug từ 100x xuống 1x. PR nhỏ = review nhanh |
 | **"Vercel/Netlify chỉ cho project nhỏ"** | Vercel host production của nhiều startup và công ty lớn. Shopee, Notion, và nhiều công ty dùng Vercel cho frontend |
+| **"Merge conflict là lỗi nghiêm trọng"** | Merge conflict là hiện tượng **bình thường** khi nhiều người cùng code. Không phải lỗi — chỉ là Git cần bạn quyết định code nào giữ lại |
+
+---
+
+### 🔀 Xử lý Merge Conflict — Kỹ năng bắt buộc
+
+Khi 2 người sửa cùng 1 dòng code → Git không biết giữ version nào → **conflict**:
+
+```
+<<<<<<< HEAD (your changes)
+const apiUrl = "https://api-v2.example.com";
+=======
+const apiUrl = "https://api-v1.example.com";
+>>>>>>> feature/new-api (their changes)
+```
+
+**Cách giải quyết (4 bước):**
+
+```bash
+# 1. Pull code mới nhất
+git pull origin develop
+
+# 2. Mở VS Code — conflict sẽ hiện với 3 options:
+#    "Accept Current"  = giữ code của bạn
+#    "Accept Incoming" = giữ code người khác
+#    "Accept Both"     = giữ cả hai
+
+# 3. Hoặc sửa thủ công — xóa markers <<<<<<<, =======, >>>>>>>
+#    Giữ lại code đúng (hoặc merge cả hai cách)
+
+# 4. Add + commit + push
+git add .
+git commit -m "fix: resolve merge conflict in api config"
+git push
+```
+
+**Phòng tránh conflict:**
+- Pull code mới nhất **trước khi** bắt đầu code
+- Mỗi người code trên **file riêng** khi có thể
+- PR nhỏ → conflict ít hơn
+- Communicate với team khi sửa file chung
 
 ---
 

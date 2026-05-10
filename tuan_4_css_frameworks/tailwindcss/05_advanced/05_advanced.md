@@ -520,6 +520,44 @@ Tạo plugin với:
 
 ---
 
+# 9. ❌ COMMON MISCONCEPTIONS — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"@apply giống như Sass @mixin"** | Không hoàn toàn. `@apply` **gộp các utility classes** đã tồn tại. Sass mixin **tạo CSS mới**. `@apply` không thể tạo property mới, chỉ dùng được utilities Tailwind có sẵn |
+| **"Dùng @apply cho tất cả để HTML gọn"** | `@apply` chỉ nên cho **patterns lặp lại** (button, badge). Dùng quá nhiều → mất lợi ích utility-first, khó debug |
+| **"PurgeCSS có thể xóa nhầm classes cần dùng"** | Đúng — classes tạo dynamically (`bg-${color}-500`) sẽ bị xóa. Dùng `safelist` hoặc viết đầy đủ trong code |
+| **"JIT mode chậm hơn vì compile on-demand"** | Ngược lại — JIT nhanh HƠN vì chỉ compile classes đang dùng. Production build nhanh hơn rất nhiều |
+| **"Tailwind v4 giống hệt v3"** | Tailwind v4 thay đổi lớn: dùng CSS-based config thay vì JS, hỗ trợ native CSS layers, nhanh hơn 10x. Nếu học mới, nên học v4 |
+
+---
+
+# 10. ✅ CHECKPOINT — Kiểm tra hiểu biết
+
+### Câu hỏi hiểu cơ bản:
+
+1. Khi nào dùng `@apply`, khi nào dùng utility classes trực tiếp trong HTML?
+2. `safelist` trong config dùng để làm gì? Cho ví dụ.
+3. CSS Layers (`@layer base`, `@layer components`, `@layer utilities`) có mục đích gì?
+
+### Câu hỏi áp dụng:
+
+4. Bạn có class `.btn-primary` dùng `@apply bg-blue-500 text-white px-4 py-2 rounded`. Khi build production, class này bị PurgeCSS xóa. Tại sao? Cách sửa?
+5. So sánh: dùng `@apply` cho 10 button variants vs tạo 1 React `<Button variant="primary">` component. Cách nào tốt hơn cho project lớn?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **@apply**: cho patterns lặp lại 3+ lần (button, badge, card). **Utility trực tiếp**: cho layout, spacing, responsive — mỗi chỗ khác nhau.
+2. `safelist` giữ classes **không được phát hiện** trong quá trình scan. Ví dụ: classes tạo dynamically từ API response: `safelist: ['bg-red-500', 'bg-green-500', 'bg-blue-500']`.
+3. Layers xác định **thứ tự ưu tiên**: `base` < `components` < `utilities`. Utilities luôn override components, components luôn override base → predictable specificity.
+4. PurgeCSS scan HTML/JS tìm class names. `.btn-primary` là custom class, không phải utility → nếu không dùng trong HTML/JS → bị xóa. Sửa: thêm `.btn-primary` vào `safelist` hoặc đảm bảo class được sử dụng trong file.
+5. **React component** tốt hơn cho project lớn — tách logic (onClick, disabled, loading state) khỏi presentation. `@apply` chỉ handle CSS, không handle behavior. Nhưng cả hai có thể dùng kết hợp: React component + @apply CSS.
+
+</details>
+
+---
+
 **Hoàn thành TailwindCSS!** Bạn đã nắm vững TailwindCSS. Chuyển sang JavaScript để học logic và tương tác!
 
 > [!TIP]

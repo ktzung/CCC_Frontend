@@ -390,6 +390,19 @@ const html = /* ? */;
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `forEach` trả về `undefined` | `forEach` không trả về gì — chỉ duyệt | Dùng `map` nếu muốn mảng mới, `filter` nếu muốn lọc |
+| `.sort()` sắp xếp số sai | Mặc định sort theo string (Unicode) | Luôn truyền comparator: `.sort((a, b) => a - b)` |
+| `map` mutate mảng gốc | `map` trả về mảng mới nhưng elements vẫn share reference | Dùng spread cho nested objects: `.map(item => ({ ...item }))` |
+| Infinite loop `while(true)` | Điều kiện không bao giờ `false` | Đảm bảo có `break` hoặc điều kiện thay đổi trong loop |
+| `for...in` trên array trả về "0", "1", "2" | `for...in` trả về keys (string), không phải values | Dùng `for...of` cho array: `for (const item of arr)` |
+| `reduce` lỗi khi mảng rỗng | Không có initial value → reduce chạy trên mảng rỗng → TypeError | Luôn truyền initial value: `.reduce((acc, val) => ..., [])` |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *Minh render được danh sách todos bằng `map`. Nhưng code lặp lại: mỗi lần cần render, lại viết lại logic. Phần tính điểm lại viết ở chỗ khác.*

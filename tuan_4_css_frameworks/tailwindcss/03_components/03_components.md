@@ -634,6 +634,43 @@ Tạo navbar với:
 
 ---
 
+# 12. ❌ COMMON MISCONCEPTIONS — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Tailwind không có components, phải viết lại từ đầu mỗi lần"** | Dùng `@apply` để tạo reusable component classes. Hoặc dùng Headless UI / Flowbite — libraries components xây trên Tailwind |
+| **"HTML dài với nhiều class = code bẩn"** | Trong React/Vue, bạn **extract** thành component: `<Button variant="primary">`. HTML dài chỉ là vấn đề khi viết vanilla HTML thuần |
+| **"Navbar responsive phải dùng JavaScript"** | Tailwind dùng **peer** + CSS checkbox trick để toggle menu không cần JS. Nhưng production thường dùng JS cho UX tốt hơn |
+| **"Form validation phải dùng JS"** | HTML5 attributes (`required`, `type="email"`, `pattern`) xử lý 80% validation. Tailwind thêm `invalid:` / `valid:` classes cho styling |
+
+---
+
+# 13. ✅ CHECKPOINT — Kiểm tra hiểu biết
+
+### Câu hỏi hiểu cơ bản:
+
+1. Tại sao `@apply` được khuyến nghị cho buttons nhưng không cho spacing/layout?
+2. `peer` trong Tailwind hoạt động như thế nào? Cho ví dụ.
+3. Component "Card" trong Tailwind cần bao nhiêu utility classes tối thiểu?
+
+### Câu hỏi áp dụng:
+
+4. Build một modal dialog (hộp thoại) với Tailwind: overlay tối nền, card trắng ở giữa, nút Đóng. Viết HTML + classes.
+5. Tạo một alert component có 4 variants: success (xanh), warning (vàng), error (đỏ), info (xanh dương). Dùng `@apply`.
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. Buttons có **ít nhất 8-10 classes lặp lại** (`px-4 py-2 rounded font-medium...`) → `@apply` giúp gọn hơn. Spacing/layout thì khác nhau ở mỗi chỗ → không nên gộp.
+2. `peer` cho phép style element **anh em** dựa trên state của element trước. Ví dụ: `<input class="peer" /> <label class="peer-focus:text-blue-500">` — label đổi màu khi input được focus.
+3. Tối thiểu: `rounded-lg shadow-md overflow-hidden` (cho container). Content bên trong dùng padding/margin utilities.
+4. `<div class="fixed inset-0 bg-black/50 flex items-center justify-center"><div class="bg-white rounded-lg p-6 max-w-md"><button class="absolute top-2 right-2">✕</button></div></div>`
+5. `.alert-success { @apply bg-green-100 text-green-800 border border-green-300 px-4 py-3 rounded; }` — tương tự cho các variants khác.
+
+</details>
+
+---
+
 **Bài tiếp theo:** [04. Customization](../04_customization/04_customization.md) - Customize TailwindCSS với config file
 
 > [!TIP]

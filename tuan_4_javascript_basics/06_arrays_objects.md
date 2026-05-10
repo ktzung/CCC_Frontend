@@ -425,6 +425,19 @@ console.log(getStats(state.todos));
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `TypeError: Cannot read property 'x' of undefined` | Truy cập key không tồn tại trong object | Dùng optional chaining: `obj?.nested?.key` |
+| Spread chỉ copy shallow | `{...obj}` copy reference của nested objects | Dùng `structuredClone(obj)` cho deep copy |
+| `push()` mutate mảng gốc | `push()` thay đổi mảng trực tiếp | Dùng `const newArr = [...arr, newItem]` để immutable |
+| Destructuring trả về `undefined` | Key name không khớp với object key | Kiểm tra chính tả: `const { name } = obj` phải khớp key `name` trong obj |
+| `Object.keys()` trả về string[] | Object keys luôn là string (kể cả số) | Convert: `Object.keys(obj).map(Number)` nếu cần số |
+| Array methods trả về `undefined` | Quên `return` trong callback của `map`/`filter` | Arrow function 1 dòng tự return. Nhiều dòng phải có `return` |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *"Data layer xong," Minh nói. "Mình có thể thêm, xóa, sửa todos trong JavaScript. Nhưng trang HTML vẫn không thay đổi. User không nhìn vào console!"*

@@ -402,8 +402,8 @@ mkdir src dist
 @import "bootstrap/scss/functions";
 
 // Chọn màu brand của bạn
-$primary: ???;     // Màu chính brand của bạn
-$secondary: ???;   // Màu phụ
+$primary: #e63946;   // Đỏ brand
+$secondary: #457b9d; // Xanh dương nhẹ
 $font-family-base: 'Inter', system-ui, sans-serif;
 $border-radius: 0.5rem;
 $card-border-width: 0;
@@ -425,6 +425,173 @@ npm run sass:watch  # Build tự động
 ```
 
 **Kiểm tra:** Mở `index.html` trong browser — màu có đúng brand không?
+
+---
+
+### 🪜 Step-by-Step: SASS Customization từ đầu (30 phút)
+
+**Bước 1: Setup project (3 phút)**
+```bash
+mkdir my-bootstrap-theme && cd my-bootstrap-theme
+npm init -y
+npm install bootstrap@5.3.0 sass
+mkdir src dist
+```
+
+Tạo scripts trong `package.json`:
+```json
+{
+    "scripts": {
+        "build": "sass src/custom.scss dist/style.css",
+        "watch": "sass --watch src/custom.scss dist/style.css"
+    }
+}
+```
+
+**Bước 2: Tạo custom.scss cơ bản (5 phút)**
+```scss
+// src/custom.scss
+
+// BƯỚC 1: Import functions (bắt buộc)
+@import "bootstrap/scss/functions";
+
+// BƯỚC 2: Override variables TRƯỚC bootstrap
+$primary: #e63946;    // Đỏ brand
+$secondary: #457b9d;  // Xanh dương nhẹ
+$success: #2a9d8f;    // Xanh ngọc
+$font-family-base: 'Inter', system-ui, sans-serif;
+$border-radius: 0.5rem;
+$card-border-width: 0;
+
+// BƯỚC 3: Import bootstrap đầy đủ
+@import "bootstrap/scss/bootstrap";
+
+// BƯỚC 4: Custom CSS riêng (sau bootstrap)
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+}
+```
+
+**Bước 3: Build và test (2 phút)**
+```bash
+npm run build
+```
+
+Tạo `index.html` test:
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Theme Test</title>
+    <!-- Dùng file CSS đã build, KHÔNG dùng CDN -->
+    <link rel="stylesheet" href="dist/style.css">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="text-primary mb-4">Brand Theme</h1>
+        <button class="btn btn-primary me-2">Primary</button>
+        <button class="btn btn-secondary me-2">Secondary</button>
+        <button class="btn btn-success me-2">Success</button>
+        <button class="btn btn-outline-primary">Outline</button>
+
+        <div class="card mt-4" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Card với theme mới</h5>
+                <p class="card-text">Border-radius và shadow đã customize.</p>
+                <a href="#" class="btn btn-primary">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+```
+
+Mở `index.html` → nút phải màu đỏ brand, card không viền, bo tròn nhiều hơn.
+
+**Bước 4: Thêm brand colors mới (5 phút)**
+```scss
+// Thêm TRƯỚC @import "bootstrap/scss/bootstrap"
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": #264653,
+    "warning": #f4a261,
+    "danger": #e76f51,
+    "light": #f8f9fa,
+    "dark": #212529,
+    // Brand colors mới
+    "brand": #e63946,
+    "accent": #a8dadc,
+);
+```
+
+Sau build → dùng được:
+```html
+<button class="btn btn-brand">Brand</button>
+<div class="bg-accent p-3">Accent background</div>
+<span class="badge bg-brand">Brand badge</span>
+```
+
+**Bước 5: Selective import (giảm bundle size) (5 phút)**
+```scss
+// Chỉ import components cần dùng
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+
+// Layout
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+
+// Components (chọn lọc)
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/badge";
+
+// Utilities
+@import "bootstrap/scss/utilities/api";
+```
+
+So sánh kích thước:
+```bash
+# Full import → ~250KB
+# Selective import → ~100KB (giảm 60%)
+```
+
+**Bước 6: Watch mode cho development (2 phút)**
+```bash
+npm run watch
+# Tự rebuild mỗi khi save custom.scss
+# Ctrl+C để dừng
+```
+
+---
+
+### 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| Override không生效 | Đặt sau `@import "bootstrap"` | Phải đặt TRƯỚC `@import` |
+| `sass` command không chạy | Chưa cài sass hoặc chưa thêm scripts | `npm install sass` + kiểm tra `package.json` |
+| Font không thay đổi | Chưa import Google Font | Thêm `@import url('...')` trong custom.scss |
+| `btn-brand` không hoạt động | Chưa thêm "brand" vào `$theme-colors` | Phải thêm map entry trước `@import` |
+| CSS output rất lớn | Import toàn bộ bootstrap | Dùng selective import (Bước 5) |
+| `darken()` / `lighten()` không hoạt động | Dùng trong CSS thường, không phải SASS | Phải dùng trong file `.scss`, không phải `.css` |
 
 ---
 
@@ -493,6 +660,211 @@ npm run sass:watch  # Build tự động
 3. **`$theme-colors` map** → thêm màu mới → Bootstrap tự tạo TẤT CẢ utility/component classes
 4. **Selective import** → bundle nhỏ hơn, nhưng phải import Required imports trước
 5. **Custom CSS sau `@import`** → dùng được tất cả SASS variables và mixins của Bootstrap
+
+---
+
+## 10. 📎 Phụ lục: CSS Variables vs SASS — Khi nào dùng gì?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    CUSTOMIZATION METHODS                     │
+├─────────────────────────┬───────────────────────────────────┤
+│   CSS VARIABLES         │   SASS VARIABLES                 │
+│   (--var: value)        │   ($var: value)                  │
+├─────────────────────────┼───────────────────────────────────┤
+│ ✅ Runtime (không build)│ ✅ Compile-time (cần build)      │
+│ ✅ Thay đổi bằng JS     │ ✅ Toàn quyền customize          │
+│ ✅ Dark mode dễ dàng    │ ✅ Functions: darken(), lighten() │
+│ ❌ Không override BS    │ ✅ Override Bootstrap variables   │
+│ ❌ Không có functions   │ ✅ Selective import               │
+├─────────────────────────┼───────────────────────────────────┤
+│ Dùng cho:               │ Dùng cho:                        │
+│ - Dark mode toggle      │ - Brand theme customization      │
+│ - Runtime theming       │ - Production optimization        │
+│ - User preferences      │ - Selective component import     │
+└─────────────────────────┴───────────────────────────────────┘
+```
+
+**Bootstrap 5.3+ hỗ trợ CẢ HAI:**
+- SASS variables: override khi build
+- CSS variables: runtime customization + dark mode
+
+```scss
+// SASS: Override khi compile (không thay đổi runtime)
+$primary: #e63946;
+
+// Bootstrap 5.3 tự tạo CSS variables từ SASS variables:
+// --bs-primary: #e63946;
+// → Có thể override bằng JS nếu cần
+```
+
+---
+
+## 11. 🌙 Dark Mode với Bootstrap 5.3+
+
+Bootstrap 5.3+ có built-in dark mode support:
+
+```html
+<!-- Thêm data-bs-theme vào <html> để toggle dark mode -->
+<html lang="vi" data-bs-theme="dark">
+```
+
+```scss
+// src/custom.scss — Custom dark mode colors
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+
+// Override dark mode variables
+$body-bg-dark: #1a1a2e;
+$body-color-dark: #e0e0e0;
+$card-bg-dark: #16213e;
+$navbar-dark-bg: #0f3460;
+
+@import "bootstrap/scss/bootstrap";
+```
+
+```javascript
+// Toggle dark mode bằng JavaScript
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-bs-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-bs-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+}
+
+// Load saved theme khi trang mở
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-bs-theme', savedTheme);
+```
+
+```html
+<!-- Dark mode toggle button -->
+<button class="btn btn-outline-secondary" onclick="toggleDarkMode()">
+    🌙/☀️
+</button>
+```
+
+---
+
+## 12. ⚡ Performance Optimization
+
+### Bundle Size Comparison
+
+| Approach | CSS Size | CSS (gzip) | Khi nào dùng |
+|----------|----------|------------|---------------|
+| CDN full | ~227KB | ~30KB | Học tập, prototype |
+| npm full | ~227KB | ~30KB | Production cơ bản |
+| npm selective (10 components) | ~100KB | ~15KB | Production optimize |
+| npm selective + PurgeCSS | ~40KB | ~8KB | Performance critical |
+
+### Selective Import Template
+
+```scss
+// src/custom.scss — Production optimized
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Core (bắt buộc)
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+
+// Layout
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+
+// Components (chỉ import cần dùng)
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/dropdown";
+
+// KHÔNG import: carousel, offcanvas, spinners, progress, toasts, tooltips
+
+// Utilities
+@import "bootstrap/scss/utilities/api";
+```
+
+### Critical CSS Strategy
+
+```html
+<!-- Inline critical CSS cho above-the-fold content -->
+<style>
+    /* Chỉ CSS cho navbar + hero section */
+    .navbar { /* minimal styles */ }
+    .hero { min-height: 100vh; /* ... */ }
+</style>
+
+<!-- Load đầy đủ Bootstrap sau (defer) -->
+<link rel="preload" href="dist/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+```
+
+---
+
+## 13. 🎨 Complete Brand Identity Example
+
+**Brand: "Cà Phê Sáng" — quán cà phê trực tuyến**
+
+```scss
+// src/custom.scss
+
+@import "url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap')";
+@import "bootstrap/scss/functions";
+
+// ═══ BRAND TOKENS ═══
+$brand-brown:    #6F4E37;  // Nâu cà phê
+$brand-cream:    #F5F0EB;  // Kem sữa
+$brand-gold:     #C9A96E;  // Vàng nhạt
+$brand-dark:     #2C1810;  // Nâu đậm
+
+$primary:   $brand-brown;
+$secondary: $brand-gold;
+$success:   #4a7c59;
+$danger:    #c0392b;
+$warning:   $brand-gold;
+$info:      #5b7fa5;
+$light:     $brand-cream;
+$dark:      $brand-dark;
+
+$font-family-base: 'Be Vietnam Pro', system-ui, sans-serif;
+$border-radius:    0.75rem;
+$border-radius-lg: 1rem;
+$card-border-width: 0;
+
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "coffee": $brand-brown,
+    "cream": $brand-cream,
+    "gold": $brand-gold,
+);
+
+@import "bootstrap/scss/bootstrap";
+
+// ═══ CUSTOM STYLES ═══
+.navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.card { transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.btn { font-weight: 500; }
+```
+
+**Kết quả:**
+```html
+<button class="btn btn-coffee">Đặt cà phê</button>
+<div class="bg-cream p-4">Menu hôm nay</div>
+<span class="badge bg-gold text-dark">Mới</span>
+```
 
 ---
 

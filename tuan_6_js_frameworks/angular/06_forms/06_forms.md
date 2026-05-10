@@ -323,6 +323,19 @@ export function passwordMatchValidator(group: AbstractControl): ValidationErrors
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Can't bind to 'formGroup'` | Quên import `ReactiveFormsModule` | Thêm `ReactiveFormsModule` vào imports |
+| `formControlName` không sync | Sai tên control hoặc FormGroup chưa tạo control | Đảm bảo `fb.group({ name: '' })` khớp `formControlName="name"` |
+| Validation không hiển thị lỗi | Chưa kiểm tra `touched`/`dirty` | Dùng `*ngIf="f['name'].touched && f['name'].errors"` |
+| `FormArray` add/remove không cập nhật UI | Dùng array methods thay vì FormArray methods | Dùng `formArray.push()` và `formArray.removeAt()` |
+| `ngModel` trong Reactive Form lỗi | Mix reactive và template-driven | Chọn 1 trong 2, không dùng cả hai trên cùng element |
+| Custom validator luôn trả `null` | Logic sai hoặc quên return `ValidationErrors` | `return { errorName: true }` khi invalid, `return null` khi valid |
+
+---
+
 ## 8. 📌 Summary
 
 1. **Template-driven**: `[(ngModel)]` + `#form="ngForm"` — đơn giản, ít code

@@ -579,6 +579,20 @@ export class CartComponent {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `TS2339: Property 'X' does not exist on type 'Y'` | Truy cập property không tồn tại trong interface | Kiểm tra interface, thêm property hoặc dùng optional chaining `?.` |
+| `TS2345: Argument not assignable to parameter` | Truyền sai type cho function | Kiểm tra type annotation, dùng `as Type` assertion hoặc sửa type |
+| `TS7006: Parameter implicitly has 'any' type` | `strict` mode bật mà không khai báo type | Thêm type annotation: `function foo(x: string): void` |
+| `Experimental support for decorators` warning | Thiếu `experimentalDecorators` trong tsconfig | Thêm `"experimentalDecorators": true` vào `compilerOptions` |
+| `TS2322: Type not assignable` khi dùng `@Input()` | Parent truyền type khác với child Input | Đảm bảo type khớp, hoặc dùng union type |
+| Generic `does not satisfy the constraint` | Generic không extends interface yêu cầu | Thêm constraint: `<T extends HasId>` |
+| `Cannot find module 'X'` dù đã npm install | Thiếu `@types/X` | Chạy `npm i -D @types/X` |
+
+---
+
 ## 11. **TỔNG KẾT**
 
 - ✅ **TypeScript** cung cấp type safety và better tooling

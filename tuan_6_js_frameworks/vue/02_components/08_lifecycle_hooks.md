@@ -396,6 +396,20 @@ onUnmounted(() => {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Cannot read properties of null (reading 'xxx')` trong `setup()` | Truy cập DOM element hoặc template ref trước khi component mount | Chuyển code vào `onMounted()`: `onMounted(() => { console.log(myRef.value) })` |
+| Memory leak: Event listener vẫn chạy sau khi component destroy | Quên `removeEventListener` trong `onUnmounted` | Thêm cleanup: `onUnmounted(() => window.removeEventListener('scroll', handler))` |
+| `Cannot use top-level await in <script setup>` | `await` trực tiếp trong `<script setup>` mà không có `<Suspense>` | Bọc trong `onMounted(async () => { ... })` hoặc dùng `<Suspense>` ở parent |
+| Fetch data hiển thị sai khi component remount | State cũ không được reset khi component unmount rồi mount lại | Reset state trong `onBeforeMount` hoặc dùng key để force recreate component |
+| `setInterval` chạy liên tục dù component đã unmount | Quên `clearInterval` trong `onUnmounted` | Lưu interval ID: `const id = setInterval(...)` → `onUnmounted(() => clearInterval(id))` |
+| `nextTick()` không đợi được async code | `nextTick` chỉ đợi Vue DOM update, không đợi API call hoàn thành | Dùng `await nextTick()` sau DOM update, API call cần `.then()` hoặc `await` riêng |
+| Composable không cleanup khi component unmount | Composable đăng ký listener nhưng không trả về cleanup function | Thêm `onUnmounted` bên trong composable hoặc return cleanup để component gọi |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **Lifecycle order**: `setup → onBeforeMount → onMounted → (updates) → onBeforeUnmount → onUnmounted`

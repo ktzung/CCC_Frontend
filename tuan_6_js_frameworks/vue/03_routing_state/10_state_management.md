@@ -505,6 +505,19 @@ Dùng trong:
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Store is not defined` hoặc `useStore is not a function` | Gọi store ngoài `<script setup>` hoặc thiếu `defineStore` return | Đảm bảo `useXxxStore()` được gọi bên trong setup; kiểm tra `return { ... }` trong defineStore |
+| State mất reactivity khi destructure | Dùng `const { items } = store` thay vì `storeToRefs` | Dùng `const { items } = storeToRefs(store)` cho state/getters; `const { addItem } = store` cho actions |
+| `storeToRefs is not defined` | Quên import `storeToRefs` từ `pinia` | Thêm `import { storeToRefs } from 'pinia'` |
+| Pinia state không persist qua F5 | Chưa cài `pinia-plugin-persistedstate` hoặc thiếu option `persist` | `npm i pinia-plugin-persistedstate`, thêm `persist: { paths: ['key'] }` vào defineStore |
+| `Cannot read properties of null (reading 'install')` | Quên `app.use(createPinia())` trước `app.mount()` | Đảm bảo `createPinia()` được use trước router và mount |
+| Getter trả về `undefined` | Getter tham chiếu `this.xxx` nhưng state chưa được khởi tạo | Kiểm tra giá trị mặc định trong `ref()` / `reactive()`; kiểm tra getter logic |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **`defineStore('name', () => { return { ... } })`** = Composition-style Pinia store. Không mutations, không boilerplate

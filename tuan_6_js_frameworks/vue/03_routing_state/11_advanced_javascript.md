@@ -238,6 +238,29 @@ const searchQuery = ref('')
 const loading = ref(false)
 const error = ref(null)
 
+// ... (remaining implementation)
+</script>
+```
+
+---
+
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `SyntaxError: Unexpected token '=>'` | Dùng arrow function trong object literal (mất `this`) | Dùng method shorthand `{ fn() {} }` hoặc arrow chỉ cho callback không cần `this` |
+| `TypeError: Cannot destructure property 'xxx' of undefined` | Object không có property đó hoặc giá trị là `undefined` | Kiểm tra object trước: `const { name = 'default' } = obj || {}` (default value) |
+| `import` báo `SyntaxError: Cannot use import outside a module` | Script tag thiếu `type="module"` | Thêm `<script type="module">` hoặc dùng bundler (Vite) |
+| `ReferenceError: regeneratorRuntime is not defined` | Dùng `async/await` mà không có polyfill hoặc target quá cũ | Đảm bảo `vite.config.js` có `target: 'es2020'` hoặc cài `@babel/plugin-transform-runtime` |
+| Spread `{...obj}` không deep clone nested object | Spread chỉ clone 1 cấp (shallow copy) | Dùng `structuredClone(obj)` hoặc `JSON.parse(JSON.stringify(obj))` cho deep copy |
+| Template literal `${expr}` hiển thị raw text | Dùng nháy đơn `'...'` thay vì backtick `` `...` `` | Thay `'Hello ${name}'` bằng `` `Hello ${name}` `` (backtick) |
+
+---
+
+## 📌 Summary
+
+1. **Arrow functions**: `(a, b) => a + b` — ngắn gọn, không có `this` riêng
+
 // Computed với destructuring
 const filteredUsers = computed(() => {
   if (!searchQuery.value) return users.value

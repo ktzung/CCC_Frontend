@@ -318,6 +318,19 @@ async function onSubmit(values) {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `v-model` không cập nhật value | Input type không đúng hoặc thiếu `v-model` trên đúng element | Đảm bảo `v-model` nằm trên `<input>`, `<select>`, `<textarea>`; checkbox dùng `v-model:checked` |
+| VeeValidate `Field` không hiển thị lỗi | Thiếu `<ErrorMessage name="fieldName" />` trong template | Thêm `<ErrorMessage name="tên_field" />` ngay sau `<Field>` |
+| `yup.ref('password')` không hoạt động trong `confirmPassword` | Dùng `yup.ref('password')` nhưng field name sai | Đảm bảo name一致: `yup.string().oneOf([yup.ref('password')])` |
+| Form submit không gọi `onSubmit` | Thiếu `@submit` hoặc dùng `@submit.prevent` sai cách | VeeValidate: dùng `<Form @submit="onSubmit">`, không cần `.prevent` (VeeValidate tự xử lý) |
+| Validation chạy quá chậm (lag khi gõ) | Dùng `validateOnChange` trên mọi field | Chỉ dùng `validateOnBlur` cho text, `validateOnChange` cho password strength hoặc checkbox |
+| `TypeError: schema.validate is not a function` | Import sai Yup hoặc dùng API VeeValidate v3 thay v4 | VeeValidate v4+: truyền `:validation-schema="schema"` prop, không phải `validate()` manual |
+
+---
+
 ## 8. 📌 Summary
 
 1. **`v-model`** = two-way binding tự động cho inputs, selects, checkboxes, radios

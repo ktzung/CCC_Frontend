@@ -415,6 +415,19 @@ ng g s services/cart
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `NullInjectorError: No provider for X!` | Service chưa `providedIn: 'root'` hoặc không trong providers | Thêm `@Injectable({ providedIn: 'root' })` hoặc khai báo trong `providers` |
+| Circular dependency giữa 2 services | Service A inject Service B và ngược lại | Dùng `forwardRef(() => X)` hoặc refactor loại bỏ vòng lặp |
+| `No provider for HttpClient` | Quên import `HttpClientModule` | Thêm `provideHttpClient()` (Angular 17+) hoặc `HttpClientModule` |
+| Service tạo 2 instances (không singleton) | `providedIn` ở cả root và component providers | Chỉ dùng `providedIn: 'root'`, xóa khỏi component providers |
+| `BehaviorSubject` emit `undefined` | Không truyền initial value | `new BehaviorSubject<Type>(initialValue)` — luôn có giá trị khởi tạo |
+| Memory leak: subscribe không unsubscribe | Quên cleanup trong `ngOnDestroy` | Dùng `takeUntil(destroy$)` hoặc `takeUntilDestroyed()` Angular 16+ |
+
+---
+
 ## 8. 📌 Summary
 
 1. **Service** = `@Injectable` class. `providedIn: 'root'` = singleton toàn app

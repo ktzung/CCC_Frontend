@@ -246,4 +246,92 @@ Mở file HTML trong trình duyệt. Nếu thấy:
 
 ---
 
+# 9. 🛠️ HANDS-ON PRACTICE — Làm ngay bây giờ
+
+### Bài tập: So sánh Bootstrap vs Tailwind (20 phút)
+
+**Phần 1: Tạo cùng 1 card sản phẩm bằng cả 2 framework**
+
+1. Tạo file `bootstrap-card.html` — dùng Bootstrap CDN:
+```html
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="card" style="width: 18rem;">
+    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Sản phẩm">
+    <div class="card-body">
+        <h5 class="card-title">iPhone 15 Pro</h5>
+        <p class="card-text">25.990.000đ</p>
+        <a href="#" class="btn btn-primary">Mua ngay</a>
+    </div>
+</div>
+```
+
+2. Tạo file `tailwind-card.html` — dùng Tailwind CDN:
+```html
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="max-w-sm rounded overflow-hidden shadow-lg">
+    <img class="w-full" src="https://via.placeholder.com/300x200" alt="Sản phẩm">
+    <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2">iPhone 15 Pro</div>
+        <p class="text-gray-700 text-base">25.990.000đ</p>
+        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Mua ngay
+        </button>
+    </div>
+</div>
+```
+
+3. So sánh:
+   - File nào ngắn hơn?
+   - Bạn hiểu được bao nhiêu class trong mỗi file?
+   - Muốn đổi màu button — file nào dễ hơn?
+
+**Phần 2: Thử customize**
+
+Trong file Tailwind, hãy thử:
+- Đổi `bg-blue-500` → `bg-green-500` (màu xanh lá)
+- Đổi `rounded` → `rounded-full` (bo tròn hoàn toàn)
+- Thêm `hover:scale-105 transition-transform` vào card div
+
+**Ghi nhận xét:** Tailwind tiện ở điểm nào? Bất tiện ở điểm nào?
+
+---
+
+# 10. ❌ COMMON MISCONCEPTIONS — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Tailwind = inline style"** | Tailwind classes có **design tokens** sẵn (spacing scale, color palette). Inline style thì không. Tailwind cũng hỗ trợ responsive/hover/dark mode — inline style thì không |
+| **"HTML dài = code xấu"** | Tailwind dùng **component extraction** — gom HTML dài thành component (React/Vue). Code organization nằm ở JS, không phải CSS |
+| **"Tailwind không thể customize"** | `tailwind.config.js` cho phép customize MỌI THỨ: colors, fonts, spacing, breakpoints. Thậm chí extend hoặc override toàn bộ |
+| **"Bootstrap tốt hơn vì có sẵn components"** | Bootstrap nhanh hơn cho prototype. Tailwind linh hoạt hơn cho design custom. Không có cái nào "tốt hơn" — tùy use case |
+| **"Tailwind chỉ cho người mới"** | Apple, Netflix, GitHub, Laravel, Shopify đều dùng Tailwind ở production |
+
+---
+
+# 11. ✅ CHECKPOINT — Kiểm tra hiểu biết
+
+### Câu hỏi hiểu cơ bản:
+
+1. Utility-First khác Component-Based ở điểm gì cơ bản nhất?
+2. Tại sao TailwindCSS có bundle size nhỏ dù có hàng nghìn utility classes?
+3. Khi nào nên dùng CDN, khi nào nên dùng npm để cài Tailwind?
+
+### Câu hỏi áp dụng:
+
+4. Bạn cần build 1 landing page trong 2 tuần cho startup. Team có 1 designer + 1 developer. Nên dùng Bootstrap hay Tailwind? Tại sao?
+5. Một developer nói: "Tailwind làm HTML bẩn, nên dùng CSS thuần." Bạn phản biện thế nào?
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **Component-Based** (Bootstrap) cung cấp components có sẵn (`btn`, `card`). **Utility-First** (Tailwind) cung cấp utility classes nhỏ (`bg-blue-500`, `px-4`) — bạn tự ghép thành component.
+2. Tailwind dùng **PurgeCSS** (hoặc JIT mode) — chỉ generate CSS cho các class bạn **thực sự dùng** trong HTML. Dùng 50 class → chỉ output CSS cho 50 class đó, không phải 10,000+ class.
+3. **CDN**: học tập, prototype, demo. **npm**: production, cần customize theme, cần PurgeCSS optimization.
+4. **Tailwind** — có designer muốn pixel-perfect → Tailwind linh hoạt hơn Bootstrap. 2 tuần deadline → Tailwind với CDN đủ nhanh.
+5. Tailwind không làm HTML "bẩn" — nó **chuyển sự phức tạp từ CSS sang HTML**. Lợi ích: không cần đặt tên class, không conflict, không specificity issues. Khi HTML dài → extract thành component (React/Vue) — đây là pattern chuẩn trong industry.
+
+</details>
+
+---
+
 **Bài tiếp theo:** [02. Utilities](../02_utilities/02_utilities.md) - Spacing, Colors, Typography, Flexbox, Grid utilities

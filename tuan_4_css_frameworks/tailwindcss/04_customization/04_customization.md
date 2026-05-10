@@ -485,6 +485,63 @@ theme: {
 
 ---
 
+# 14. 🛠️ HANDS-ON PRACTICE — Làm ngay bây giờ
+
+### Bài tập: Tạo brand theme cho Todo App (20 phút)
+
+1. Tạo `tailwind.config.js` với custom theme:
+   - **Colors**: primary (xanh dương), secondary (tím), accent (cam)
+   - **Font family**: `sans` = `'Inter', sans-serif`
+   - **Border radius**: `card` = `12px`
+
+2. Dùng custom theme để style Todo App:
+   - Header dùng `bg-primary`
+   - Buttons dùng `bg-accent`
+   - Cards dùng `rounded-card`
+
+3. Thêm custom animation `bounce-slow` vào config
+
+**Bonus:** Tạo dark mode colors và test với `dark:` prefix
+
+---
+
+# 15. ❌ COMMON MISCONCEPTIONS — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Dùng `extend` hay `theme` cũng được"** | **SAI!** `theme` **ghi đè** toàn bộ giá trị mặc định. `extend` **thêm vào**. Dùng `theme` khi muốn thay đổi hoàn toàn, `extend` khi muốn thêm |
+| **"Custom colors mất hết default colors"** | Chỉ khi dùng `theme: { colors: {...} }`. Dùng `extend: { colors: {...} }` để GIỮ default + thêm custom |
+| **"Plugins phức tạp, không cần học"** | Plugins Tailwind rất đơn giản — chỉ là JS function thêm utilities. Hữu ích cho team share custom utilities |
+| **"Config thay đổi phải restart server"** | Với Vite (HMR) → tự reload. Với Webpack → cần restart. Tailwind JIT mode tự detect file changes |
+
+---
+
+# 16. ✅ CHECKPOINT — Kiểm tra hiểu biết
+
+### Câu hỏi hiểu cơ bản:
+
+1. Sự khác biệt giữa `theme` và `extend` trong `tailwind.config.js` là gì?
+2. Tại sao phải khai báo `content` trong config? Điều gì xảy ra nếu bỏ?
+3. Custom plugin thêm utility mới bằng cách nào?
+
+### Câu hỏi áp dụng:
+
+4. Bạn muốn thêm 5 brand colors (primary, secondary, accent, success, danger) vào Tailwind. Viết config.
+5. Một developer dùng `theme: { colors: { primary: '#2563eb' } }` — sau đó báo "tất cả default colors mất hết". Giải thích lỗi và cách sửa.
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. `theme` **ghi đè** toàn bộ giá trị mặc định (mất hết default). `extend` **bổ sung** vào (giữ nguyên default + thêm mới). Luôn dùng `extend` trừ khi muốn thay đổi hoàn toàn.
+2. `content` cho Tailwind biết **file nào cần scan** để tìm classes đang dùng → chỉ generate CSS cho classes đó. Bỏ `content` → Tailwind generate TẤT CẢ classes → bundle size rất lớn (3MB+).
+3. Dùng `plugin` function: `plugin(function({ addUtilities }) { addUtilities({ '.text-shadow': { textShadow: '2px 2px 4px rgba(0,0,0,0.3)' } }) })`.
+4. `theme: { extend: { colors: { primary: '#2563eb', secondary: '#7c3aed', accent: '#f97316', success: '#22c55e', danger: '#ef4444' } } }`
+5. Lỗi: dùng `theme` thay vì `extend`. `theme.colors` ghi đè TOÀN BỘ colors → mất default (`red-500`, `blue-500`...). Sửa: đổi `theme` → `extend`.
+
+</details>
+
+---
+
 **Bài tiếp theo:** [05. Advanced](../05_advanced/05_advanced.md) - @apply, Plugins, Performance optimization
 
 > [!TIP]

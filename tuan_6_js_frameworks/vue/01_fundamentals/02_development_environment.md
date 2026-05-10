@@ -472,6 +472,19 @@ button { background: #42b883; color: white; border: none; padding: 0.5rem 1rem; 
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `vite: command not found` | Vite chưa được cài đặt hoặc không có trong PATH | Chạy `npm create vue@latest` lại hoặc `npm install` trong project folder |
+| `Port 5173 is already in use` | Process cũ đang giữ port | Dùng `npx vite --port 3000` hoặc kill process: `netstat -ano | findstr 5173` → `taskkill /PID <id>` |
+| `Module "./xxx.vue" has no exported member 'default'` | Quên `<script setup>` hoặc thiếu `export default` trong script | Thêm `<script setup>` hoặc `export default { setup() { ... } }` |
+| `The file does not exist at "src/components/xxx.vue" which is in the optimize deps directory` | Import sai path hoặc file bị xóa mà cache chưa update | Xóa `node_modules/.vite` rồi chạy lại `npm run dev` |
+| `Unrecognized option: --host` | Vite version cũ không hỗ trợ flag | Nâng cấp: `npm install vite@latest` hoặc dùng `vite.config.js` với `server: { host: true }` |
+| Hot Reload không hoạt động | File nằm ngoài `src/` hoặc symlink bị lỗi | Đảm bảo file nằm trong workspace, kiểm tra `vite.config.js` → `server.watch` |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **`npm create vue@latest`** → Vite + Vue 3 project trong 60 giây. Chọn Router + Pinia cho SPA đầy đủ

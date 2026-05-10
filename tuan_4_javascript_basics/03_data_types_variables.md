@@ -352,6 +352,19 @@ console.log(user?.address?.city ?? "Không có địa chỉ");
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `typeof null === "object"` | Bug lịch sử của JavaScript (từ năm 1995) | Dùng `value === null` để check null |
+| `0 == ""` trả về `true` | `==` coerce types trước khi so sánh | Luôn dùng `===` (strict equality) |
+| `[] == false` trả về `true` | Array rỗng coerce thành empty string → coerce thành 0 → false | Dùng `===` và convert tường minh |
+| `Number(undefined)` = `NaN` | `undefined` không convert được thành number | Check trước: `if (value !== undefined) Number(value)` |
+| `"" + 0` = `"0"` (string) | Empty string + number = string concatenation | Dùng `Number(value)` trước khi tính toán |
+| `Boolean("false")` = `true` | Mọi string (kể cả "false") đều truthy | Kiểm tra chuỗi rỗng: `value === "false"` hoặc `value !== ""` |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *"Hiểu kiểu dữ liệu rồi," Minh nói. "Giờ mình cần logic cho app: nếu todo done → gạch ngang. Lặp qua danh sách → render. Điểm >= 90 → xuất sắc. Cần if/else, for loop."*

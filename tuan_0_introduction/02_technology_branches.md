@@ -5,7 +5,7 @@
 
 ## 0. 🎬 Opening Hook
 
-*Một tin tuyển dụng thực tế từ Shopee năm 2024:*
+*Một tin tuyển dụng thực tế từ Shopee:*
 
 > **"Frontend Engineer — $2,000–$4,000/tháng. Yêu cầu: HTML/CSS/JS, React, 1 năm kinh nghiệm."**
 

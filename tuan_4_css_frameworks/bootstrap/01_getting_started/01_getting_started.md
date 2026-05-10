@@ -207,6 +207,99 @@ border-radius 4px, hover đổi sang #0b5ed7
 
 ---
 
+### 🪜 Step-by-Step: Tạo trang Bootstrap đầu tiên (15 phút)
+
+**Bước 1: Tạo file HTML (2 phút)**
+1. Mở VS Code → tạo thư mục `bootstrap-demo/`
+2. Tạo file `index.html`
+3. Gõ `!` → Tab (Emmet) để tạo HTML boilerplate
+
+**Bước 2: Thêm Bootstrap CDN (1 phút)**
+```html
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Demo</title>
+    <!-- Bootstrap CSS — LUÔN đặt trong <head> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Nội dung sẽ thêm ở bước 3 -->
+
+    <!-- Bootstrap JS — LUÔN đặt cuối <body> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+```
+
+> **💡 Tại sao CSS trong `<head>` nhưng JS cuối `<body>`?** CSS cần load trước để render đúng ngay từ đầu. JS có thể load sau vì nó xử lý tương tác — không cần thiết khi trang vừa mở.
+
+**Bước 3: Tạo Todo App với Bootstrap (10 phút)**
+```html
+<body>
+    <div class="container mt-5" style="max-width: 600px;">
+        <h1 class="text-center text-primary mb-4">📝 Todo App</h1>
+
+        <!-- Card chứa toàn bộ app -->
+        <div class="card shadow">
+            <div class="card-body">
+                <!-- Input group: input + button -->
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Thêm todo mới...">
+                    <button class="btn btn-primary">Thêm</button>
+                </div>
+
+                <!-- Danh sách todo -->
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Học Bootstrap
+                        <span class="badge bg-success">Hoàn thành</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Làm BTL CSE391
+                        <span class="badge bg-warning text-dark">Đang làm</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Ôn thi cuối kỳ
+                        <span class="badge bg-danger">Chưa bắt đầu</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+```
+
+**Bước 4: Test responsive (2 phút)**
+1. Mở Live Server → xem trên desktop
+2. F12 → Ctrl+Shift+M → chọn iPhone SE
+3. Resize từ lớn đến nhỏ → layout có tự responsive không?
+
+**Giải thích classes đã dùng:**
+- `container mt-5` → max-width container + margin-top 3rem
+- `text-center text-primary` → căn giữa + màu xanh Bootstrap
+- `card shadow` → card component + bóng đổ nhẹ
+- `input-group` → gom input + button liền nhau
+- `form-control` → style input theo Bootstrap
+- `list-group list-group-item` → danh sách có style sẵn
+- `d-flex justify-content-between align-items-center` → flexbox: hai đầu, căn giữa dọc
+- `badge bg-success` → nhãn màu xanh
+
+---
+
+### 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| Trang trông "bình thường" (không có style) | CDN link sai hoặc mất mạng | Kiểm tra Network tab → xem bootstrap.min.css có load được không |
+| Responsive không hoạt động | Thiếu `<meta name="viewport">` | Thêm viewport meta tag vào `<head>` |
+| Hamburger menu không mở | Thiếu Bootstrap JS | Thêm `bootstrap.bundle.min.js` trước `</body>` |
+| Classes không hoạt động | Bootstrap 4 class trên Bootstrap 5 | Kiểm tra: `ml-*` → `ms-*`, `mr-*` → `me-*` |
+| Font trông lạ | CDN conflict với font khác | Kiểm tra: Bootstrap dùng hệ thống font stack |
+
+---
+
 ## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
 | Hiểu sai | Sự thật |
@@ -252,6 +345,112 @@ border-radius 4px, hover đổi sang #0b5ed7
 3. **Viewport meta tag bắt buộc** — thiếu là responsive không hoạt động
 4. **Bootstrap JS bắt buộc** cho Navbar, Modal, Dropdown — không có = interactive không chạy
 5. **Bootstrap không thay thế CSS** — biết CSS thuần mới debug được khi Bootstrap fail
+
+---
+
+## 10. 📎 Phụ lục: Bootstrap 5 Cheat Sheet
+
+### Layout & Grid (chi tiết ở Bài 02)
+```html
+<div class="container">         <!-- max-width responsive -->
+<div class="container-fluid">   <!-- full width -->
+<div class="row g-3">           <!-- row + gutter -->
+<div class="col-12 col-md-6 col-lg-4">  <!-- responsive column -->
+```
+
+### Components thường dùng (chi tiết ở Bài 03)
+```html
+<button class="btn btn-primary btn-lg">Button</button>
+<div class="card shadow-sm"><div class="card-body">...</div></div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">...</nav>
+<div class="alert alert-success alert-dismissible">...</div>
+<span class="badge bg-danger rounded-pill">5</span>
+```
+
+### Utilities thường dùng (chi tiết ở Bài 04)
+```html
+<div class="mt-3 mb-4 p-3">       <!-- spacing -->
+<div class="d-flex justify-content-between align-items-center">  <!-- flexbox -->
+<div class="d-none d-md-block">    <!-- responsive display -->
+<p class="text-center fw-bold fs-5 text-primary">  <!-- typography -->
+<div class="rounded shadow bg-white">  <!-- decoration -->
+```
+
+### JS Components (cần Bootstrap JS)
+```html
+<!-- Modal: data-bs-toggle + data-bs-target -->
+<button data-bs-toggle="modal" data-bs-target="#myModal">Open</button>
+
+<!-- Dropdown: tự hoạt động với Bootstrap JS -->
+<div class="dropdown">
+  <button data-bs-toggle="dropdown">Menu</button>
+  <ul class="dropdown-menu">...</ul>
+</div>
+
+<!-- Toast: cần JS để show -->
+<script>
+  const toast = new bootstrap.Toast(document.getElementById('myToast'));
+  toast.show();
+</script>
+```
+
+---
+
+## 11. ♿ Accessibility (a11y) Notes
+
+Bootstrap đã build a11y vào components sẵn, nhưng bạn cần thêm:
+
+```html
+<!-- ✅ Luôn có alt cho ảnh -->
+<img src="..." alt="Mô tả chi tiết ảnh">
+
+<!-- ✅ aria-label cho nút chỉ có icon -->
+<button class="btn btn-close" aria-label="Đóng"></button>
+
+<!-- ✅ role="alert" cho thông báo -->
+<div class="alert alert-danger" role="alert">Lỗi!</div>
+
+<!-- ✅ aria-label cho nav khi có nhiều nav -->
+<nav class="navbar" aria-label="Menu chính">
+<nav class="navbar" aria-label="Menu phụ">
+
+<!-- ✅ tabindex cho custom interactive elements -->
+<div class="card" tabindex="0" role="button">Click được</div>
+
+<!-- ✅ Skip link (ẩn, hiện khi Tab) -->
+<a href="#main-content" class="visually-hidden-focusable">Skip to content</a>
+<main id="main-content">...</main>
+```
+
+**Kiểm tra a11y nhanh:**
+1. F12 → Lighthouse tab → chọn "Accessibility" → Run
+2. Chỉ dùng Tab (không dùng chuột) → xem có navigate được không
+3. Bật screen reader (NVDA trên Windows) → xem đọc đúng không
+
+---
+
+## 12. ⚡ Performance Tips
+
+| Tip | Mô tả | Impact |
+|-----|-------|--------|
+| **CDN với SRI** | Thêm `integrity` attribute để browser verify file | Bảo mật |
+| **Preload CSS** | `<link rel="preload" href="bootstrap.min.css" as="style">` | Load nhanh hơn |
+| **Deferred JS** | `<script src="..." defer>` hoặc đặt cuối body | Render không bị block |
+| **Selective import** | Chỉ import components cần (Bài 05) | Giảm 40-60% bundle |
+| **PurgeCSS** | Xóa unused CSS classes trong production | Giảm file size |
+| **Lazy load images** | `loading="lazy"` trên `<img>` | Trang load nhanh hơn |
+
+```html
+<!-- CDN với SRI (Subresource Integrity) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous">
+
+<!-- Preload quan trọng nhất -->
+<link rel="preload" href="bootstrap.min.css" as="style">
+<link rel="stylesheet" href="bootstrap.min.css">
+```
 
 ---
 

@@ -504,6 +504,19 @@ function select(option) {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `[Vue warn]: Invalid event arguments` | `emit` truyền arguments sai thứ tự hoặc type | Kiểm tra `defineEmits(['update:modelValue'])` và `emit('update:modelValue', newValue)` |
+| Event handler không chạy | Viết `@click="handleClick()"` với ngoặc — gọi ngay lập tức | Bỏ ngoặc: `@click="handleClick"` hoặc dùng arrow: `@click="() => handleClick(id)"` |
+| `.prevent` modifier không hoạt động | Dùng `.prevent` trên event không có default behavior (ví dụ `@click.prevent` trên `<div>`) | Chỉ dùng `.prevent` trên `submit`, `contextmenu`, events có default browser behavior |
+| `v-model` trên custom component không hoạt động | Component không nhận `modelValue` prop hoặc không emit `update:modelValue` | Thêm `defineProps(['modelValue'])` và `emit('update:modelValue', newVal)` trong child |
+| `.once` modifier không hoạt động lần 2 | `.once` chỉ cho phép event fire 1 lần — đúng như thiết kế | Nếu cần toggle, dùng state `ref(false)` và đổi trong handler thay vì `.once` |
+| `@keyup.enter` không hoạt động trên `<div>` | Key modifiers chỉ hoạt động trên `<input>`, `<textarea>`, hoặc element có `tabindex` | Thêm `tabindex="0"` vào div hoặc chuyển sang `<input>` |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **`@event.prevent`** = `e.preventDefault()`. **`@event.stop`** = `e.stopPropagation()`. **`@click.self`** = chỉ element đó

@@ -419,6 +419,20 @@ products = [
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `'ng' is not recognized` | Chưa cài Angular CLI hoặc chưa thêm PATH | `npm install -g @angular/cli`, kiểm tra `ng version` |
+| `Schema validation failed` khi `ng serve` | `angular.json` lỗi hoặc version mismatch | Kiểm tra `angular.json`, chạy `ng update` |
+| `Component is not part of any NgModule` | Component chưa trong `declarations` hoặc thiếu `standalone: true` | Thêm vào `declarations` hoặc set `standalone: true` |
+| `Can't bind to 'ngModel' since it isn't a known property` | Quên import `FormsModule` | Thêm `FormsModule` vào `imports: []` |
+| `NullInjectorError: No provider for ...` | Service chưa `@Injectable` hoặc thiếu provider | Thêm `@Injectable({ providedIn: 'root' })` |
+| Trang trắng sau `ng serve` | Không có component trong `app.component.html` | Kiểm tra nội dung hoặc thêm `<router-outlet>` |
+| `ng serve` lỗi port `4200 already in use` | Port bị chiếm bởi process khác | Dùng `ng serve --port 4201` hoặc kill process cũ |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **Angular = Full Framework** — TypeScript, DI, Router, Forms, HTTP đều built-in. Opinionated → consistent cho large teams

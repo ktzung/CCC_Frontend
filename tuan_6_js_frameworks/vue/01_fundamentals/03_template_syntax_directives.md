@@ -540,6 +540,19 @@ Xây form đăng ký có:
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `[Vue warn]: Property "xxx" is not reactive` | Dùng object thường thay vì `reactive()` hoặc `ref()` | Bọc state bằng `reactive({})` hoặc `ref()` để Vue track thay đổi |
+| `v-for` render ra thứ tự sai / duplicate key warning | Dùng `index` làm `:key` khi list thay đổi thứ tự | Dùng `:key="item.id"` với giá trị unique, không dùng index |
+| `[Vue warn]: Avoid using v-if and v-for on the same element` | `v-if` và `v-for` trên cùng 1 element → xung đột priority | Tách ra: `<template v-for="...">` + `<div v-if="...">` hoặc dùng `computed` filter trước |
+| `v-model` không cập nhật giá trị input | Dùng `v-bind:value` thay vì `v-model` hoặc thiếu event handler | Dùng `v-model="state.field"` — tự tạo two-way binding |
+| `v-show` không ẩn được element | `v-show` dùng `display: none` — không hoạt động trên `<template>` | Chuyển sang `v-if` cho `<template>`, hoặc bọc trong `<div>` rồi dùng `v-show` |
+| Class/style không apply | Sai syntax object hoặc conflict với static `class` | Dùng `:class="{ active: isActive }"` hoặc `:class="[classA, classB]"` |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **`v-if`** = DOM add/remove (ít thay đổi). **`v-show`** = CSS hide (toggle thường xuyên). **`:key` bắt buộc** trong `v-for`

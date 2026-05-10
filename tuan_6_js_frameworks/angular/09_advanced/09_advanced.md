@@ -370,6 +370,19 @@ describe('ProductCardComponent', () => {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `signal is not a function` | Angular version < 17 hoặc import sai | Upgrade: `ng update @angular/core @angular/cli` |
+| OnPush không update UI | Không dùng `markForCheck()` sau thay đổi | Inject `ChangeDetectorRef`, gọi `cdr.markForCheck()` hoặc dùng Signal |
+| `computed()` không re-evaluate | Signal dependency không đổi reference | Đảm bảo dùng `.set()` thay vì mutate object |
+| Custom pipe không update khi data đổi | `pure: true` và data mutation | Đặt `pure: false` hoặc đảm bảo input reference thay đổi |
+| `TestBed.createComponent` lỗi component not found | Component chưa import vào TestBed | Thêm component vào `imports: []` của TestBed config |
+| `HttpClientTestingModule` không intercept | Không gọi `expectOne()` | Luôn gọi `httpMock.expectOne(url).flush(data)` trong test |
+
+---
+
 ## 8. 📌 Summary
 
 1. **Signals** (Angular 17+): `signal()` + `computed()` + `effect()` — fine-grained reactivity, no RxJS overhead for state

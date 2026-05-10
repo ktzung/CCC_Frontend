@@ -294,6 +294,19 @@ export class SearchComponent implements OnDestroy {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| Observable không emit giá trị | Chưa subscribe (Observable là lazy) | Gọi `.subscribe()` hoặc dùng `async pipe` |
+| `Maximum call stack size exceeded` | Recursive subscription | Kiểm tra unsubscribe condition; dùng `take(1)` |
+| `switchMap` cancel request quá sớm | Dùng cho form submit thay vì search | Form submit → `exhaustMap()` hoặc `mergeMap()` |
+| Memory leak sau navigate | Quên unsubscribe | `takeUntil(destroy$)` hoặc `takeUntilDestroyed()` |
+| `Subject` mới subscriber không nhận giá trị cũ | Dùng `Subject` thay vì `BehaviorSubject` | Chuyển sang `BehaviorSubject(initialValue)` |
+| Operator chain dài khó debug | Pipe nhiều operators | Tách thành private methods, dùng `tap()` cho logging |
+
+---
+
 ## 8. 📌 Summary
 
 1. **Observable**: Lazy stream of values. Must subscribe. `next/error/complete` protocol

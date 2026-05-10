@@ -83,6 +83,18 @@ body {
 **Danh sách properties ĐƯỢC inherit:**
 `color`, `font-*` (family/size/weight/style), `line-height`, `letter-spacing`, `text-*` (align/decoration/transform), `list-style-*`, `cursor`, `visibility`
 
+**Danh sách properties KHÔNG inherit (quan trọng để nhớ):**
+
+| Category | Properties không inherit | Tại sao? |
+|---|---|---|
+| **Box Model** | `margin`, `padding`, `border`, `width`, `height` | Mỗi element có hộp riêng — không thể "thừa kế" kích thước |
+| **Background** | `background`, `background-color`, `background-image` | Nếu inherit → con cháu sẽ chồng chéo background |
+| **Position** | `position`, `top`, `right`, `bottom`, `left`, `z-index` | Vị trí riêng cho từng element |
+| **Display** | `display`, `overflow`, `float`, `clear` | Layout behavior riêng |
+| **Flex/Grid** | `flex`, `grid`, `justify-content`, `align-items` | Container properties — con tự quản layout |
+
+> 💡 **Tại sao box properties không inherit?**想象 nếu `border` inherit — bạn set `border` cho `body` → MỌI element trên trang đều có border → hỗn loạn. Đó là lý do CSS chọn chỉ inherit text properties.
+
 **Force và Reset inheritance:**
 ```css
 .child {

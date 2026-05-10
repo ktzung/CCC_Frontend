@@ -354,6 +354,19 @@ function close() { emit('update:modelValue', false) }
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `[Vue warn]: Extraneous non-emits event listeners (onXxx)` | Parent truyền event listener mà child không khai báo `defineEmits` | Thêm `const emit = defineEmits(['eventName'])` trong child |
+| `[Vue warn]: Invalid prop: type check failed for prop "xxx"` | Truyền sai type prop (string thay vì number, null thay vì object) | Kiểm tra `defineProps({ xxx: { type: Number, required: true } })` và data truyền vào |
+| Slot content không hiển thị | Đặt nội dung slot vào attribute thay vì child element | Dùng `<template #slotName>Nội dung</template>` thay vì `<Component #slotName="Nội dung">` |
+| `defineExpose` không hoạt động | Dùng `defineExpose` trong `<script>` thường (không phải `<script setup>`) | `defineExpose` chỉ hoạt động với `<script setup>`. Dùng `expose: ['method']` trong Options API |
+| `<Teleport>` render sai vị trí | Target selector không tồn tại khi component mount | Đảm bảo target element (ví dụ `<div id="modals">`) tồn tại trong `index.html` trước khi mount app |
+| `ref` trên component trả về `undefined` | Template ref tên không khớp hoặc component chưa mount | Kiểm tra `ref="myRef"` khớp với `const myRef = ref(null)`, chỉ truy cập trong `onMounted` |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **SFC** = `<template>` + `<script setup>` + `<style scoped>`. Mỗi `.vue` file = 1 component độc lập

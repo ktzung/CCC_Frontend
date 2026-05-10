@@ -282,6 +282,19 @@ setTimeout(() => {
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Uncaught ReferenceError: xxx is not defined` | Biến/function chưa khai báo hoặc script chưa load | Kiểm tra tên biến có chính tả không. Kiểm tra `<script>` tag có trong HTML không |
+| `Cannot read properties of null` | `querySelector` trả về null — element chưa tồn tại khi JS chạy | Đặt `<script>` cuối `<body>` hoặc dùng `defer` |
+| JS không chạy gì cả | Thiếu `<script>` tag hoặc sai đường dẫn file | Kiểm tra Network tab → file JS có load được không (status 200) |
+| `Unexpected token` | Thiếu dấu `;`, `)`, `}` hoặc thừa dấu `,` cuối object/array | Đọc dòng lỗi → kiểm tra cú pháp dòng đó |
+| Console hiện kết quả cũ | Browser cache file JS cũ | Ctrl+Shift+R (hard refresh) hoặc勾选 "Disable cache" trong Network tab |
+| `alert()` hiện `[object Object]` | Truyền object vào `alert()` thay vì string | Dùng `console.log(object)` hoặc `alert(JSON.stringify(object))` |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *"JS chạy rồi," Minh nói. "Nhưng mình cần lưu tên todo, đếm số lượng, tính tổng. Mình cần biến và kiểu dữ liệu."*

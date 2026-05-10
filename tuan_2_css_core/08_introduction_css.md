@@ -105,15 +105,49 @@ selector {
 
 ### CSS Properties thường dùng nhất
 
-| Category | Properties | Ví dụ |
-|---|---|---|
-| **Text** | `color`, `font-size`, `font-family`, `font-weight`, `text-align`, `line-height` | Màu, cỡ, font, canh chỉnh |
-| **Background** | `background-color`, `background-image`, `background-size` | Nền màu, nền ảnh |
-| **Spacing** | `margin`, `padding` | Khoảng cách ngoài/trong |
-| **Border** | `border`, `border-radius`, `outline` | Viền, bo tròn |
-| **Size** | `width`, `height`, `max-width`, `min-height` | Kích thước |
-| **Display** | `display`, `visibility`, `opacity` | Hiển thị/ẩn |
-| **Flexbox** | `flex`, `justify-content`, `align-items` | Layout hiện đại |
+| Category | Properties | Ví dụ | Ghi chú |
+|---|---|---|---|
+| **Text** | `color`, `font-size`, `font-family`, `font-weight`, `text-align`, `line-height`, `text-decoration`, `text-transform` | `color: #1e293b; font-size: 16px;` | `font-weight`: 400=normal, 700=bold |
+| **Background** | `background-color`, `background-image`, `background-size`, `background-position`, `background-repeat` | `background: #f0f9ff;` | Shorthand: `background: url(img.jpg) center/cover` |
+| **Spacing** | `margin`, `padding` (top/right/bottom/left) | `margin: 16px; padding: 12px 24px;` | 2 giá trị = top&bottom, left&right |
+| **Border** | `border`, `border-radius`, `outline`, `box-shadow` | `border: 1px solid #e2e8f0; border-radius: 8px;` | `outline` không chiếm không gian như border |
+| **Size** | `width`, `height`, `max-width`, `min-height`, `min-width` | `width: 100%; max-width: 600px;` | `max-width` + `margin: auto` = responsive center |
+| **Display** | `display` (block/inline/inline-block/flex/grid/none), `visibility`, `opacity` | `display: flex; gap: 16px;` | `display: none` = ẩn hoàn toàn, không chiếm chỗ |
+| **Position** | `position` (static/relative/absolute/fixed/sticky), `top`, `right`, `bottom`, `left`, `z-index` | `position: sticky; top: 0;` | Học chi tiết ở Bài 12 |
+| **Flexbox** | `display: flex`, `justify-content`, `align-items`, `flex-direction`, `gap`, `flex-wrap` | `display: flex; justify-content: space-between;` | Layout 1 chiều — dùng phổ biến nhất |
+| **Grid** | `display: grid`, `grid-template-columns`, `grid-template-rows`, `gap` | `display: grid; grid-template-columns: repeat(3, 1fr);` | Layout 2 chiều — mạnh hơn Flex |
+| **Overflow** | `overflow`, `overflow-x`, `overflow-y` | `overflow: hidden;` | `hidden` = cắt, `scroll` = thêm scrollbar, `auto` = scroll khi cần |
+| **Transition** | `transition`, `transition-property`, `transition-duration` | `transition: all 0.3s ease;` | Hiệu ứng mượt khi state thay đổi |
+| **Transform** | `transform` (translate, rotate, scale, skew) | `transform: scale(1.05);` | Thường dùng với transition cho hover effects |
+
+### CSS Values — Các loại giá trị
+
+```css
+/* Keyword values */
+display: flex;
+position: sticky;
+cursor: pointer;
+
+/* Length values */
+width: 300px;           /* Pixels — cố định */
+font-size: 1.25rem;     /* Relative to root font-size (1rem = 16px mặc định) */
+padding: 2em;           /* Relative to element's font-size */
+width: 80%;             /* Relative to parent's width */
+height: 100vh;          /* Viewport height */
+gap: 1.5rem;
+
+/* Color values */
+color: #2563eb;         /* Hex (phổ biến nhất) */
+color: rgb(37, 99, 235); /* RGB */
+color: hsl(217, 91%, 53%); /* HSL */
+color: rgba(0, 0, 0, 0.5); /* RGB + alpha (trong suốt) */
+color: currentColor;    /* Kế thừa color từ element cha */
+
+/* Multi-value (shorthand) */
+margin: 10px 20px;              /* top-bottom left-right */
+border: 1px solid #e2e8f0;     /* width style color */
+transition: all 0.3s ease;     /* property duration timing */
+```
 
 ---
 
@@ -135,6 +169,20 @@ body {
 }
 ```
 
+### CSS Units — Bảng tham chiếu nhanh
+
+| Unit | Loại | Ví dụ | Khi nào dùng |
+|---|---|---|---|
+| `px` | Absolute | `width: 300px;` | Border, box-shadow, cố định chính xác |
+| `rem` | Relative (root) | `font-size: 1.25rem;` | ⭐ Font-size, spacing — **ưu tiên dùng** |
+| `em` | Relative (parent) | `font-size: 1.2em;` | Component internal scaling |
+| `%` | Relative (parent) | `width: 80%;` | Width, responsive layout |
+| `vw/vh` | Viewport | `width: 100vw; height: 100vh;` | Full-screen sections, hero |
+| `fr` | Grid fraction | `grid-template-columns: 1fr 2fr;` | CSS Grid layout |
+| `auto` | Keyword | `margin: 0 auto;` | Căn giữa, flexible sizing |
+
+> 💡 **Quy tắc:** Dùng `rem` cho font-size và spacing (consistent trên toàn site). Dùng `px` cho border và shadow (cố định). Dùng `%` hoặc `fr` cho layout width.
+
 ---
 
 ## 4. 🟢 Simplified Layer — Một câu nhớ mãi
@@ -154,7 +202,7 @@ body {
 - **Maintainability**: Tách HTML (structure) và CSS (presentation) → team làm song song được
 - **Performance**: Minified CSS (xóa space, comment) → file nhỏ hơn → load nhanh hơn
 
-### CSS trong production thực tế (Shopee, 2024):
+### CSS trong production thực tế (Shopee):
 
 ```
 styles/

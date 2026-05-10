@@ -149,6 +149,55 @@ thead th {
 
 > 💡 **z-index chỉ hoạt động khi `position ≠ static`**. Element `static` không respond z-index.
 
+### Stacking Context — Tại sao z-index "không hoạt động"?
+
+z-index **chỉ so sánh trong cùng một stacking context**. Nhiều property tạo stacking context mới:
+
+```css
+/* Các property TẠO stacking context mới: */
+.parent {
+    position: relative;  /* hoặc absolute/fixed/sticky */
+    z-index: 1;          /* Cần position + z-index */
+    opacity: 0.99;       /* opacity < 1 cũng tạo stacking context! */
+    transform: scale(1); /* transform bất kỳ */
+    filter: blur(0);     /* filter bất kỳ */
+}
+```
+
+**Ví dụ bug thực tế:**
+```css
+/* ❌ Bug: Dropdown bị che dù z-index rất cao */
+.parent {
+    position: relative;
+    z-index: 1;
+    opacity: 0.99;           /* ← Tạo stacking context mới! */
+}
+.dropdown {
+    position: absolute;
+    z-index: 9999;           /* Vô dụng — bị giới hạn trong .parent */
+}
+
+/* ✅ Sửa: Bỏ opacity khỏi parent hoặc đặt dropdown RA NGOÀI parent */
+```
+
+> 💡 **Quy tắc:** z-index 9999 trong stacking context con **luôn thua** z-index 1 trong stacking context cha. Giống như "vua một nước" — dù chỉ là vua nhỏ, vẫn lớn hơn mọi người trong nước mình.
+
+### `transform` tạo containing block mới cho `absolute`
+
+```css
+/* ⚠️ Gotcha: transform trên cha thay đổi cách absolute con tính tọa độ */
+.parent {
+    position: relative;
+    transform: translateX(10px);  /* ← Tạo containing block mới! */
+}
+.child {
+    position: absolute;
+    top: 0; left: 0;  /* Bây giờ tính từ .parent, KHÔNG phải từ vị trí gốc */
+}
+```
+
+> 💡 Trước khi thêm `transform` vào element có `absolute` con, hãy kiểm tra xem vị trí con có bị ảnh hưởng không.
+
 ---
 
 ### Pattern thực tế — E-commerce

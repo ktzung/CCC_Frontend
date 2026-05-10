@@ -5,11 +5,11 @@
 
 ## 0. 🎬 Opening Hook
 
-*Khảo sát Stack Overflow 2024 với 65,000 lập trình viên:*
+*Khảo sát Stack Overflow 2025 với hơn 65,000 lập trình viên:*
 
-- **#1 JavaScript** — 12 năm liên tiếp là ngôn ngữ phổ biến nhất
-- **#1 Framework** — React (40.6% developer dùng)
-- **Fastest growing** — Svelte, Bun, Rust
+- **#1 JavaScript** — 13 năm liên tiếp là ngôn ngữ phổ biến nhất
+- **#1 Framework** — React (vẫn dẫn đầu với ~40% developer)
+- **Fastest growing** — Svelte, Bun, Rust, HTMX
 
 *Nhưng jQuery — từng là "thần thánh" năm 2012 — giờ còn không xuất hiện trong top 10.*
 
@@ -61,9 +61,10 @@ Web development hiện tại chia thành các lớp công nghệ:
 | **Svelte** | Rich Harris | Performance, code ít hơn | ~5% (đang tăng) |
 
 **Xu hướng quan trọng:**
-- **TypeScript** đang trở thành **bắt buộc** — không còn là optional. 78% developer dùng TypeScript trong 2024.
+- **TypeScript** đang trở thành **bắt buộc** — không còn là optional. Hơn 80% developer dùng TypeScript trong 2025.
 - **Vite** thay thế Webpack — build nhanh hơn 10–100 lần. Mọi project mới đều dùng Vite.
 - **React Server Components** — render trên server, giảm JS gửi về client. Đây là tương lai của React.
+- **HTMX** — thư viện nhỏ cho phép tạo dynamic UI bằng HTML attributes, không cần viết JS. Đang nổi trong cộng đồng "return to simplicity".
 
 ---
 
@@ -113,7 +114,7 @@ Hype (mới, mọi người nói)
 
 ## 5. 🏭 Real-world Layer
 
-**Thực tế tại các công ty Việt Nam (2024–2025):**
+**Thực tế tại các công ty Việt Nam (2025–2026):**
 
 | Công ty | Frontend | Backend | Cloud |
 |---|---|---|---|
@@ -134,7 +135,7 @@ Hype (mới, mọi người nói)
 
 **Bài tập: Đọc xu hướng từ dữ liệu thực**
 
-1. Vào [Stack Overflow Developer Survey 2024](https://survey.stackoverflow.co/2024/)
+1. Vào [Stack Overflow Developer Survey](https://survey.stackoverflow.co/) (mới nhất)
 2. Tìm section **"Technology"** → **"Web Frameworks and Technologies"**
 3. Trả lời:
    - Top 3 framework phổ biến nhất là gì?

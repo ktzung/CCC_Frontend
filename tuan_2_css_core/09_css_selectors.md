@@ -90,13 +90,47 @@ a  { color: #2563eb; text-decoration: none; }
 /* Specificity cao → khó override → dùng hạn chế */
 ```
 
-**5. Attribute Selector — Nhắm theo attribute:**
+**5. Attribute Selector — Nhắm theo attribute (mạnh mẽ hơn bạn nghĩ):**
+
 ```css
+/* === Exact match === */
 input[type="email"]     { border-color: #2563eb; }
 input[type="password"]  { font-family: monospace; }
-a[target="_blank"]::after { content: " ↗"; }       /* Link ngoài thêm icon */
+
+/* === Substring matching (rất hữu ích!) === */
 a[href^="https"]        { color: green; }            /* Bắt đầu bằng https */
+a[href$=".pdf"]::after  { content: " 📄"; }          /* Kết thúc bằng .pdf */
+a[href*="github"]       { color: #333; }             /* CHỨA "github" ở bất kỳ đâu */
+
+/* ^ = bắt đầu, $ = kết thúc, * = chứa */
+
+/* === Presence & partial match === */
+input[required]         { border-left: 3px solid #2563eb; }  /* Có attribute required */
+input[disabled]         { opacity: 0.5; }                     /* Có attribute disabled */
+[class*="btn"]          { cursor: pointer; }                  /* Class CHỨA "btn" */
+
+/* === Case-insensitive match (thêm i flag) === */
+input[type="email" i]   { }  /* Match "email", "Email", "EMAIL" */
+
+/* === Language selector === */
+html[lang="vi"]         { font-family: 'Inter', sans-serif; }
+html[lang="en"]         { font-family: 'Roboto', sans-serif; }
+p:lang(vi)              { line-height: 1.8; }  /* Paragraph tiếng Việt */
 ```
+
+**Bảng tổng hợp attribute selectors:**
+
+| Selector | Ý nghĩa | Ví dụ match |
+|---|---|---|
+| `[attr]` | Có attribute này | `[required]` → `<input required>` |
+| `[attr="val"]` | Chính xác bằng "val" | `[type="email"]` → chỉ "email" |
+| `[attr^="val"]` | **Bắt đầu** bằng "val" | `[href^="https"]` → `https://...` |
+| `[attr$="val"]` | **Kết thúc** bằng "val" | `[href$=".pdf"]` → `file.pdf` |
+| `[attr*="val"]` | **Chứa** "val" | `[href*="github"]` → `github.com` |
+| `[attr~="val"]` | Có từ "val" trong list | `[class~="active"]` → `class="btn active"` |
+| `[attr\|="val"]` | Bắt đầu bằng "val" hoặc "val-" | `[lang\|="en"]` → `en`, `en-US` |
+
+> 💡 **Thực tế:** Attribute selectors rất mạnh cho styling form — `input:not([type="hidden"]):not([type="submit"])` chọn tất cả input nhập liệu mà không cần thêm class.
 
 ---
 
@@ -148,6 +182,40 @@ li:nth-child(even) { background: white; }    /* Dòng chẵn (2,4,6...) */
 input:valid    { border-color: #22c55e; }  /* Đang hợp lệ */
 input:invalid  { border-color: #ef4444; }  /* Đang không hợp lệ */
 input:required { border-left: 3px solid #2563eb; }
+
+/* :not() — Loại trừ phần tử không khớp */
+li:not(:last-child) { border-bottom: 1px solid #e2e8f0; }  /* Tất cả li trừ li cuối */
+p:not(.special) { color: #64748b; }  /* Tất cả p trừ p.special */
+input:not([type="submit"]) { border: 1px solid #cbd5e1; }  /* Tất cả input trừ submit */
+.card:not(.featured):not(.disabled) { opacity: 0.8; }  /* Loại trừ nhiều class */
+
+/* :has() — "Parent selector" (CSS mới, 2023+) */
+.card:has(img) { padding: 0; }           /* Card chứa ảnh */
+form:has(:invalid) { border-color: red; } /* Form có input lỗi */
+li:has(> a.active) { font-weight: bold; } /* Li chứa link active */
+
+/* :is() — Viết ngắn hơn, giảm lặp lại */
+/* ❌ Trước đây: */
+h1 { color: blue; }
+h2 { color: blue; }
+h3 { color: blue; }
+.card h1, .card h2, .card h3 { color: blue; }
+
+/* ✅ Với :is(): */
+:is(h1, h2, h3) { color: blue; }
+.card :is(h1, h2, h3) { color: blue; }
+
+/* :is() áp dụng specificity của argument cao nhất */
+:is(#main, .card) p { color: red; }  /* Specificity = 1-0-1 (từ #main) */
+
+/* :where() — Giống :is() nhưng specificity = 0 */
+:where(#main, .card) p { color: red; }  /* Specificity = 0-0-1 (chỉ từ p) */
+/* Hữu ích cho CSS Reset — dễ override sau này */
+
+/* :is() trong context thực tế */
+nav :is(a, button):hover { color: #2563eb; }
+article :is(h1, h2, h3):first-child { margin-top: 0; }
+form :is(input, select, textarea):focus { outline: 2px solid #2563eb; }
 ```
 
 ---
@@ -284,6 +352,74 @@ nav a.active { color: #2563eb; border-bottom: 2px solid #2563eb; }
 
 ---
 
+### Bài tập Bonus: Specificity Calculator (10 phút)
+
+Tính specificity cho mỗi selector sau — viết đáp án trước, rồi kiểm tra bằng DevTools:
+
+| # | Selector | A | B | C | Ghi chú |
+|---|---|---|---|---|---|
+| 1 | `p` | ? | ? | ? | |
+| 2 | `.card` | ? | ? | ? | |
+| 3 | `#main` | ? | ? | ? | |
+| 4 | `.card .title` | ? | ? | ? | |
+| 5 | `#main .card .title` | ? | ? | ? | |
+| 6 | `#main .card h2` | ? | ? | ? | |
+| 7 | `.card:hover` | ? | ? | ? | Pseudo-class tính là class |
+| 8 | `a[href^="https"]` | ? | ? | ? | Attribute selector tính là class |
+| 9 | `#nav .item.active:hover` | ? | ? | ? | |
+| 10 | `body header nav a` | ? | ? | ? | |
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+| # | Selector | A | B | C | Tổng |
+|---|---|---|---|---|---|
+| 1 | `p` | 0 | 0 | 1 | 1 |
+| 2 | `.card` | 0 | 1 | 0 | 10 |
+| 3 | `#main` | 1 | 0 | 0 | 100 |
+| 4 | `.card .title` | 0 | 2 | 0 | 20 |
+| 5 | `#main .card .title` | 1 | 2 | 0 | 120 |
+| 6 | `#main .card h2` | 1 | 2 | 1 | 121 |
+| 7 | `.card:hover` | 0 | 2 | 0 | 20 (hover tính như class) |
+| 8 | `a[href^="https"]` | 0 | 1 | 1 | 11 (attribute tính như class) |
+| 9 | `#nav .item.active:hover` | 1 | 3 | 0 | 130 |
+| 10 | `body header nav a` | 0 | 0 | 4 | 4 |
+
+**Bài học:** 10 class ≠ 1 ID. Specificity tính theo **cột**, không phải số thập phân. Cột A luôn thắng B, B luôn thắng C.
+
+</details>
+
+---
+
+### Bài tập Bonus 2: Selector Challenge (15 phút)
+
+Viết selector cho mỗi yêu cầu sau — KHÔNG dùng thêm class mới:
+
+1. Chọn tất cả link **ngoài** (bắt đầu bằng `https://`) → thêm icon ↗
+2. Chọn **dòng lẻ** trong bảng → đổi nền xám nhạt
+3. Chọn input **đang focus** và **không hợp lệ** → viền đỏ
+4. Chọn card **chứa ảnh** → bỏ padding
+5. Chọn **paragraph đầu tiên** trong mỗi article → bỏ margin-top
+6. Chọn button **không bị disabled** → thêm cursor pointer
+7. Chọn link **file PDF** → thêm icon 📄
+8. Chọn **heading ngay sau** paragraph → thêm margin-top
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. `a[href^="https://"]::after { content: " ↗"; }`
+2. `tbody tr:nth-child(even) { background: #f8fafc; }`
+3. `input:focus:invalid { border-color: #ef4444; outline-color: #ef4444; }`
+4. `.card:has(img) { padding: 0; }`
+5. `article p:first-of-type { margin-top: 0; }` (dùng `:first-of-type` thay vì `:first-child` để linh hoạt hơn)
+6. `button:not(:disabled) { cursor: pointer; }`
+7. `a[href$=".pdf"]::after { content: " 📄"; }`
+8. `p + h2, p + h3 { margin-top: 24px; }` (adjacent sibling)
+
+</details>
+
+---
+
 ## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
 | Hiểu sai | Sự thật |
@@ -293,6 +429,9 @@ nav a.active { color: #2563eb; border-bottom: 2px solid #2563eb; }
 | **"`:hover` chỉ dùng được cho link `<a>`"** | `:hover` dùng được với MỌI element: div, button, img, table row... |
 | **"Pseudo-element `::before/::after` cần HTML"** | Không — `::before/::after` tạo ra element CSS thuần túy. Nhưng **cần `content: ""`** để element tồn tại |
 | **"Specificity tính bằng cộng số"** | Gần đúng nhưng không phải số thập phân. 11 class selectors ≠ 1 ID selector (dù 11 × 10 = 110) — thực ra là **ba cột riêng biệt** |
+| **"`:is()` và `:where()` giống hệt nhau"** | `:is()` lấy specificity từ argument cao nhất. `:where()` luôn có specificity = 0 → dễ override hơn. Dùng `:where()` cho CSS Reset |
+| **"`:has()` chỉ dùng cho styling"** | `:has()` thay đổi cách bạn viết CSS — trước đây cần JS để "style cha dựa vào con". Giờ CSS làm được: `.item:has(.error) { border: red }` |
+| **"Chỉ dùng class selector là đủ"** | Class rất tốt nhưng attribute selectors (`[type="email"]`, `[required]`) mạnh hơn cho form styling — không cần thêm class vào HTML |
 
 ---
 
@@ -330,10 +469,10 @@ nav a.active { color: #2563eb; border-bottom: 2px solid #2563eb; }
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **Class selector `.class`** = lựa chọn mặc định, linh hoạt, dùng 90% thời gian
-2. **Specificity hierarchy**: `!important` > inline > `#id` > `.class` > `tag` > `*`
+2. **Specificity hierarchy**: `!important` > inline > `#id` > `.class`/`:pseudo-class`/`[attribute]` > `tag` > `*`
 3. **Combinator**: space (descendant), `>` (child), `+` (adjacent), `~` (sibling)
 4. **Pseudo-classes** (`:hover`, `:focus`, `:nth-child`) = trạng thái. **Pseudo-elements** (`::before`, `::after`) = phần tử giả
-5. **Debug specificity conflict**: DevTools Styles panel → rule bị gạch ngang = bị override
+5. **Modern selectors**: `:is()` (viết ngắn), `:where()` (specificity=0), `:has()` (parent selector), `[attr^/$/*]` (substring matching)
 
 ---
 

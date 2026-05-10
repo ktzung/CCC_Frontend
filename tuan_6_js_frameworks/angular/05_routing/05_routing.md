@@ -308,6 +308,19 @@ export class ProductDetailComponent implements OnInit {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Cannot match any routes. URL segment: 'X'` | Route path sai hoặc chưa khai báo | Kiểm tra `routes` array, đảm bảo path khớp |
+| `<router-outlet> is not a known element` | Thiếu `RouterModule` hoặc `provideRouter` | Thêm `RouterModule.forRoot(routes)` hoặc `provideRouter(routes)` |
+| `Can't bind to 'routerLink'` | Thiếu `RouterModule` trong imports | Import `RouterModule` vào component/module |
+| `Loading chunk failed` khi lazy load | Sai đường dẫn import | Kiểm tra `loadComponent: () => import('./path')` |
+| Params bị mất khi refresh page | Dùng `router.navigate` state (không persist) | Dùng route params (`:id`) thay vì state |
+| Guard redirect loop vô hạn | Guard redirect về chính route bị guard | Redirect về login/public route, không vòng |
+
+---
+
 ## 8. 📌 Summary
 
 1. **Lazy loading**: `loadComponent` / `loadChildren` → separate JS chunks → faster initial load

@@ -1,0 +1,21 @@
+# Solutions directories - không commit đáp án
+**/solutions/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Editor
+.vscode/
+*.code-workspace
+
+# Build
+node_modules/
+dist/
+.cache/
+
+# Audit reports (generated)
+QUALITY_AUDIT_REPORT.md
+UPGRADE_REPORT.md

@@ -61,7 +61,7 @@ Kết hợp cả 4 → UI premium
     );
 }
 
-/* Gradient text (hiệu ứng hot 2024) */
+/* Gradient text (hiệu ứng phổ biến) */
 .gradient-text {
     background: linear-gradient(90deg, #667eea, #764ba2);
     -webkit-background-clip: text;
@@ -224,19 +224,42 @@ transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bounce */
 
 **Bước 2: Gán cho element:**
 ```css
-/* animation: name duration timing iteration delay fill-mode */
+/* animation shorthand: name | duration | timing-function | iteration-count | delay | fill-mode | direction | play-state */
 
 .hero-title {
     animation: slideInUp 0.8s ease-out;
+    /* Tương đương:
+       animation-name: slideInUp;
+       animation-duration: 0.8s;
+       animation-timing-function: ease-out;
+       animation-iteration-count: 1;        (mặc định)
+       animation-delay: 0s;                 (mặc định)
+       animation-fill-mode: none;           (mặc định)
+    */
 }
 
 .notification-badge {
     animation: pulse 2s ease-in-out infinite;
+    /* infinite = lặp vô hạn */
 }
 
 .loading-spinner {
     animation: spin 0.8s linear infinite;
 }
+```
+
+**Bảng tham chiếu animation shorthand:**
+
+| Giá trị | Ý nghĩa | Ví dụ |
+|---|---|---|
+| `animation-name` | Tên @keyframes | `slideInUp`, `pulse` |
+| `animation-duration` | Thời gian chạy 1 lần | `0.3s`, `500ms` |
+| `animation-timing-function` | Tốc độ (giống transition) | `ease`, `linear`, `ease-in-out` |
+| `animation-iteration-count` | Số lần lặp | `1`, `3`, `infinite` |
+| `animation-delay` | Chờ trước khi bắt đầu | `0.5s`, `200ms` |
+| `animation-fill-mode` | Style trước/sau animation | `forwards` (giữ end state), `backwards`, `both` |
+| `animation-direction` | Chiều chạy | `normal`, `reverse`, `alternate` |
+| `animation-play-state` | Chạy/tạm dừng | `running`, `paused` |
 
 /* Skeleton loading (shimmer effect) */
 .skeleton {

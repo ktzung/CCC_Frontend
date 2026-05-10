@@ -364,6 +364,19 @@ console.log(message);
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Uncaught TypeError: Assignment to constant variable` | Gán lại biến `const` | Dùng `let` nếu cần reassign. `const` chỉ cho phép thay đổi nội dung object/array, không gán lại |
+| `"3" + 4 = "34"` (không phải 7) | Type coercion: `+` với string → nối chuỗi | Convert tường minh: `Number("3") + 4 = 7` |
+| `undefined` khi truy cập object | Key không tồn tại trong object | Dùng optional chaining: `user?.address?.city` hoặc check trước: `if (user.address)` |
+| `NaN` xuất hiện trong tính toán | `Number("abc")` = NaN, mọi phép tính với NaN = NaN | Kiểm tra input trước: `if (isNaN(value))` |
+| `const arr = [1,2,3]; arr.push(4)` — không lỗi! | `const` không cho reassign nhưng cho mutate nội dung | Đây là hành vi đúng. Nếu muốn immutable: `const arr2 = [...arr, 4]` |
+| Template literal không hoạt động | Dùng dấu `' '` hoặc `" "` thay vì `` ` ` `` | Phải dùng backtick `` ` `` (phím ~ trên bàn phím EN) |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *"Biến OK rồi," Minh nói. "Nhưng mình thấy `"5" + 3 = "53"` mà không được `8`. Và `null + 5 = 5`? JavaScript đang làm gì với kiểu dữ liệu vậy?"*

@@ -248,7 +248,7 @@ Tạo file `gallery.html` với:
 | Hiểu sai | Sự thật |
 |---|---|
 | **"`alt` để trống thì thôi"** | `alt=""` (chuỗi rỗng) là **hợp lệ** — dùng cho ảnh trang trí thuần túy. Nhưng thiếu `alt` hoàn toàn = lỗi accessibility |
-| **"WebP chưa đủ browser support"** | Năm 2024, WebP được support bởi **97%+ browser** — hãy dùng nó |
+| **"WebP chưa đủ browser support"** | WebP được support bởi **97%+ browser** — hãy dùng nó |
 | **"`loading='lazy'` cho tất cả ảnh để nhanh hơn"** | Ảnh đầu tiên user thấy (LCP image) **không nên lazy load** — phải tải ngay để tránh chậm LCP |
 | **"SVG không dùng được như ảnh bình thường"** | SVG hoàn toàn dùng được qua `<img src='logo.svg'>` — chỉ là không style được bằng CSS. Để style được phải dùng inline SVG |
 | **"Video HTML5 cần tải nhiều format"** | Chỉ cần **WebM + MP4** — hai format này cover 99%+ browser hiện đại |
@@ -283,7 +283,7 @@ Tạo file `gallery.html` với:
 
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
-1. **WebP cho ảnh, SVG cho icon** — hai lựa chọn format mặc định năm 2024+
+1. **WebP cho ảnh, SVG cho icon** — hai lựa chọn format mặc định hiện nay
 2. **Luôn thêm `width` + `height`** vào `<img>` — tránh CLS (layout shift)
 3. **`loading="lazy"`** chỉ cho ảnh bên dưới fold — không cho ảnh hero/logo
 4. **`<picture>`** cho progressive enhancement — AVIF → WebP → JPEG fallback

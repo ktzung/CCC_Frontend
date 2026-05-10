@@ -429,6 +429,20 @@ function increment() {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `[Vue warn]: Avoid mutating a prop directly` | Thay đổi prop value trong child component thay vì emit event lên parent | Dùng `emit('update:modelValue', newValue)` — để parent quyết định thay đổi state |
+| Props không reactive trong child | Truyền object prop rồi mutate nested property mà không dùng `reactive()` ở parent | Đảm bảo source ở parent là `reactive()` hoặc `ref()`, child sẽ nhận được reactivity |
+| `[Vue warn]: Expected Array, got: Object` | `defineProps` khai báo type sai (Array thay vì Object) | Kiểm tra type match: `defineProps({ items: { type: Array, default: () => [] } })` |
+| Provide/Inject không reactive | `provide('key', someValue)` truyền primitive — mất reactivity | Dùng `provide('key', ref(someValue))` hoặc `provide('key', reactive({...}))` |
+| Pinia store: `xxx is not defined` | Quên gọi `useStore()` trước khi truy cập state | Luôn gọi `const store = useStore()` trong `setup()`, truy cập qua `store.xxx` |
+| `v-model` trên custom component không sync | Component chỉ emit `update:modelValue` mà không nhận `modelValue` prop | Thêm `defineProps(['modelValue'])` kết hợp với `defineEmits(['update:modelValue'])` |
+| Event không bubble lên grandparent | Vue custom events không có DOM bubbling | Dùng provide/inject hoặc Pinia store để communicate qua nhiều tầng component |
+
+---
+
 ## 6. **TỔNG KẾT**
 
 - ✅ **Props** truyền data từ cha xuống con (one-way)

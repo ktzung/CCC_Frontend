@@ -338,6 +338,111 @@ Tạo layout Blog với cấu trúc:
 
 ---
 
+### 🪜 Step-by-Step: Grid Patterns từ đơn giản đến phức tạp (20 phút)
+
+**Bước 1: 2 cột equal (3 phút)**
+```html
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 bg-light p-3">Cột A (50%)</div>
+        <div class="col-md-6 bg-white p-3">Cột B (50%)</div>
+    </div>
+</div>
+```
+> Resize → mobile: xếp chồng. Tablet+: nằm ngang.
+
+**Bước 2: 3 cột product grid (3 phút)**
+```html
+<div class="container">
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card p-3">Sản phẩm 1</div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card p-3">Sản phẩm 2</div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card p-3">Sản phẩm 3</div>
+        </div>
+    </div>
+</div>
+```
+> `g-3` = gutter (khoảng cách giữa các cột). Không cần `g-3` → cột dính nhau.
+
+**Bước 3: Sidebar layout (3 phút)**
+```html
+<div class="container">
+    <div class="row">
+        <!-- Sidebar: ẩn trên mobile, hiện từ lg -->
+        <div class="col-lg-3 d-none d-lg-block bg-light p-3">
+            <h5>Sidebar</h5>
+            <ul class="list-unstyled">
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+            </ul>
+        </div>
+        <!-- Main: full trên mobile, 9/12 trên desktop -->
+        <div class="col-12 col-lg-9 p-3">
+            <h2>Nội dung chính</h2>
+            <p>Chiếm 75% trên desktop, 100% trên mobile.</p>
+        </div>
+    </div>
+</div>
+```
+
+**Bước 4: Dashboard cards (3 phút)**
+```html
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+        <div class="col">
+            <div class="card text-center p-3">
+                <h3 class="text-primary">1,234</h3>
+                <small class="text-muted">Đơn hàng</small>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center p-3">
+                <h3 class="text-success">56.789.000đ</h3>
+                <small class="text-muted">Doanh thu</small>
+            </div>
+        </div>
+        <!-- Thêm 2 cards nữa -->
+    </div>
+</div>
+```
+> `row-cols-*` = cách viết gọn hơn `col-*` trên mỗi item. Hữu ích khi tất cả items cùng kích thước.
+
+**Bước 5: Nested grid (3 phút)**
+```html
+<div class="row">
+    <div class="col-md-8 bg-light p-3">
+        <h3>Main (8/12)</h3>
+        <!-- Nested grid: 12 cột tính lại trong col-md-8 -->
+        <div class="row mt-3">
+            <div class="col-6 bg-white p-2">Nested A (50% của 8)</div>
+            <div class="col-6 bg-white p-2">Nested B (50% của 8)</div>
+        </div>
+    </div>
+    <div class="col-md-4 bg-white p-3">
+        <h3>Sidebar (4/12)</h3>
+    </div>
+</div>
+```
+
+---
+
+### 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| Cột không nằm ngang | Thiếu `<div class="row">` | Phải có Container → Row → Col |
+| Cột bị lệch, không đều | Tổng col > 12 trong 1 row | Đảm bảo tổng = 12 hoặc dùng `row-cols-*` |
+| `col-md-6` không responsive trên mobile | Không có `col-12` cho mobile | Thêm `col-12 col-md-6` |
+| `g-3` không có khoảng cách | Dùng `no-gutters` (BS4) thay vì `g-3` (BS5) | Dùng `g-3` trong Bootstrap 5 |
+| Nested grid không chia đúng | Tính theo 12 cột toàn màn hình thay vì 12 cột của cha | Nested col tính theo parent col, không phải viewport |
+
+---
+
 ## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
 | Hiểu sai | Sự thật |
@@ -408,6 +513,75 @@ Tạo layout Blog với cấu trúc:
 3. **Mobile-First**: Luôn bắt đầu bằng `col-12` cho mobile, thêm breakpoint lớn hơn
 4. **Tổng cột > 12** = wrap xuống dòng. **Tổng < 12** = khoảng trắng bên phải
 5. **`g-3`** trên Row = gap giữa các cột. **`d-none d-lg-block`** = ẩn trên mobile, hiện trên desktop
+
+---
+
+## 10. 📎 Phụ lục: Responsive Breakpoint Visual
+
+### Cách columns stack theo màn hình
+
+```
+col-12 col-md-6 col-lg-4
+
+MOBILE (< 768px):              TABLET (≥ 768px):           DESKTOP (≥ 992px):
+┌──────────────────────┐       ┌─────────────┬─────────────┐
+│      col-12 (100%)   │       │  col-md-6   │  col-md-6   │
+│      Item 1          │       │  Item 1     │  Item 2     │
+├──────────────────────┤       ├─────────────┼─────────────┤
+│      col-12 (100%)   │       │  col-md-6   │  col-md-6   │
+│      Item 2          │       │  Item 3     │             │
+├──────────────────────┤       └─────────────┴─────────────┘
+│      col-12 (100%)   │
+│      Item 3          │       ┌───────┬───────┬───────┐
+└──────────────────────┘       │col-lg-4│col-lg-4│col-lg-4│
+                               │ Item 1 │ Item 2 │ Item 3 │
+                               └───────┴───────┴───────┘
+```
+
+### Quick Reference: col classes
+
+| Cần | Class | Giải thích |
+|-----|-------|------------|
+| 1 cột mobile, 2 tablet, 3 desktop | `col-12 col-md-6 col-lg-4` | Phổ biến nhất |
+| 2 cột mọi kích thước | `col-6` | Đơn giản |
+| Sidebar + Main | `col-lg-3` + `col-lg-9` | Blog, e-commerce |
+| 4 cards equal | `col-12 col-sm-6 col-lg-3` | Product grid |
+| Auto equal | `col` (không số) | Tự chia đều |
+| Cột căn giữa | `col-md-6 offset-md-3` | Form, content |
+
+---
+
+## 11. 🔍 DevTools: Inspect Grid
+
+1. **F12** → tab **Elements** → chọn `<div class="row">`
+2. Tab **Layout** (gần Computed) → thấy **Flexbox overlay**
+3. Hover vào từng `col-*` → thấy kích thước chính xác
+4. **Ctrl+Shift+M** → kéo resize → xem breakpoint nào đang hoạt động
+5. Tab **Computed** → tìm `display: flex` trên `.row` → xác nhận Bootstrap đang dùng Flexbox
+
+---
+
+## 12. ♿ Accessibility cho Grid
+
+```html
+<!-- ✅ Sử dụng semantic HTML thay vì div thuần -->
+<div class="container">
+    <div class="row">
+        <main class="col-lg-9">
+            <h1>Nội dung chính</h1>
+        </main>
+        <aside class="col-lg-3" aria-label="Sidebar">
+            <nav aria-label="Danh mục">
+                <!-- Sidebar navigation -->
+            </nav>
+        </aside>
+    </div>
+</div>
+
+<!-- ✅ Responsive table cho data bảng (không dùng grid cho data) -->
+<!-- Grid layout KHÔNG phù hợp cho screen reader đọc data bảng -->
+<!-- Dùng <table> thay vì grid cho dữ liệu có cấu trúc hàng/cột -->
+```
 
 ---
 

@@ -423,6 +423,19 @@ const expensiveCalc = memoize((n) => {
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `TypeError: xxx is not a function` | Gọi biến không phải function hoặc chưa import | Kiểm tra: có `export default` không? Import đúng chưa? |
+| Function trả về `undefined` | Thiếu `return` statement | Thêm `return` ở cuối function. Arrow: `() => value` (implicit return) |
+| Arrow function không có `this` | Arrow function kế thừa `this` từ scope cha | Dùng regular function nếu cần `this` riêng (event handlers, object methods) |
+| `arguments` không hoạt động trong arrow | Arrow function không có `arguments` object | Dùng rest params: `(...args) => {}` |
+| Closure giữ giá trị cũ | Closure "nhớ" biến, không phải giá trị | Đây là feature, không phải bug. Nếu cần giá trị mới → dùng `let` thay vì `var` trong loop |
+| Default param không hoạt động với `undefined` | Default param chỉ áp dụng khi giá trị là `undefined` | Không truyền `null` nếu muốn dùng default: `fn(undefined)` kích hoạt default |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *"500 email gửi xong. Functions giải quyết vấn đề lặp lại," Minh nói. "Nhưng sếp vừa giao thêm: xử lý 10.000 sản phẩm từ API, lọc theo giá và danh mục, sắp xếp, tính tổng. Mình cần một nơi lưu trữ tất cả."*

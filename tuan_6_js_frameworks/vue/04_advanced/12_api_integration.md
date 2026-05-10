@@ -346,6 +346,19 @@ async function handleSubmit() {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Network Error` hoặc `ERR_NETWORK` | Backend không chạy hoặc sai `baseURL` trong Axios | Kiểm tra backend đang chạy; sửa `baseURL: 'http://localhost:3000/api'` |
+| `CORS policy: No 'Access-Control-Allow-Origin' header` | Frontend và backend khác origin (port/domain) | Backend thêm `cors({ origin: 'http://localhost:5173' })` hoặc dùng proxy trong `vite.config.js` |
+| `AbortController` không cancel request | Tạo mới `AbortController()` mỗi lần fetch thay vì reuse | Tạo controller trong `onMounted`, gọi `controller.abort()` trong `onUnmounted` |
+| `TypeError: response.data is not iterable` | Dùng Axios mà truy cập `response.data` trực tiếp nhưng response đã bị unwrap | Axios: dùng `response.data`; fetch: dùng `await response.json()` |
+| `401 Unauthorized` lặp vô hạn (loop redirect) | Response interceptor redirect /login → trigger lại request → 401 again | Thêm flag `isRefreshing` để chặn nhiều redirect; dùng queue cho request đang chờ |
+| Data fetch 2 lần trong development (StrictMode) | Vue 3 strict mode gọi `setup()` 2 lần trong dev | Bình thường trong dev; nếu production cũng bị → kiểm tra component key hoặc re-mount logic |
+
+---
+
 ## 8. 📌 Summary
 
 1. **`useFetch(url)`** = composable chuẩn với loading/error/abort. URL reactive để auto re-fetch

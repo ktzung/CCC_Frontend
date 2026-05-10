@@ -370,6 +370,19 @@ export class ProductsComponent implements OnInit {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `HttpErrorResponse: Unknown URL` | Sai endpoint hoặc base URL chưa config | Kiểm tra URL trong service, dùng `environment.apiUrl` |
+| `CORS policy blocked` | Server thiếu `Access-Control-Allow-Origin` header | Backend thêm CORS header; dev dùng `proxy.conf.json` |
+| `Property 'subscribe' does not exist on type 'void'` | Service method không return Observable | Đảm bảo `return this.http.get<T>(url)` |
+| Response type là `Object` | Không truyền generic type cho `http.get()` | Dùng `http.get<Product[]>(url)` thay vì `http.get(url)` |
+| Interceptor không chạy | Chưa đăng ký interceptor | `provideHttpClient(withInterceptors([authInterceptor]))` |
+| `catchError` không fallback đúng | Quên `return` trong catchError | `catchError(err => { return of(fallback) })` — luôn return Observable |
+
+---
+
 ## 8. 📌 Summary
 
 1. **HttpClient** = `http.get<T>()`, `post()`, `put()`, `patch()`, `delete()` → returns **Observable**

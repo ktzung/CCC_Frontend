@@ -454,6 +454,20 @@ async function handleLogin() {
 
 ---
 
+## 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `[Vue Router warn]: No match found for location "/products"` | Chưa khai báo route `/products` trong `createRouter({ routes })` | Thêm `{ path: '/products', component: ProductsView }` vào mảng `routes` |
+| `Cannot read properties of undefined (reading 'params')` | Dùng `useRoute()` ngoài `<script setup>` hoặc ngoài component | Đảm bảo gọi `useRoute()` bên trong `<script setup>` của component |
+| Page trắng khi navigate bằng `router.push('/path')` | Component chưa được import hoặc path sai | Kiểm tra `import` component trong router file; kiểm tra chính tả path |
+| `NavigationDuplicated: Avoided redundant navigation to current location` | Gọi `router.push()` trùng URL hiện tại | Bọc trong `try/catch` hoặc dùng `router.replace()` thay vì `push()` |
+| Nested route không render `<router-view>` con | Component cha thiếu `<router-view />` trong template | Thêm `<router-view />` vào template của component layout cha |
+| Refresh trang → 404 trên server | Server không redirect mọi URL về `index.html` | Thêm redirect rule: `/* → /index.html` (Netlify: `_redirects`, Nginx: `try_files`) |
+| `useRoute()` trả về params rỗng | Dùng `route.params.id` trước khi navigation hoàn tất | Dùng `watch(() => route.params.id, ...)` hoặc `onMounted()` để đảm bảo route ready |
+
+---
+
 ## 9. 📌 Summary — 5 điều quan trọng nhất
 
 1. **`<RouterLink to>`** → không reload. **`<RouterView />`** → render component. Setup: `createRouter` + `app.use(router)`

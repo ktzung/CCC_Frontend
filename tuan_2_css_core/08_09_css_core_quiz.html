@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Kiểm Tra: CSS Core - Selectors & Properties</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --correct-text: #166534;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #4f46e5, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Score Board */
+        #score-board {
+            display: none;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--correct-border) 0%, #e2e8f0 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+            transition: background 1s ease-out;
+        }
+        
+        .score-inner {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .score-inner span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .feedback-msg {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 10px;
+        }
+
+        /* Questions */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .q-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .q-title span {
+            color: var(--primary);
+            margin-right: 8px;
+            font-weight: 700;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            background: white;
+        }
+
+        .option-label:hover {
+            border-color: #c7d2fe;
+            background-color: #f5f3ff;
+        }
+
+        .option-label input {
+            margin-top: 3px;
+            margin-right: 12px;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .option-text {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* State Classes */
+        .option-label.selected {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+
+        .quiz-submitted .option-label {
+            pointer-events: none;
+        }
+
+        .quiz-submitted .option-label.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+        }
+        .quiz-submitted .option-label.correct .option-text { color: var(--correct-text); font-weight: 500; }
+
+        .quiz-submitted .option-label.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: var(--wrong-text);
+            opacity: 0.8;
+        }
+        .quiz-submitted .option-label.wrong .option-text { color: var(--wrong-text); }
+
+        .quiz-submitted .option-label.correct::after {
+            content: '✓';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--correct-border);
+            font-weight: bold;
+        }
+
+        .quiz-submitted .option-label.wrong::after {
+            content: '✗';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--wrong-border);
+            font-weight: bold;
+        }
+
+        /* Explanation */
+        .explanation {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 1rem;
+            color: #334155;
+            display: none;
+            line-height: 1.6;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .explanation strong {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .quiz-submitted .explanation {
+            display: block;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        button.submit-btn {
+            background: linear-gradient(to right, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s;
+        }
+
+        button.submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+        }
+
+        button.submit-btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .question-card { padding: 20px; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Bài Đánh Giá CSS Core</h1>
+        <p class="subtitle">Nhiệm vụ 1: Selectors & Nhiệm vụ 2: Properties & Values</p>
+    </header>
+
+    <div id="score-board">
+        <div class="score-circle" id="score-circle">
+            <div class="score-inner">
+                <div id="score-text">0</div>
+                <span>/ 31</span>
+            </div>
+        </div>
+        <div class="feedback-msg" id="feedback-msg">Hoàn thành xuất sắc!</div>
+    </div>
+
+    <div id="quiz-container">
+        <!-- JS will render questions here -->
+    </div>
+
+    <div class="submit-container" id="submit-container">
+        <button class="submit-btn" onclick="submitQuiz()">Nộp Bài & Xem Giải Thích</button>
+    </div>
+</div>
+
+<script>
+const quizData = [
+  { q: "Có bao nhiêu cách chính để thêm CSS vào một trang web?", a: ["1", "2", "3", "4"], correct: 2, explain: "Có 3 cách: Inline (trong thẻ HTML), Internal (trong thẻ <style>), và External (trong file .css riêng)." },
+  { q: "Cách thêm CSS nào được ưu tiên sử dụng nhất trong các dự án thực tế (production)?", a: ["Inline CSS", "Internal CSS", "External CSS", "Tất cả đều được ưu tiên như nhau"], correct: 2, explain: "External CSS được ưu tiên nhất vì browser có thể cache file CSS, giúp tăng tốc độ tải trang, dễ dàng tái sử dụng và maintain." },
+  { q: "Đoạn mã CSS `* { margin: 0; padding: 0; box-sizing: border-box; }` thường được gọi là gì?", a: ["CSS Framework", "CSS Reset", "CSS Combinator", "CSS Animation"], correct: 1, explain: "Đây là CSS Reset cơ bản, giúp loại bỏ các giá trị margin/padding mặc định khác nhau giữa các trình duyệt để trang web hiển thị nhất quán." },
+  { q: "Trong CSS, selector nào dùng để chọn TẤT CẢ các phần tử trên trang?", a: [".all", "#all", "element", "*"], correct: 3, explain: "Universal selector (*) được dùng để chọn và áp dụng style cho mọi phần tử trên trang." },
+  { q: "Để chọn một phần tử có class là 'button', cú pháp selector nào sau đây là đúng?", a: ["#button", ".button", "button", "*button"], correct: 1, explain: "Class selector bắt đầu bằng dấu chấm (.), ví dụ: .button" },
+  { q: "Sự khác biệt chính giữa Class selector và ID selector là gì?", a: ["ID có thể dùng nhiều lần trên một trang, Class chỉ dùng 1 lần", "Class có specificity cao hơn ID", "ID chỉ nên xuất hiện duy nhất 1 lần trên một trang, Class có thể tái sử dụng nhiều lần", "Không có sự khác biệt"], correct: 2, explain: "ID mang tính duy nhất (unique) và có điểm specificity cao (100). Class có thể tái sử dụng nhiều lần cho nhiều phần tử khác nhau và có điểm specificity thấp hơn (10)." },
+  { q: "Selector `.card p` (có dấu cách ở giữa) có ý nghĩa gì?", a: ["Chọn tất cả thẻ <p> là con trực tiếp của .card", "Chọn thẻ <p> ngay liền sau .card", "Chọn TẤT CẢ thẻ <p> nằm bên trong .card ở bất kỳ cấp độ nào (Descendant)", "Chọn thẻ .card và thẻ <p> cùng lúc"], correct: 2, explain: "Dấu cách biểu thị Descendant combinator (chọn thế hệ con/cháu). Nó sẽ chọn tất cả thẻ p nằm bên trong phần tử có class card." },
+  { q: "Selector `.card > p` có ý nghĩa gì?", a: ["Chọn thẻ <p> là con trực tiếp (Child) của .card", "Chọn tất cả thẻ <p> bên trong .card", "Chọn thẻ <p> đứng trước .card", "Chọn thẻ <p> là phần tử giả của .card"], correct: 0, explain: "Dấu > biểu thị Child combinator, nó CHỈ chọn những thẻ là con trực tiếp (ngay cấp bậc dưới) của phần tử cha." },
+  { q: "Selector `h2 + p` sẽ chọn phần tử nào?", a: ["Tất cả thẻ <p> sau thẻ h2", "Thẻ <p> ngay liền sau thẻ h2 (Adjacent Sibling)", "Thẻ h2 đứng ngay trước thẻ <p>", "Thẻ <p> là con của h2"], correct: 1, explain: "Dấu + là Adjacent sibling combinator. Nó chọn phần tử đứng NGAY LIỀN kề sau một phần tử cụ thể (cùng chung phần tử cha)." },
+  { q: "Selector `h2 ~ p` khác `h2 + p` ở điểm nào?", a: ["Không khác biệt", "`h2 ~ p` chọn MỌI thẻ <p> nằm sau h2 (cùng cha), còn `h2 + p` chỉ chọn thẻ <p> ngay liền sau h2", "`h2 ~ p` chọn thẻ p là con của h2", "`h2 ~ p` có độ ưu tiên cao hơn"], correct: 1, explain: "Dấu ~ là General sibling combinator, chọn tất cả các phần tử anh em nằm sau nó, không bắt buộc phải đứng liền kề như dấu +." },
+  { q: "Cú pháp nào sau đây dùng để chọn các thẻ <input> có attribute type là 'email'?", a: ["input.email", "input#email", "input[type=\"email\"]", "input:email"], correct: 2, explain: "Cú pháp chọn theo attribute được đặt trong dấu ngoặc vuông [attr=\"value\"]." },
+  { q: "Trạng thái `:hover` trong CSS là gì?", a: ["Một phần tử giả (Pseudo-element)", "Một lớp giả (Pseudo-class) kích hoạt khi người dùng di chuột qua phần tử", "Một class CSS mặc định", "Trạng thái khi người dùng click vào phần tử"], correct: 1, explain: ":hover là Pseudo-class, áp dụng style khi người dùng tương tác bằng cách di chuột lên phần tử (nhưng chưa click)." },
+  { q: "Muốn style cho các phần tử ở dòng chẵn trong một danh sách <li>, bạn dùng selector nào?", a: ["li:nth-child(even)", "li:nth-child(odd)", "li:even", "li:nth-child(2)"], correct: 0, explain: ":nth-child(even) sẽ chọn các phần tử có chỉ mục chẵn (2, 4, 6...). Tương tự :nth-child(odd) cho phần tử lẻ." },
+  { q: "Để tạo một hiệu ứng phủ màu (overlay) hoặc thêm nội dung ảo trước một phần tử bằng CSS mà không cần viết thêm HTML, ta dùng gì?", a: ["::before và ::after", ":hover và :active", ":first-child và :last-child", "Không thể làm được bằng CSS"], correct: 0, explain: "::before và ::after là các Pseudo-elements cho phép chèn nội dung ảo vào trước/sau nội dung của phần tử HTML (yêu cầu phải có thuộc tính content)." },
+  { q: "Pseudo-class `:focus` thường được áp dụng nhất cho các phần tử nào?", a: ["Hình ảnh <img>", "Thẻ tiêu đề <h1>", "Các phần tử form như <input>, <textarea> khi chúng đang được chọn để nhập liệu", "Thẻ <div>"], correct: 2, explain: ":focus kích hoạt khi một phần tử được nhấp vào hoặc điều hướng tới bằng bàn phím (như thẻ input khi bạn đang gõ chữ vào đó)." },
+  { q: "Trong CSS, 'Specificity' (độ đặc hiệu) có nghĩa là gì?", a: ["Tốc độ trình duyệt đọc file CSS", "Quy tắc xác định bộ chọn nào sẽ 'thắng' (được áp dụng) khi có nhiều quy tắc cùng trỏ đến một phần tử", "Mức độ phức tạp của mã HTML", "Số lượng class trên một phần tử"], correct: 1, explain: "Specificity là hệ thống tính điểm của trình duyệt để quyết định xem style nào sẽ được ưu tiên hiển thị nếu có xung đột (conflict)." },
+  { q: "Điểm Specificity của ID selector (#header) so với Class selector (.btn) thì như thế nào?", a: ["ID có specificity thấp hơn Class", "ID và Class có specificity bằng nhau", "ID có specificity cao hơn Class (100 so với 10)", "Tùy thuộc vào vị trí viết trong file CSS"], correct: 2, explain: "Specificity được tính theo thứ tự: ID (100 điểm) > Class/Pseudo-class/Attribute (10 điểm) > Tag/Pseudo-element (1 điểm)." },
+  { q: "Cho 2 rule CSS sau:<br>1: `.title { color: green; }`<br>2: `#main .title { color: red; }`<br>Chữ sẽ có màu gì và tại sao?", a: ["Màu xanh (green) vì viết trước", "Màu xanh (green) vì class .title phổ biến hơn", "Màu đỏ (red) vì #main .title có specificity cao hơn (110 điểm so với 10 điểm)", "Màu đỏ (red) vì viết sau"], correct: 2, explain: "Quy tắc #main .title có 1 ID (100) + 1 Class (10) = 110 điểm. Quy tắc .title chỉ có 1 Class = 10 điểm. 110 > 10 nên màu đỏ thắng." },
+  { q: "Trường hợp nào sau đây có specificity (độ ưu tiên) cao nhất, vượt qua cả ID selector?", a: ["Class selector", "Inline style (ví dụ: <div style=\"color: red;\">)", "Universal selector (*)", "Thẻ HTML (ví dụ: div)"], correct: 1, explain: "Inline style có mức độ ưu tiên rất cao (1000 điểm), ghi đè hầu hết các CSS được viết trong file external (trừ khi có !important)." },
+  { q: "Tại sao việc sử dụng `!important` trong CSS bị coi là một 'anti-pattern' (thói quen xấu)?", a: ["Vì nó làm trang web tải chậm hơn", "Vì nó gây lỗi cú pháp CSS", "Vì nó phá vỡ cấu trúc độ ưu tiên (cascade), làm CSS cực kỳ khó debug và maintain sau này", "Vì nó không được hỗ trợ trên các trình duyệt cũ"], correct: 2, explain: "!important ghi đè mọi quy tắc Specificity thông thường. Nếu lạm dụng, bạn sẽ mất quyền kiểm soát mã nguồn CSS của mình khi dự án phình to." },
+  { q: "Thuộc tính (property) nào trong CSS dùng để đổi màu chữ?", a: ["text-color", "font-color", "color", "background-color"], correct: 2, explain: "Thuộc tính 'color' điều khiển màu của văn bản." },
+  { q: "Muốn tạo khoảng trống BÊN TRONG của một phần tử (giữa viền border và nội dung bên trong), bạn dùng thuộc tính nào?", a: ["margin", "spacing", "padding", "border"], correct: 2, explain: "Padding tạo không gian bên trong (từ nội dung đẩy ra viền), Margin tạo không gian bên ngoài (từ viền đẩy các phần tử khác ra xa)." },
+  { q: "Thuộc tính `display: none` có tác dụng gì?", a: ["Làm phần tử trở nên trong suốt (giống opacity: 0)", "Ẩn phần tử hoàn toàn khỏi trang web và không chiếm không gian hiển thị", "Ẩn phần tử nhưng nó vẫn chiếm không gian trên layout (giống visibility: hidden)", "Thay đổi font chữ"], correct: 1, explain: "display: none loại bỏ phần tử khỏi luồng hiển thị (document flow), làm nó mất tích hoàn toàn và các phần tử khác sẽ dồn lên lấp chỗ trống." },
+  { q: "Thuộc tính nào dùng để làm tròn các góc của một khối (box)?", a: ["border-circle", "corner-radius", "box-radius", "border-radius"], correct: 3, explain: "border-radius được dùng để bo tròn các góc. Ví dụ: border-radius: 8px hoặc border-radius: 50% (để tạo hình tròn)." },
+  { q: "Giá trị nào của thuộc tính `position` sẽ giúp một phần tử giữ cố định trên màn hình ngay cả khi người dùng cuộn trang (scroll)?", a: ["absolute", "relative", "fixed", "static"], correct: 2, explain: "position: fixed gắn phần tử vào viewport (khung nhìn của trình duyệt), nên nó sẽ không di chuyển khi cuộn trang (ví dụ: thanh header cố định)." },
+  { q: "Thuộc tính `font-weight` dùng để làm gì?", a: ["Thay đổi kích thước chữ", "Thay đổi họ font chữ", "Xác định độ đậm/nhạt của chữ (ví dụ: bold, 400, 700)", "In nghiêng chữ"], correct: 2, explain: "font-weight chỉnh độ đậm của font. Các giá trị thường dùng là normal (400), bold (700)." },
+  { q: "Làm thế nào để căn giữa một khối <div> có width cố định theo chiều ngang?", a: ["text-align: center;", "margin: 0 auto;", "padding: center;", "float: center;"], correct: 1, explain: "Với các block element có width, `margin: 0 auto;` sẽ tự động chia đều khoảng trống margin ở bên trái và bên phải, giúp khối đó ra giữa." },
+  { q: "Thuộc tính `box-sizing: border-box;` giải quyết vấn đề gì?", a: ["Tự động tạo viền cho phần tử", "Xóa toàn bộ viền mặc định", "Đảm bảo padding và border được tính VÀO TRONG kích thước width/height đã set, tránh việc phần tử bị phình to ra", "Tạo đổ bóng cho viền"], correct: 2, explain: "Mặc định (content-box), thêm padding/border sẽ làm width tổng thể tăng lên. `border-box` giữ width cố định và đẩy nội dung vào trong thay vì phình box ra ngoài." },
+  { q: "Thuộc tính nào cho phép bạn thiết lập màu nền cho phần tử?", a: ["color", "bg-color", "background-color", "background-text"], correct: 2, explain: "Thuộc tính background-color (hoặc viết tắt là background) dùng để thiết lập màu nền." },
+  { q: "Trong CSS, đơn vị `vh` có nghĩa là gì?", a: ["Vertical Height", "Viewport Height - 1vh bằng 1% chiều cao của cửa sổ trình duyệt hiện tại", "Visual Height", "Very High"], correct: 1, explain: "vh (Viewport Height) là đơn vị tương đối. 100vh bằng chính xác 100% chiều cao của màn hình thiết bị đang xem." },
+  { q: "Khi nào thì một Selector Rule sau sẽ GHI ĐÈ Rule trước trong file CSS?", a: ["Luôn luôn ghi đè", "Khi rule sau có độ Specificity bằng hoặc cao hơn rule trước", "Chỉ khi dùng !important", "Không bao giờ"], correct: 1, explain: "Trong CSS (Cascading), nếu 2 selector có CÙNG độ specificity (điểm ưu tiên), thì quy tắc được viết SAU sẽ chiến thắng và ghi đè quy tắc viết trước." },
+  { q: "Selector `a[href$=\".pdf\"]` sẽ chọn phần tử nào?", a: ["Tất cả link có href", "Link có href BẮT ĐẦU bằng '.pdf'", "Link có href KẾT THÚC bằng '.pdf'", "Link có href CHỨA '.pdf'"], correct: 2, explain: "Dấu $ trong attribute selector biểu thị 'kết thúc bằng'. Tương tự: ^ = bắt đầu bằng, * = chứa ở bất kỳ đâu." },
+  { q: "Selector `a[href*=\"github\"]` sẽ chọn phần tử nào?", a: ["Chỉ link đến github.com", "Link có href CHỨA từ 'github' ở bất kỳ vị trí nào", "Link có href bắt đầu bằng 'github'", "Link có class là 'github'"], correct: 1, explain: "Dấu * trong attribute selector biểu thị 'chứa'. Mọi link có chứa từ 'github' trong href đều được chọn, dù ở đầu, giữa hay cuối." },
+  { q: "Pseudo-class `:not(.special)` có ý nghĩa gì?", a: ["Chọn phần tử có class 'special'", "Chọn TẤT CẢ phần tử NGOẠI TRỪ phần tử có class 'special'", "Chọn phần tử không có class nào", "Chọn phần tử đầu tiên không có class"], correct: 1, explain: ":not() là pseudo-class loại trừ. :not(.special) chọn mọi phần tử trừ phần tử có class 'special'. Có thể kết hợp: :not(.a):not(.b) để loại trừ nhiều điều kiện." },
+  { q: "Giá trị CSS nào tương đương với 1rem theo mặc định của trình duyệt?", a: ["10px", "12px", "16px", "20px"], correct: 2, explain: "Theo mặc định, 1rem = 16px (bằng font-size mặc định của trình duyệt). Đơn vị 'rem' là viết tắt của 'root em' - relative to root element font-size." },
+  { q: "Sự khác biệt giữa đơn vị `rem` và `em` trong CSS là gì?", a: ["Không có sự khác biệt", "rem relative to root font-size (16px), em relative to parent element font-size", "rem dùng cho mobile, em dùng cho desktop", "rem là đơn vị cố định, em là đơn vị tương đối"], correct: 1, explain: "rem (root em) luôn tính theo font-size của phần tử gốc (thường là html). em tính theo font-size của phần tử cha trực tiếp. Dùng rem để tránh compounding effect." },
+  { q: "Đơn vị `vh` trong CSS dùng để làm gì?", a: ["Đặt chiều rộng theo viewport", "Đặt chiều cao theo viewport (1vh = 1% chiều cao màn hình)", "Đặt font-size theo viewport", "Đặt margin theo viewport"], correct: 1, explain: "vh = viewport height. 100vh = chiều cao đầy đủ của màn hình. Rất hữu ích cho hero section full-screen: height: 100vh." },
+  { q: "Trong CSS Grid, đơn vị `1fr` có nghĩa là gì?", a: ["1 pixel", "1 phần bằng nhau trong không gian còn lại", "1 font-size", "1 frame"], correct: 1, explain: "fr = fraction (phần). 1fr = 1 phần của không gian còn lại. Ví dụ: grid-template-columns: 1fr 2fr tạo 2 cột, cột thứ 2 rộng gấp đôi cột thứ 1." }
+];
+
+const container = document.getElementById('quiz-container');
+const userAnswers = new Array(quizData.length).fill(null);
+let isSubmitted = false;
+
+// Render Questions
+quizData.forEach((item, qIndex) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-card-${qIndex}`;
+    
+    let optionsHtml = '';
+    item.a.forEach((opt, aIndex) => {
+        optionsHtml += `
+            <label class="option-label" id="label-${qIndex}-${aIndex}">
+                <input type="radio" name="q${qIndex}" value="${aIndex}" onchange="selectAnswer(${qIndex}, ${aIndex})">
+                <span class="option-text">${opt}</span>
+            </label>
+        `;
+    });
+
+    card.innerHTML = `
+        <div class="q-title"><span>Câu ${qIndex + 1}:</span> ${item.q}</div>
+        <div class="options-grid">
+            ${optionsHtml}
+        </div>
+        <div class="explanation">
+            <strong>💡 Giải thích:</strong>
+            ${item.explain}
+        </div>
+    `;
+    container.appendChild(card);
+});
+
+function selectAnswer(qIndex, aIndex) {
+    if (isSubmitted) return;
+    userAnswers[qIndex] = aIndex;
+    
+    // Highlight selected label
+    const labels = document.querySelectorAll(`#q-card-${qIndex} .option-label`);
+    labels.forEach(l => l.classList.remove('selected'));
+    document.getElementById(`label-${qIndex}-${aIndex}`).classList.add('selected');
+}
+
+function submitQuiz() {
+    if (isSubmitted) return;
+    
+    // Check if all answered (optional, let's allow partial for now, but count unanswered as wrong)
+    isSubmitted = true;
+    document.getElementById('quiz-container').classList.add('quiz-submitted');
+    document.getElementById('submit-container').style.display = 'none';
+
+    let score = 0;
+
+    quizData.forEach((item, qIndex) => {
+        const userAns = userAnswers[qIndex];
+        const correctAns = item.correct;
+        
+        const correctLabel = document.getElementById(`label-${qIndex}-${correctAns}`);
+        correctLabel.classList.add('correct');
+        
+        if (userAns !== null) {
+            if (userAns === correctAns) {
+                score++;
+            } else {
+                const wrongLabel = document.getElementById(`label-${qIndex}-${userAns}`);
+                wrongLabel.classList.add('wrong');
+            }
+        }
+    });
+
+    // Show Score Board
+    const scoreBoard = document.getElementById('score-board');
+    scoreBoard.style.display = 'block';
+    
+    // Animate Score
+    const percent = Math.round((score / quizData.length) * 100);
+    const circle = document.getElementById('score-circle');
+    const text = document.getElementById('score-text');
+    const msg = document.getElementById('feedback-msg');
+    
+    // Set proper document total
+    document.querySelector('.score-inner span').textContent = `/ ${quizData.length}`;
+
+    let currentScore = 0;
+    const interval = setInterval(() => {
+        text.innerText = currentScore;
+        if (currentScore >= score) clearInterval(interval);
+        else currentScore++;
+    }, 30);
+
+    setTimeout(() => {
+        circle.style.background = `conic-gradient(var(--correct-border) ${percent}%, #e2e8f0 ${percent}%)`;
+    }, 100);
+
+    if (percent === 100) msg.innerText = "Tuyệt vời! Bạn đã nắm vững CSS Core 🏆";
+    else if (percent >= 80) msg.innerText = "Rất tốt! Bạn hiểu bài rất kỹ 🌟";
+    else if (percent >= 50) msg.innerText = "Khá tốt! Hãy xem lại phần giải thích để hiểu rõ hơn nhé 👍";
+    else msg.innerText = "Cần cố gắng hơn! Hãy đọc lại tài liệu và xem kỹ giải thích nhé 📚";
+
+    // Scroll to top to see score
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

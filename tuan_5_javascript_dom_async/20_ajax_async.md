@@ -375,6 +375,54 @@ initApp();
 
 ---
 
+### 🔒 CORS — Lỗi đầu tiên MỌI sinh viên gặp phải
+
+Khi gọi API từ frontend, bạn **sẽ** gặp lỗi này:
+
+```
+Access to fetch at 'https://api.example.com/data' from origin 
+'http://localhost:5173' has been blocked by CORS policy: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+
+**CORS là gì?**
+- **Cross-Origin Resource Sharing** — cơ chế bảo mật của browser
+- Browser chặn request từ domain A → domain B除非 server B cho phép
+- **Chỉ ảnh hưởng browser** — Postman, curl, server-to-server không bị CORS
+
+**Tại sao bị CORS?**
+```
+Frontend: localhost:5173  →  API: api.example.com
+   (domain khác nhau!) → Browser chặn
+```
+
+**Cách giải quyết (theo thứ tự ưu tiên):**
+
+| Cách | Khi nào dùng | Ví dụ |
+|---|---|---|
+| **Backend cho phép CORS** | API của bạn (bạn control server) | Thêm header `Access-Control-Allow-Origin: *` |
+| **Proxy server** | API người khác, không thể sửa | Vite proxy: `server: { proxy: { '/api': 'https://api.example.com' } }` |
+| **CORS proxy service** | Học tập, demo | `https://corsproxy.io/?url=https://api.example.com/data` |
+
+**Vite proxy config (phổ biến nhất khi dev):**
+```javascript
+// vite.config.js
+export default {
+    server: {
+        proxy: {
+            '/api': {
+                target: 'https://jsonplaceholder.typicode.com',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '')
+            }
+        }
+    }
+}
+```
+Sau đó gọi: `fetch('/api/todos')` thay vì `fetch('https://jsonplaceholder.typicode.com/todos')`
+
+---
+
 ## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
 | Hiểu sai | Sự thật |
@@ -445,6 +493,19 @@ initApp();
 3. **3 states**: Loading → Success → Error — thiếu 1 là UX không hoàn chỉnh
 4. **`localStorage`** = persist qua refresh. Chỉ lưu string → `JSON.stringify/parse`
 5. **`Promise.all`** = parallel requests (nhanh hơn sequential). **`Promise.allSettled`** = không fail nếu 1 request lỗi
+
+---
+
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `CORS policy blocked` | Frontend gọi API khác domain mà server không cho phép | Backend thêm header `Access-Control-Allow-Origin`. Hoặc dùng proxy |
+| `SyntaxError: Unexpected token <` | Server trả về HTML (error page) thay vì JSON | Kiểm tra URL API có đúng không. Kiểm tra `response.headers.get('content-type')` |
+| `TypeError: Failed to fetch` | Mất mạng, sai URL, hoặc server down | Kiểm tra Network tab → status code. Thêm try/catch |
+| `TypeError: xxx.json is not a function` | `response` không phải Response object | Đảm bảo dùng `await fetch(...)` không phải `fetch(...).then()` |
+| Data không cập nhật trên UI | Quên gọi `setState` sau khi fetch | Phải `setUsers(data)` sau `const data = await res.json()` |
+| localStorage lưu `[object Object]` | Truyền object trực tiếp vào `setItem` | Phải `JSON.stringify(obj)` trước khi lưu, `JSON.parse()` khi đọc |
 
 ---
 

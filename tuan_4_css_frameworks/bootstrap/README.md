@@ -36,11 +36,13 @@ Bootstrap là CSS Framework phổ biến nhất thế giới, giúp bạn xây d
 
 ## ⏱️ THỜI GIAN ƯỚC TÍNH
 
-- **Getting Started:** 30 phút
-- **Grid System:** 1 giờ
-- **Components:** 2-3 giờ
-- **Utilities:** 1 giờ
-- **Customization:** 1 giờ
+| Bài | Thời gian | Độ khó |
+|-----|-----------|--------|
+| **Getting Started** | 30 phút | ⭐ Dễ |
+| **Grid System** | 1 giờ | ⭐⭐ Trung bình |
+| **Components** | 2-3 giờ | ⭐⭐⭐ Khó |
+| **Utilities** | 1 giờ | ⭐⭐ Trung bình |
+| **Customization** | 1 giờ | ⭐⭐⭐ Khó |
 
 **Tổng cộng:** ~6-7 giờ để nắm vững Bootstrap 5
 
@@ -49,12 +51,45 @@ Bootstrap là CSS Framework phổ biến nhất thế giới, giúp bạn xây d
 ## 🎯 MỤC TIÊU SAU KHI HOÀN THÀNH
 
 Sau khi học xong lộ trình này, bạn sẽ:
-- ✅ Hiểu Bootstrap là gì và khi nào nên dùng
+- ✅ Hiểu Bootstrap là gì và khi nào nên dùng (CDN vs npm)
 - ✅ Cài đặt Bootstrap vào project (CDN và npm)
 - ✅ Sử dụng Grid System để tạo layout responsive
-- ✅ Sử dụng các Components phổ biến (Buttons, Cards, Navbar, Forms)
-- ✅ Sử dụng Utilities để style nhanh
-- ✅ Customize Bootstrap với SASS variables
+- ✅ Sử dụng các Components phổ biến (Buttons, Cards, Navbar, Forms, Modal)
+- ✅ Sử dụng Utilities để style nhanh không cần CSS riêng
+- ✅ Customize Bootstrap với SASS variables cho brand riêng
+- ✅ Build production-ready theme với selective import
+- ✅ Dark mode với Bootstrap 5.3+
+- ✅ Performance optimization (bundle size, lazy loading)
+- ✅ Accessibility (a11y) cho mọi component
+
+---
+
+## 🔗 MỐI LIÊN HỆ VỚI CÁC BÀI HỌC KHÁC
+
+```
+Tuần 2-3: CSS Core & Advanced
+    ↓ (Kiến thức nền tảng: selectors, box model, flexbox, grid)
+Tuần 4A: Bootstrap 5 ← BẠN ĐANG Ở ĐÂY
+    ↓ (So sánh: Component-based vs Utility-first)
+Tuần 4A: TailwindCSS
+    ↓ (Áp dụng vào project thực tế)
+Tuần 4B: JavaScript → React
+    ↓ (Bootstrap trong React: react-bootstrap hoặc Bootstrap CSS thuần)
+BTL: Todo App / E-commerce
+```
+
+---
+
+## 📊 ĐÁNH GIÁ SAU KHI HOÀN THÀNH
+
+| Kỹ năng | Có thể làm được | Chưa làm được |
+|----------|-----------------|---------------|
+| **Grid System** | Tạo mọi layout responsive | Advanced: CSS Subgrid |
+| **Components** | Navbar, Cards, Forms, Modal | Custom components phức tạp |
+| **Utilities** | Style nhanh không cần CSS | Custom utility classes |
+| **SASS** | Override variables, theme colors | Custom mixins nâng cao |
+| **Performance** | Selective import, lazy load | Critical CSS extraction |
+| **Accessibility** | ARIA labels, keyboard nav | Screen reader testing toàn diện |
 
 ---
 

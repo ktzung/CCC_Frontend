@@ -431,6 +431,19 @@ function updateCounter(count) {
 
 ---
 
+## 9b. 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| `Cannot read properties of null` | `querySelector` trả về null — element chưa render | Đảm bảo script chạy SAU khi DOM parse xong (script cuối body hoặc `defer`) |
+| `getElementById` trả về `null` | Sai ID hoặc element chưa tồn tại | Kiểm tra: `console.log(document.getElementById("myId"))` |
+| `classList.add` không生效 | Element bị ẩn (display:none) hoặc CSS specificity quá thấp | Kiểm tra DevTools → Elements → xem class đã được thêm chưa |
+| Event không hoạt động | Sai event name (`onClick` → `click`) hoặc element chưa tồn tại | Dùng lowercase: `click`, `submit`, `input`. Kiểm tra element tồn tại |
+| `innerHTML` bị XSS | Chèn user input trực tiếp vào `innerHTML` | Dùng `textContent` cho text thuần. Sanitize HTML nếu cần |
+| Event listener chạy nhiều lần | Thêm listener trong loop mà không remove cũ | Dùng `removeEventListener` hoặc `{ once: true }` |
+
+---
+
 ## 10. ➡️ Next Lesson Bridge
 
 *"Todo App hoạt động real-time! Thêm, xóa, tick hoàn thành — không cần reload!" Minh hào hứng.*

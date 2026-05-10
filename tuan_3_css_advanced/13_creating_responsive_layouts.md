@@ -234,6 +234,39 @@ img, video {
 3. **Viewport units** cho hero section (không cần tính toán JS)
 4. **System font fallback**: `-apple-system, BlinkMacSystemFont` load ngay, không cần download
 
+### Responsive Images với `srcset` và `<picture>`:
+
+```html
+<!-- Cách 1: srcset trên <img> — browser chọn ảnh phù hợp -->
+<img srcset="product-400w.jpg 400w,
+             product-800w.jpg 800w,
+             product-1200w.jpg 1200w"
+     sizes="(max-width: 600px) 100vw,
+            (max-width: 1024px) 50vw,
+            33vw"
+     src="product-800w.jpg"
+     alt="Sản phẩm"
+     loading="lazy">
+
+<!-- Cách 2: <picture> — bạn quyết định ảnh nào cho breakpoint nào -->
+<picture>
+    <source media="(max-width: 480px)" srcset="hero-mobile.webp">
+    <source media="(max-width: 1024px)" srcset="hero-tablet.webp">
+    <img src="hero-desktop.webp" alt="Hero banner" loading="eager">
+</picture>
+
+<!-- Cách 3: Art direction — crop khác nhau cho mỗi màn hình -->
+<picture>
+    <source media="(max-width: 768px)"
+            srcset="product-square.jpg">    <!-- Ảnh vuông cho mobile -->
+    <source media="(min-width: 769px)"
+            srcset="product-landscape.jpg"> <!-- Ảnh ngang cho desktop -->
+    <img src="product-landscape.jpg" alt="Sản phẩm">
+</picture>
+```
+
+> 💡 **`srcset` = browser chọn** (theo kích thước file). **`<picture>` = developer chọn** (theo breakpoint). Dùng `<picture>` khi muốn control chính xác ảnh nào hiển thị ở mỗi kích thước.
+
 ### Test responsive NHANH:
 
 ```

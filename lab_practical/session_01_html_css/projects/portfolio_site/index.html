@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Your Name</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/skills.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">YourName</a>
+
+            <!-- Mobile Menu Toggle -->
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+            <!-- Navigation -->
+            <nav class="nav">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Hi, I'm <span class="accent">Your Name</span>
+            </h1>
+            <p class="hero-subtitle">
+                Full-Stack Developer | UI Designer | Problem Solver
+            </p>
+            <a href="#portfolio" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://picsum.photos/400/400?random=1" alt="Your Photo">
+                </div>
+                <div class="about-content">
+                    <h2 class="section-title">About Me</h2>
+                    <p class="lead">
+                        I'm a passionate developer with 3+ years of experience
+                        building web applications that make a difference.
+                    </p>
+                    <p>
+                        Specialized in Frontend development with React and Vue.
+                        Also experienced in Backend with Node.js and Python.
+                        I believe in clean code, user-centered design, and continuous learning.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills-section">
+        <div class="container">
+            <h2 class="section-title text-center">My Skills</h2>
+
+            <div class="skills-grid">
+                <!-- Skill 1 -->
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">HTML5</span>
+                        <span class="skill-percentage">95%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="95"></div>
+                    </div>
+                </div>
+
+                <!-- Skill 2 -->
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">CSS3</span>
+                        <span class="skill-percentage">90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="90"></div>
+                    </div>
+                </div>
+
+                <!-- Skill 3 -->
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">JavaScript</span>
+                        <span class="skill-percentage">85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="85"></div>
+                    </div>
+                </div>
+
+                <!-- Skill 4 -->
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">React</span>
+                        <span class="skill-percentage">80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" data-width="80"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio-section">
+        <div class="container">
+            <h2 class="section-title text-center">My Portfolio</h2>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="web">Web</button>
+                <button class="filter-btn" data-filter="mobile">Mobile</button>
+                <button class="filter-btn" data-filter="design">Design</button>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="portfolio-grid">
+                <!-- Item 1 - Web -->
+                <div class="portfolio-item" data-category="web">
+                    <a href="#lightbox-1" class="lightbox-link">
+                        <img src="https://picsum.photos/400/300?random=10" alt="E-Commerce Website">
+                    </a>
+                    <div class="portfolio-overlay">
+                        <h3>E-Commerce Website</h3>
+                        <p>React + Node.js</p>
+                    </div>
+                </div>
+
+                <!-- Item 2 - Mobile -->
+                <div class="portfolio-item" data-category="mobile">
+                    <a href="#lightbox-2" class="lightbox-link">
+                        <img src="https://picsum.photos/400/300?random=11" alt="Health Tracker App">
+                    </a>
+                    <div class="portfolio-overlay">
+                        <h3>Health Tracker App</h3>
+                        <p>React Native</p>
+                    </div>
+                </div>
+
+                <!-- Item 3 - Web -->
+                <div class="portfolio-item" data-category="web">
+                    <a href="#lightbox-3" class="lightbox-link">
+                        <img src="https://picsum.photos/400/300?random=12" alt="Dashboard Admin">
+                    </a>
+                    <div class="portfolio-overlay">
+                        <h3>Dashboard Admin</h3>
+                        <p>Vue.js + Chart.js</p>
+                    </div>
+                </div>
+
+                <!-- Item 4 - Design -->
+                <div class="portfolio-item" data-category="design">
+                    <a href="#lightbox-4" class="lightbox-link">
+                        <img src="https://picsum.photos/400/300?random=13" alt="Portfolio Design">
+                    </a>
+                    <div class="portfolio-overlay">
+                        <h3>Portfolio Design</h3>
+                        <p>Figma + CSS</p>
+                    </div>
+                </div>
+
+                <!-- Item 5 - Mobile -->
+                <div class="portfolio-item" data-category="mobile">
+                    <a href="#lightbox-5" class="lightbox-link">
+                        <img src="https://picsum.photos/400/300?random=14" alt="Social App">
+                    </a>
+                    <div class="portfolio-overlay">
+                        <h3>Social Media App</h3>
+                        <p>Flutter + Firebase</p>
+                    </div>
+                </div>
+
+                <!-- Item 6 - Design -->
+                <div class="portfolio-item" data-category="design">
+                    <a href="#lightbox-6" class="lightbox-link">
+                        <img src="https://picsum.photos/400/300?random=15" alt="Brand Identity">
+                    </a>
+                    <div class="portfolio-overlay">
+                        <h3>Brand Identity</h3>
+                        <p>Branding + Logo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title text-center">Get In Touch</h2>
+
+            <div class="contact-wrapper">
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <p>Feel free to reach out. I'm always open to discussing new projects.</p>
+                    <div class="info-item">
+                        <span class="icon">📧</span>
+                        <span>your.email@example.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">📍</span>
+                        <span>Hanoi, Vietnam</span>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                        <span class="error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                        <span class="error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+                        <span class="error-message"></span>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Send Message</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">YourName</div>
+                <p class="footer-tagline">Building digital experiences</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:your.email@example.com" class="social-link" aria-label="Email">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12.713l-11.985-9.713h23.971l-11.986 9.713zm-5.425-1.822l-6.575-5.329v12.531l6.575-7.202zm10.85 0l6.575 7.202v-12.531l-6.575 5.329zm-1.557 1.261l-3.868 3.135-3.868-3.135-8.11 8.848h23.956l-8.11-8.848z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 YourName. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Overlays -->
+    <div id="lightbox-1" class="lightbox">
+        <img src="https://picsum.photos/800/600?random=10" alt="">
+        <div class="lightbox-caption">
+            <h3>E-Commerce Website</h3>
+            <p>Full-stack e-commerce application with React and Node.js</p>
+        </div>
+        <a href="#" class="lightbox-close">&times;</a>
+    </div>
+
+    <div id="lightbox-2" class="lightbox">
+        <img src="https://picsum.photos/800/600?random=11" alt="">
+        <div class="lightbox-caption">
+            <h3>Health Tracker App</h3>
+            <p>Mobile app for tracking fitness goals</p>
+        </div>
+        <a href="#" class="lightbox-close">&times;</a>
+    </div>
+
+    <div id="lightbox-3" class="lightbox">
+        <img src="https://picsum.photos/800/600?random=12" alt="">
+        <div class="lightbox-caption">
+            <h3>Dashboard Admin</h3>
+            <p>Analytics dashboard with real-time data</p>
+        </div>
+        <a href="#" class="lightbox-close">&times;</a>
+    </div>
+
+    <div id="lightbox-4" class="lightbox">
+        <img src="https://picsum.photos/800/600?random=13" alt="">
+        <div class="lightbox-caption">
+            <h3>Portfolio Design</h3>
+            <p>Personal portfolio design system</p>
+        </div>
+        <a href="#" class="lightbox-close">&times;</a>
+    </div>
+
+    <div id="lightbox-5" class="lightbox">
+        <img src="https://picsum.photos/800/600?random=14" alt="">
+        <div class="lightbox-caption">
+            <h3>Social Media App</h3>
+            <p>Cross-platform social application</p>
+        </div>
+        <a href="#" class="lightbox-close">&times;</a>
+    </div>
+
+    <div id="lightbox-6" class="lightbox">
+        <img src="https://picsum.photos/800/600?random=15" alt="">
+        <div class="lightbox-caption">
+            <h3>Brand Identity</h3>
+            <p>Complete branding package</p>
+        </div>
+        <a href="#" class="lightbox-close">&times;</a>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-icon sun-icon">☀️</span>
+        <span class="theme-icon moon-icon">🌙</span>
+    </button>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

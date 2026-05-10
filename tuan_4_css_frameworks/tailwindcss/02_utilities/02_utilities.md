@@ -715,6 +715,44 @@ Tạo button với:
 
 ---
 
+# 16. ❌ COMMON MISCONCEPTIONS — Hiểu sai phổ biến
+
+| Hiểu sai | Sự thật |
+|---|---|
+| **"Phải nhớ hết tất cả utility classes"** | Không cần! Tailwind có **IntelliSense extension** (VS Code) tự gợi ý. Dùng dần, não sẽ tự nhớ pattern. Chỉ cần nhớ ~50 class phổ biến nhất |
+| **"Spacing values lộn xộn, không có quy tắc"** | Tailwind dùng **spacing scale** cố định: 1 = 0.25rem = 4px. `p-4` = 1rem = 16px. Quy tắc: `number × 4 = px` |
+| **"Grid phức tạp hơn Flexbox"** | Grid cho layout 2D (hàng + cột). Flexbox cho layout 1D (một chiều). Nhiều layout dùng Grid nhanh hơn Flexbox rất nhiều |
+| **"Responsive prefixes phải viết theo thứ tự"** | Đúng — phải viết `sm:` trước `md:` trước `lg:`. Nhưng đây là **min-width** breakpoints, không phải max-width |
+| **"Hover chỉ dùng được với chuột"** | Tailwind cũng hỗ trợ `focus:` (bàn phím), `active:` (đang nhấn), `group-hover:` (cha được hover) |
+
+---
+
+# 17. ✅ CHECKPOINT — Kiểm tra hiểu biết
+
+### Câu hỏi hiểu cơ bản:
+
+1. `p-4` và `px-4 py-4` có giống nhau không? Giải thích.
+2. `grid-cols-3` tạo bao nhiêu cột? Và `col-span-2` chiếm bao nhiêu cột?
+3. `text-gray-500` và `text-gray-900` — cái nào đậm hơn?
+
+### Câu hỏi áp dụng:
+
+4. Viết utility classes cho: "một div có padding 32px, nền trắng, đổ bóng, bo góc 8px, rộng tối đa 400px và căn giữa"
+5. Tạo layout 3 cột trên desktop, 2 cột trên tablet, 1 cột trên mobile — dùng Grid utilities
+
+<details>
+<summary>👁️ Xem đáp án</summary>
+
+1. **Giống nhau** — `p-4` = padding tất cả 4 cạnh. `px-4 py-4` = padding ngang 4 + dọc 4 = cùng kết quả. Nhưng `px`/`py` hữu ích khi muốn padding khác nhau.
+2. `grid-cols-3` = **3 cột** bằng nhau. `col-span-2` = chiếm **2 cột** (trên tổng 3).
+3. `text-gray-900` đậm hơn — số càng lớn = càng đậm (900 gần đen, 500 là xám trung bình).
+4. `bg-white shadow-lg rounded-lg max-w-md mx-auto p-8` (p-8 = 32px)
+5. `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4`
+
+</details>
+
+---
+
 **Bài tiếp theo:** [03. Components](../03_components/03_components.md) - Xây dựng Components với Utilities
 
 > [!TIP]

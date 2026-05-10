@@ -415,6 +415,129 @@ Xây trang gồm:
 
 ---
 
+### 🪜 Step-by-Step: Xây từng Component (30 phút)
+
+**Bước 1: Navbar responsive (8 phút)**
+```html
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">🛒 ShopVN</a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="#">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Sản phẩm</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Danh mục</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Điện thoại</a></li>
+                        <li><a class="dropdown-item" href="#">Laptop</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Phụ kiện</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <input class="form-control form-control-sm me-2" type="search" placeholder="Tìm kiếm...">
+                <button class="btn btn-outline-light btn-sm">🔍</button>
+            </form>
+        </div>
+    </div>
+</nav>
+```
+
+> **💡 `data-bs-toggle="collapse"` + `data-bs-target="#mainNav"`:** Khi click hamburger → toggle (ẩn/hiện) div có `id="mainNav"`. Cần Bootstrap JS.
+
+**Bước 2: Alert dismissible (3 phút)**
+```html
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    🚚 <strong>Freeship!</strong> Miễn phí vận chuyển cho đơn từ 300.000đ.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+```
+
+**Bước 3: Product Cards với equal height (10 phút)**
+```html
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 my-3">
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="position-relative">
+                <img src="https://picsum.photos/300/200?random=1" class="card-img-top" alt="Sản phẩm">
+                <span class="position-absolute top-0 end-0 m-2 badge bg-danger">-20%</span>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h6 class="card-title">iPhone 15 Pro</h6>
+                <p class="card-text text-muted small flex-grow-1">Chip A17 Pro, camera 48MP</p>
+                <div class="mt-auto">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-danger">25.990.000đ</span>
+                        <small class="text-muted text-decoration-line-through">32.490.000đ</small>
+                    </div>
+                    <button class="btn btn-primary w-100 btn-sm">Thêm vào giỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Thêm 3 cards tương tự -->
+</div>
+```
+
+> **💡 Pattern `h-100` + `d-flex flex-column` + `mt-auto`:** `h-100` cho cards cùng chiều cao. `flex-column` + `mt-auto` đẩy button xuống đáy — dù mô tả dài hay ngắn, button luôn ở cùng vị trí.
+
+**Bước 4: Delete Modal (5 phút)**
+```html
+<!-- Cuối <body>, trước script -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-danger">⚠️ Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn xóa <strong id="productName">sản phẩm</strong> không?</p>
+                <p class="text-muted small">Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button class="btn btn-danger" id="confirmDelete">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+**Bước 5: Pagination (4 phút)**
+```html
+<nav aria-label="Phân trang" class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled"><a class="page-link" href="#">‹</a></li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">›</a></li>
+    </ul>
+</nav>
+```
+
+---
+
+### 🐛 Troubleshooting — Lỗi thường gặp
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|-----|-------------|----------|
+| Modal không mở | Thiếu `data-bs-toggle="modal"` trên trigger button | Phải có cả `data-bs-toggle` và `data-bs-target` |
+| Modal bị clip/cắt | Modal đặt trong element có `overflow: hidden` | Đặt modal cuối `<body>`, ngoài mọi container |
+| Dropdown không hoạt động | Thiếu Bootstrap JS | Thêm `bootstrap.bundle.min.js` |
+| Cards không bằng nhau | Thiếu `h-100` trên card | Thêm `class="card h-100"` |
+| Alert không đóng được | Thiếu `alert-dismissible` + Bootstrap JS | Phải có class `alert-dismissible` và nút `btn-close` |
+| Form validation không hiện | Thiếu `was-validated` class | JS phải thêm `this.classList.add("was-validated")` |
+
+---
+
 ## 7. ❌ Common Misconceptions — Hiểu sai phổ biến
 
 | Hiểu sai | Sự thật |
@@ -467,6 +590,105 @@ Xây trang gồm:
 3. **Card equal-height pattern**: `h-100` + `d-flex flex-column` + `mt-auto` cho button luôn đáy
 4. **Modal đặt cuối body** — tránh overflow/transform ancestor gây clip
 5. **Alert vs Toast**: Alert = persistent, quan trọng. Toast = tạm thời, không chặn tương tác
+
+---
+
+## 10. 📎 Phụ lục: Component Accessibility Checklist
+
+### Navbar
+```html
+<!-- ✅ aria-label phân biệt nhiều nav -->
+<nav class="navbar" aria-label="Menu chính">
+<nav class="navbar" aria-label="Menu footer">
+
+<!-- ✅ aria-expanded cho hamburger button -->
+<button class="navbar-toggler"
+        aria-expanded="false"
+        aria-label="Mở menu điều hướng">
+    <span class="navbar-toggler-icon"></span>
+</button>
+```
+
+### Modal
+```html
+<!-- ✅ aria-labelledby + aria-describedby -->
+<div class="modal" id="myModal" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <h5 class="modal-title" id="modalTitle">Xác nhận</h5>
+    <p id="modalDesc">Bạn có chắc muốn xóa?</p>
+</div>
+
+<!-- ✅ Focus trap: Bootstrap tự động trap focus trong modal -->
+<!-- ✅ Escape key: Bootstrap tự đóng modal khi nhấn Escape -->
+```
+
+### Alert
+```html
+<!-- ✅ role="alert" cho thông báo quan trọng -->
+<div class="alert alert-danger" role="alert">
+    Lỗi: Email không hợp lệ
+</div>
+
+<!-- ✅ role="status" cho thông báo nhẹ -->
+<div class="alert alert-success" role="status">
+    Đã lưu thành công
+</div>
+```
+
+### Form
+```html
+<!-- ✅ Label LUÔN kết nối với input -->
+<label for="email" class="form-label">Email</label>
+<input type="email" class="form-control" id="email" required>
+
+<!-- ✅ aria-describedby cho hint text -->
+<input type="password" class="form-control" id="pwd" aria-describedby="pwdHint">
+<div id="pwdHint" class="form-text">Tối thiểu 8 ký tự</div>
+
+<!-- ✅ aria-invalid cho validation error -->
+<input type="email" class="form-control is-invalid" aria-invalid="true">
+<div class="invalid-feedback">Email không hợp lệ</div>
+```
+
+### Button
+```html
+<!-- ✅ aria-label cho nút chỉ có icon -->
+<button class="btn btn-close" aria-label="Đóng"></button>
+<button class="btn btn-danger" aria-label="Xóa sản phẩm">🗑️</button>
+
+<!-- ✅ Disabled button: dùng aria-disabled thay vì disabled attribute -->
+<!-- để vẫn giữ focusable và hiện tooltip giải thích -->
+<button class="btn btn-primary" aria-disabled="true" tabindex="-1">
+    Không thể submit
+</button>
+```
+
+---
+
+## 11. ⚡ Performance Tips cho Components
+
+| Component | Tip | Lý do |
+|-----------|-----|-------|
+| **Images trong Card** | `loading="lazy"` + `width`/`height` | Tránh layout shift, load nhanh |
+| **Modal** | Chỉ render khi cần (JS tạo DOM) | Tránh DOM bloat |
+| **Dropdown** | Sử dụng `data-bs-toggle` (event delegation) | Ít event listeners hơn |
+| **Carousel** | `data-bs-interval="false"` nếu không cần auto-play | Tiết kiệm CPU |
+| **Font Icons** | Chỉ import icons cần dùng (SVG sprite) | Giảm HTTP requests |
+| **Bootstrap JS** | Import selective: `import { Modal } from 'bootstrap'` | Tree-shaking |
+
+```html
+<!-- ✅ Image optimization trong Card -->
+<img src="product.jpg"
+     alt="iPhone 15 Pro"
+     width="300" height="200"
+     loading="lazy"
+     class="card-img-top">
+
+<!-- ✅ Selective JS import (npm) -->
+<script type="module">
+    import { Modal, Toast } from 'bootstrap';
+    // Chỉ import Modal và Toast, không import Carousel, Tooltip...
+</script>
+```
 
 ---
 
