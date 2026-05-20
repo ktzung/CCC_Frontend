@@ -54,7 +54,216 @@ Xếp hàng tại quầy             Đặt số & chờ tên được gọi
 
 ## 3. ⚙️ Core Technical Truth
 
-### Fetch API — Gọi HTTP request
+### Promise — "Lời hứa" trong JavaScript
+
+#### 💡 Story: "Đặt đồ ăn trên ShopeeFood"
+
+*Minh muốn hiểu async/await. Anh Hùng bắt đầu bằng câu chuyện:*
+
+*"Em đặt đồ ăn trên ShopeeFood. Em nhấn 'Đặt hàng' — nhà hàng nhận đơn. Lúc này, em có một **LỜI HỨA**: 'Đồ ăn sẽ được giao.' Lời hứa này có 3 trạng thái:"*
+
+```
+    Đặt hàng                                    Nhận đồ ăn
+        │                                            │
+        ▼                                            ▼
+    ┌─────────────────────────────────────────────────────┐
+    │                                                     │
+    │   ⏳ PENDING        →    ✅ FULFILLED    hoặc    ❌ REJECTED
+    │   (Đang xử lý)          (Thành công)            (Thất bại)
+    │                                                     │
+    │   Nhà hàng đang         Đồ ăn giao thành       Nhà hàng hủy đơn
+    │   nấu đồ ăn             công → ăn ngon!         → hoàn tiền
+    │                                                     │
+    └─────────────────────────────────────────────────────┘
+```
+
+**Promise trong JavaScript cũng giống vậy:**
+- **Pending** — Đang chờ kết quả (gọi API chưa xong)
+- **Fulfilled** — Thành công (nhận được data)
+- **Rejected** — Thất bại (network error, server lỗi)
+
+```javascript
+// Tạo một Promise (hiểu nguyên lý, ít khi tự tạo)
+const orderFood = new Promise((resolve, reject) => {
+    // Giả lập gọi API mất 2 giây
+    setTimeout(() => {
+        const foodReady = true;  // Giả sử nhà hàng nấu xong
+
+        if (foodReady) {
+            resolve({ dish: "Phở bò", price: 45000 });  // ✅ Fulfilled
+        } else {
+            reject(new Error("Hết nguyên liệu"));       // ❌ Rejected
+        }
+    }, 2000);
+});
+
+// Sử dụng Promise
+orderFood
+    .then(food => {
+        console.log(`Nhận được: ${food.dish} — ${food.price}đ`);
+    })
+    .catch(error => {
+        console.error(`Lỗi: ${error.message}`);
+    })
+    .finally(() => {
+        console.log("Cảm ơn đã đặt hàng!");  // Luôn chạy
+    });
+```
+
+**Minh hỏi:** "Vậy `fetch()` cũng trả về Promise?"
+
+**Anh Hùng:** "Đúng! `fetch()` trả về một Promise. Khi server chưa trả lời → Promise đang `pending`. Khi server trả data → Promise `fulfilled`. Khi mất mạng → Promise `rejected`. Đó là lý do ta dùng `.then()` và `.catch()`."
+
+---
+
+### Promise Chain — "Xử lý từng bước, bước nào xong mới đến bước tiếp"
+
+#### 💡 Story: "Nấu phở theo công thức"
+
+*Minh muốn hiểu Promise Chain. Anh Hùng giải thích bằng cách nấu phở:*
+
+*"Nấu phở có 3 bước: (1) Nước dùng, (2) Trụng bánh phở, (3) Cho thịt. Bước nào cũng cần thời gian. Nhưng bước 2 phải đợi bước 1 xong. Bước 3 phải đợi bước 2 xong."*
+
+*"Promise Chain cũng vậy — mỗi `.then()` là một bước. Bước trước xong → kết quả truyền cho bước tiếp."*
+
+```
+    fetch(url)                    // Bước 1: Gọi API (Promise)
+        ↓ resolve(response)
+    .then(r => r.json())         // Bước 2: Parse JSON (Promise mới)
+        ↓ resolve(data)
+    .then(data => render(data))  // Bước 3: Hiển thị (Promise mới)
+        ↓
+    .catch(err => showError())   // Bắt lỗi từ BẤT KỲ bước nào
+        ↓
+    .finally(() => hideLoading()) // Luôn chạy
+```
+
+**Minh hỏi:** "Tại sao `.then()` lại trả về Promise mới?"
+
+**Anh Hùng:** "Đó là quy tắc vàng của Promise Chain: **Mỗi `.then()` luôn trả về Promise mới**. Nếu return value thường → Promise chứa value đó. Nếu return Promise → chain đợi Promise đó resolve. Nếu throw error → Promise rejected → nhảy xuống `.catch()`."
+
+```javascript
+// ❌ SAI — Không hiểu Promise Chain
+fetch("/api/user")
+    .then(response => {
+        response.json();  // ❌ Quên return → undefined truyền cho .then tiếp
+    })
+    .then(data => {
+        console.log(data);  // undefined — mất data!
+    });
+
+// ✅ ĐÚNG — Return Promise từ mỗi bước
+fetch("/api/user")
+    .then(response => {
+        return response.json();  // ✅ Return Promise chứa parsed JSON
+    })
+    .then(data => {
+        console.log(data);  // ✅ Nhận được data
+        return data.id;     // ✅ Return giá trị cho bước tiếp
+    })
+    .then(userId => {
+        return fetch(`/api/posts?userId=${userId}`);  // ✅ Return Promise mới
+    })
+    .then(response => response.json())
+    .then(posts => {
+        console.log(posts);  // ✅ Nhận được posts
+    });
+```
+
+**Minh hỏi:** "Nếu bước nào đó lỗi thì sao?"
+
+**Anh Hùng:** "Promise Chain giống dây chuyền sản xuất — nếu một bước lỗi, tất cả bước sau bị skip, nhảy thẳng xuống `.catch()` gần nhất."
+
+```javascript
+fetch("/api/user")           // ✅ OK
+    .then(r => r.json())     // ✅ OK
+    .then(user => {
+        return fetch(`/api/orders/${user.id}`);  // ❌ Lỗi network!
+    })
+    .then(r => r.json())     // ⏭️ SKIP — bước trước đã lỗi
+    .then(orders => {
+        renderOrders(orders); // ⏭️ SKIP
+    })
+    .catch(error => {
+        // ✅ Bắt lỗi từ BẤT KỲ bước nào phía trên
+        console.error("Lỗi:", error.message);
+        showError(error.message);
+    });
+```
+
+---
+
+### Async/Await — "Promise nhưng đọc như code thường"
+
+#### 💡 Story: "Từ phiếu đặt đồ ăn đến gọi điện trực tiếp"
+
+*Minh đã hiểu Promise và Promise Chain. Nhưng anh thấy code `.then()` dài dòng:*
+
+*"Mỗi lần thêm bước là thêm `.then()`. Code đọc từ trên xuống nhưng logic lại zig-zag theo chain. Có cách nào viết như code bình thường không?"*
+
+*Anh Hùng cười: "async/await chính là cách đó. Thay vì dùng phiếu đặt đồ ăn (Promise Chain) — em gọi điện trực tiếp cho nhà hàng (async/await). Đợi nghe phản hồi rồi mới nói tiếp."*
+
+```
+PROMISE CHAIN (.then)              ASYNC/AWAIT
+─────────────────────              ─────────────────────
+Phiếu đặt đồ ăn                   Gọi điện trực tiếp
+Nhà → Bước 1 → Bước 2 → Bước 3   Nói → Đợi → Nói → Đợi
+Đọc code zig-zag                   Đọc code từ trên xuống
+Dễ bị "callback hell"              Code sạch, dễ hiểu
+```
+
+```javascript
+// ❌ Promise Chain — zig-zag, khó đọc khi nhiều bước
+fetch("/api/user")
+    .then(r => r.json())
+    .then(user => fetch(`/api/orders/${user.id}`))
+    .then(r => r.json())
+    .then(orders => fetch(`/api/products/${orders[0].productId}`))
+    .then(r => r.json())
+    .then(product => {
+        console.log(product);
+    })
+    .catch(err => console.error(err));
+
+// ✅ Async/Await — đọc như code thường, từ trên xuống
+async function getUserOrder() {
+    try {
+        const userRes = await fetch("/api/user");
+        const user = await userRes.json();
+
+        const ordersRes = await fetch(`/api/orders/${user.id}`);
+        const orders = await ordersRes.json();
+
+        const productRes = await fetch(`/api/products/${orders[0].productId}`);
+        const product = await productRes.json();
+
+        console.log(product);
+    } catch (err) {
+        console.error(err);
+    }
+}
+```
+
+**Minh hỏi:** "Vậy `async/await` là cú pháp mới, thay thế Promise?"
+
+**Anh Hùng:** "Không phải thay thế — **async/await là "syntax sugar" cho Promise**. `await` chỉ hoạt động trên Promise. `async function` luôn trả về Promise. Bên dưới, nó vẫn là Promise — chỉ là cách viết khác, dễ đọc hơn."
+
+```javascript
+// async function LUÔN trả về Promise
+async function greet() {
+    return "Hello!";  // Tự động wrap thành Promise.resolve("Hello!")
+}
+
+// Dùng .then() vẫn hoạt động
+greet().then(msg => console.log(msg));  // "Hello!"
+
+// await "mở gói" Promise — lấy value bên trong
+const msg = await greet();  // "Hello!"
+```
+
+---
+
+### Fetch API — Gọi HTTP request với cả 2 cách
 
 **Cách 1: Promise chain (.then/.catch):**
 ```javascript
@@ -77,18 +286,31 @@ fetch("https://api.weatherapi.com/v1/current.json?key=xxx&q=Hanoi")
 ```
 
 **Cách 2: Async/Await ⭐ (KHUYẾN NGHỊ — đọc dễ hơn):**
+
+#### 💡 Story: "Gọi điện đặt pizza — đợi nghe phản hồi"
+
+*Minh đã hiểu Promise Chain, nhưng code `.then()` dài dòng. Anh Hùng dạy async/await:*
+
+*"Thay vì dùng phiếu đặt đồ ăn (Promise Chain) — em gọi điện trực tiếp cho nhà hàng (async/await). Nói xong → đợi nghe phản hồi → nói tiếp. Code đọc từ trên xuống, dễ hiểu như kể chuyện."*
+
 ```javascript
+// ✅ Async/Await — đọc như code thường
 async function getWeather(city) {
     try {
+        // "Gọi nhà hàng — đợi phản hồi"
         const response = await fetch(
             `https://api.weatherapi.com/v1/current.json?key=xxx&q=${city}`
         );
 
+        // "Kiểm tra phản hồi có OK không"
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
 
+        // "Đọc nội dung phản hồi — đợi parse xong"
         const data = await response.json();
+
+        // "Trả kết quả cho người gọi"
         return {
             city: data.location.name,
             temp: data.current.temp_c,
@@ -96,16 +318,190 @@ async function getWeather(city) {
             icon: data.current.condition.icon
         };
     } catch (error) {
+        // "Nhà hàng bận / mất mạng / sai địa chỉ"
         console.error(`Không lấy được thời tiết ${city}:`, error);
         return null;
     }
 }
 
-// Gọi hàm async
+// Gọi hàm async — cũng cần await hoặc .then()
 const weather = await getWeather("Hanoi");
 if (weather) {
     console.log(`${weather.city}: ${weather.temp}°C — ${weather.condition}`);
 }
+```
+
+---
+
+#### 🔑 try/catch với async/await — "Bọc chăn cho an toàn"
+
+*Minh hỏi: "Tại sao phải dùng try/catch? Không dùng thì sao?"*
+
+*Anh Hùng: "Nếu không có try/catch, khi Promise rejected, code sẽ crash — giống như nhà hàng gọi điện báo hủy mà em không nghe máy. App bị treo, user thấy màn hình trắng."*
+
+```javascript
+// ❌ KHÔNG có try/catch — app crash khi lỗi
+async function getWeather(city) {
+    const response = await fetch(`/api/weather?q=${city}`);  // ❌ Nếu mất mạng?
+    const data = await response.json();                       // ❌ Nếu server trả HTML?
+    return data;                                               // ❌ Không bao giờ chạy到这里
+}
+
+// ✅ CÓ try/catch — xử lý lỗi gracefully
+async function getWeather(city) {
+    try {
+        const response = await fetch(`/api/weather?q=${city}`);
+
+        if (!response.ok) {
+            throw new Error(`Server trả lỗi: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        // Bắt TẤT CẢ lỗi: network, HTTP, JSON parse
+        console.error("Lỗi:", error.message);
+        showError("Không lấy được thời tiết. Vui lòng thử lại!");
+        return null;  // Return null để code phía sau biết có lỗi
+    }
+}
+
+// ✅ Pattern nâng cao: try/catch/finally
+async function loadDashboard() {
+    showLoading();  // Hiện spinner
+
+    try {
+        const [user, weather, news] = await Promise.all([
+            fetchUser(),
+            getWeather("Hanoi"),
+            fetchNews()
+        ]);
+
+        renderDashboard(user, weather, news);
+    } catch (error) {
+        showError(error.message);
+    } finally {
+        hideLoading();  // LUÔN ẩn spinner — dù thành công hay thất bại
+    }
+}
+```
+
+---
+
+#### ⚠️ await chỉ hoạt động trong async function
+
+*Minh hỏi: "Em dùng `await` ở ngoài function thì bị lỗi?"*
+
+*Anh Hùng: "Đúng! `await` chỉ hoạt động bên trong `async function`. Nếu dùng ở top-level, phải dùng `top-level await` (chỉ trong ES Modules) hoặc bọc trong IIFE."*
+
+```javascript
+// ❌ LỖI — await ở ngoài async function (script thường)
+const data = await fetch("/api/data");  // ❌ SyntaxError!
+
+// ✅ CÁCH 1: Bọc trong async function
+async function main() {
+    const data = await fetch("/api/data");
+    const json = await data.json();
+    console.log(json);
+}
+main();  // Gọi function
+
+// ✅ CÁCH 2: IIFE (Immediately Invoked Function Expression)
+(async () => {
+    const data = await fetch("/api/data");
+    const json = await data.json();
+    console.log(json);
+})();
+
+// ✅ CÁCH 3: Top-level await (chỉ trong ES Modules — <script type="module">)
+// Trong file .js với type="module":
+const data = await fetch("/api/data");
+const json = await data.json();
+console.log(json);
+```
+
+---
+
+#### 💪 Async/Await trong thực tế — Error handling pattern
+
+```javascript
+// Pattern 1: Try/catch tập trung (cho hàm nhỏ)
+async function getUser(id) {
+    try {
+        const res = await fetch(`/api/users/${id}`);
+        if (!res.ok) throw new Error(`User ${id} not found`);
+        return await res.json();
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+// Pattern 2: Error object trả về (cho hàm phức tạp)
+async function createOrder(orderData) {
+    try {
+        // Validate
+        if (!orderData.items?.length) {
+            return { success: false, error: "Giỏ hàng trống" };
+        }
+
+        // Gọi API
+        const res = await fetch("/api/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData)
+        });
+
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            return { success: false, error: errData.message ?? `HTTP ${res.status}` };
+        }
+
+        const order = await res.json();
+        return { success: true, data: order };
+
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+// Sử dụng
+const result = await createOrder({ items: [...] });
+if (result.success) {
+    showSuccess(`Đơn hàng #${result.data.id} đã tạo!`);
+} else {
+    showError(result.error);
+}
+```
+
+---
+
+#### 🔄 Async/Await vs Promise Chain — So sánh
+
+```javascript
+// Promise Chain — ngắn gọn cho 1-2 bước, rối cho nhiều bước
+fetchUser()
+    .then(user => fetchOrders(user.id))
+    .then(orders => fetchProducts(orders[0].productId))
+    .then(product => render(product))
+    .catch(err => showError(err));
+
+// Async/Await — rõ ràng, dễ debug, dễ thêm logic
+async function loadProduct() {
+    try {
+        const user = await fetchUser();
+        const orders = await fetchOrders(user.id);
+        const product = await fetchProducts(orders[0].productId);
+        render(product);
+    } catch (err) {
+        showError(err);
+    }
+}
+
+// ⚡ Khi nào dùng cái nào?
+// • 1-2 bước đơn giản → .then() cũng OK
+// • Nhiều bước, có điều kiện, cần debug → async/await
+// • Cần parallel → Promise.all() (cả 2 đều dùng được)
 ```
 
 > **`async` function luôn trả về Promise.** Dùng `await` bên trong để "chờ" Promise resolve. `try/catch` bắt lỗi network hoặc HTTP errors.

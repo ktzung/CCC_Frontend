@@ -237,31 +237,456 @@ card.addEventListener("mouseleave", () => card.classList.remove("hovered"));
 
 ### Event Delegation — Xử lý event hiệu quả
 
+#### 💡 Story: "Quản lý nhà hàng vs. 100 nhân viên phục vụ"
+
+*Minh xây xong Todo App. Mọi thứ hoạt động. Nhưng khi thêm 50 todos, anh nhận ra vấn đề:*
+
+*"Mỗi lần render lại list, em phải gán event cho từng nút ❌. 50 todos = 50 event listeners. Render lại → mất hết → phải gán lại. Có cách nào tốt hơn không?"*
+
+*Anh Hùng cười: "Em đang làm như ông chủ nhà hàng thuê 100 nhân viên, mỗi người chỉ phục vụ 1 bàn. Khách đổi bàn → nhân viên mất việc → phải thuê lại. Thay vào đó: thuê 1 quản lý ở cửa ra vào. Khách nào cần gì, quản lý tự phân công."*
+
+*"Đó chính là **Event Delegation** — gán event cho element CHA, để cha xử lý tất cả events của con."*
+
+---
+
+#### 🔄 Event Bubbling — Tại sao Delegation hoạt động?
+
+Khi bạn click vào một element, event không chỉ xảy ra ở element đó. Nó **"bong bóng"** lên từ element con → cha → ông → ... → `document`.
+
+```
+User click vào nút ❌ trong <li>:
+
+    document          ← 4. Event到达 document
+        ↑
+    <body>            ← 3. Bong bóng lên body
+        ↑
+    <ul#todo-list>    ← 2. Bong bóng lên ul (CHA)
+        ↑
+    <li>              ← 1. Event bắt đầu ở li
+        ↑
+    <button ❌>       ← 0. User click ĐÂY
+```
+
+**Đây là lý do Event Delegation hoạt động:** Khi click vào `<button ❌>`, event cũng chạy trên `<ul>` (cha). Nếu gán listener cho `<ul>`, nó sẽ bắt được click từ BẤT KỲ con nào!
+
+---
+
+#### 🔍 Đối tượng Event `e` — "Bản báo cáo sự kiện"
+
+*Minh hỏi: "Tham số `e` trong `addEventListener('click', (e) => {...})` là gì?"*
+
+*Anh Hùng: "Là **Event Object** — bản báo cáo chi tiết về sự kiện vừa xảy ra. Khi user click, browser tạo ra object này và truyền vào handler. Nó chứa mọi thông tin: click ở đâu, button nào, có nhấn phím gì không..."*
+
 ```javascript
-// ❌ CÁCH KÉM — Gán event cho từng item (khi render lại, mất event)
+list.addEventListener("click", (e) => {
+    // ─── CÁC THUỘC TÍNH QUAN TRỌNG CỦA EVENT OBJECT ───
+
+    // 1. e.target — Element THỰC SỰ bị click (element sâu nhất)
+    console.log(e.target);
+    // Nếu click vào icon <span>❌</span> bên trong <button class="delete-btn">:
+    // e.target = <span>❌</span>  (không phải button!)
+
+    // 2. e.currentTarget — Element gắn listener (element CHA)
+    console.log(e.currentTarget);
+    // e.currentTarget = <ul#todo-list>  (element mà addEventListener gắn vào)
+
+    // 3. e.type — Loại event
+    console.log(e.type);  // "click"
+
+    // 4. e.timeStamp — Thời điểm xảy ra (milliseconds)
+    console.log(e.timeStamp);  // 1716234567890
+
+    // 5. e.clientX, e.clientY — Tọa độ chuột trên viewport
+    console.log(`Chuột ở: (${e.clientX}, ${e.clientY})`);
+
+    // 6. e.pageX, e.pageY — Tọa độ chuột trên trang (bao gồm scroll)
+    console.log(`Trên trang: (${e.pageX}, ${e.pageY})`);
+
+    // 7. e.button — Nút chuột nào được click
+    // 0 = trái, 1 = giữa, 2 = phải
+    console.log(e.button);  // 0 (chuột trái)
+
+    // 8. e.ctrlKey, e.shiftKey, e.altKey, e.metaKey — Phím modifier
+    if (e.ctrlKey) console.log("Ctrl + Click!");
+    if (e.shiftKey) console.log("Shift + Click!");
+
+    // 9. e.preventDefault() — Ngăn hành vi mặc định
+    // (ví dụ: ngăn link navigate, ngăn form submit)
+
+    // 10. e.stopPropagation() — Ngăn event bong bóng lên cha
+    // ⚠️ Cẩn thận: phá Event Delegation!
+});
+```
+
+---
+
+#### 🎯 `e.target` vs `e.currentTarget` — Khác biệt quan trọng
+
+```javascript
+// Minh họa trực quan
+<ul id="list">                    ← e.currentTarget (element gắn listener)
+  <li class="item">
+    <button class="delete-btn">
+      <span class="icon">❌</span>  ← e.target (element THỰC SỰ click)
+    </button>
+  </li>
+</ul>
+
+// Khi click vào icon ❌:
+e.target        // <span class="icon">❌</span>  — element sâu nhất
+e.currentTarget // <ul id="list">                — element gắn listener
+
+// 💡 Tại sao phải phân biệt?
+// • e.target: biết user click vào đâu (icon? text? button?)
+// • e.currentTarget: biết listener gắn ở đâu (luôn là <ul>)
+```
+
+**Minh hỏi:** "Nếu em click vào `<button class="delete-btn">` trực tiếp (không phải icon), `e.target` là gì?"
+
+**Anh Hùng:** "Là `<button class="delete-btn">` — vì đó là element sâu nhất mà con trỏ chuột chạm vào. `e.target` luôn là element **gần nhất với con trỏ chuột**, không phải element mà listener gắn vào."
+
+---
+
+#### 🔧 `closest()` — "Tìm element cha gần nhất khớp selector"
+
+*Minh hỏi: "Tại sao code dùng `e.target.closest('.delete-btn')` thay vì `e.target` trực tiếp?"*
+
+*Anh Hùng: "Vì `e.target` có thể là element con sâu (icon, text). Nếu check `e.target.classList.contains('delete-btn')` → không match! `closest()` tìm element gần nhất có class đó, **kể cả chính nó**."*
+
+```javascript
+// closest() — Tìm element gần nhất khớp selector (từ element hiện tại → lên cha)
+
+// HTML:
+// <ul id="list">
+//   <li class="todo-item" data-id="1">
+//     <button class="delete-btn">
+//       <span class="icon">❌</span>  ← e.target khi click vào đây
+//     </button>
+//   </li>
+// </ul>
+
+// ❌ SAI — e.target có thể là icon, không phải .delete-btn
+if (e.target.classList.contains("delete-btn")) {
+    // Không match khi click vào icon!
+}
+
+// ✅ ĐÚNG — closest() tìm element cha gần nhất có class
+const btn = e.target.closest(".delete-btn");
+// closest() bắt đầu từ e.target → lên <button class="delete-btn"> → MATCH!
+// Nếu click vào <li> (không phải button):
+// closest('.delete-btn') = null (không tìm thấy)
+
+// closest() cũng hoạt động với chính element đó
+const btn2 = e.target.closest("span.icon");
+// Nếu e.target = <span class="icon"> → MATCH với chính nó
+```
+
+**Minh hỏi:** "Nếu click vào vùng trống trong `<li>` (không phải button hay text), `closest('.delete-btn')` trả về gì?"
+
+**Anh Hùng:** "`null` — vì không có element nào khớp selector. Đó là lý do code luôn kiểm tra `if (deleteBtn)` trước khi xử lý."
+
+---
+
+#### 📋 Event Object cho các loại event khác nhau
+
+```javascript
+// ─── MOUSE EVENTS (click, mousedown, mouseup, mousemove) ───
+element.addEventListener("click", (e) => {
+    e.clientX, e.clientY    // Tọa độ trên viewport
+    e.pageX, e.pageY        // Tọa độ trên trang (bao gồm scroll)
+    e.button                // 0=trái, 1=giữa, 2=phải
+    e.detail                // Số lần click (1=single, 2=double)
+    e.ctrlKey, e.shiftKey   // Phím modifier
+});
+
+// ─── KEYBOARD EVENTS (keydown, keyup, keypress) ───
+document.addEventListener("keydown", (e) => {
+    e.key                   // "Enter", "Escape", "a", "ArrowUp"
+    e.code                  // "KeyA", "Enter", "ShiftLeft"
+    e.keyCode               // Deprecated nhưng vẫn dùng: 13=Enter, 27=Escape
+    e.ctrlKey, e.altKey     // Phím modifier
+    e.repeat                // true nếu giữ phím
+});
+
+// ─── INPUT EVENTS (input, change, focus, blur) ───
+input.addEventListener("input", (e) => {
+    e.target.value          // Giá trị hiện tại
+    e.inputType             // "insertText", "deleteContentBackward"
+    e.data                  // Ký tự vừa nhập (nếu insertText)
+});
+
+// ─── FORM EVENTS (submit, reset) ───
+form.addEventListener("submit", (e) => {
+    e.preventDefault();     // ⚠️ LUÔN cần cho form submit
+    e.target                // <form> element
+    e.submitter             // Element trigger submit (button, input[type=submit])
+});
+
+// ─── TOUCH EVENTS (touchstart, touchmove, touchend) ───
+element.addEventListener("touchstart", (e) => {
+    e.touches               // Danh sách các điểm chạm
+    e.changedTouches        // Điểm chạm thay đổi
+    e.touches[0].clientX    // Tọa độ điểm chạm đầu tiên
+});
+```
+
+---
+
+#### 💡 Pattern: `e.target.closest()` với Event Delegation
+
+```javascript
+// Pattern phổ biến: 1 listener xử lý nhiều actions
+list.addEventListener("click", (e) => {
+    // Bước 1: Tìm element cha gần nhất có data-id
+    const todoItem = e.target.closest("[data-id]");
+    if (!todoItem) return;  // Click vào vùng trống → bỏ qua
+
+    const id = Number(todoItem.dataset.id);
+
+    // Bước 2: Xác định action dựa trên element được click
+    const deleteBtn = e.target.closest(".delete-btn");
+    const checkBtn = e.target.closest(".check-btn");
+    const editBtn = e.target.closest(".edit-btn");
+
+    if (deleteBtn) {
+        // Click vào nút ❌
+        todos = todos.filter(t => t.id !== id);
+    } else if (checkBtn) {
+        // Click vào checkbox
+        todos = todos.map(t => t.id === id ? { ...t, done: !t.done } : t);
+    } else if (editBtn) {
+        // Click vào nút sửa
+        openEditModal(id);
+    } else {
+        // Click vào text hoặc vùng khác trong <li>
+        toggleTodo(id);
+    }
+
+    render();
+});
+
+// ✅ Tại sao dùng closest() thay vì e.target trực tiếp?
+// • e.target = element sâu nhất (icon, text, span)
+// • closest() = element cha gần nhất có class/selector
+// • closest() trả về null nếu không tìm thấy → dễ kiểm tra
+// • closest() bắt đầu từ chính element → hoạt động cả khi click trực tiếp
+```
+
+---
+
+#### ❌ Cách kém — Gán event cho từng item
+
+```javascript
+// ❌ CÁCH KÉM — Gán event cho từng item
 document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.addEventListener("click", handleDelete);
 });
 
+// Vấn đề:
+// 1. 50 todos = 50 event listeners (tốn memory)
+// 2. Render lại list → MẤT hết listeners
+// 3. Thêm todo mới → phải gán lại listener cho nút mới
+// 4. Nếu quên gán → nút không hoạt động
+```
+
+#### 🔍 "Render lại list" là gì? Tại sao MẤT hết listeners?
+
+**Render lại list** = gán lại `innerHTML` cho element cha. Đây là cách phổ biến nhất để cập nhật UI khi data thay đổi:
+
+```javascript
+// Khi user thêm todo mới → render lại toàn bộ list
+function render() {
+    list.innerHTML = todos.map(todo => `
+        <li class="todo-item">
+            <span>${todo.text}</span>
+            <button class="delete-btn">❌</button>
+        </li>
+    `).join("");
+}
+```
+
+**Tại sao mất listeners?** Vì `innerHTML` **PHÁ HỦY toàn bộ DOM cũ** và **TẠO MỚI** từ HTML string:
+
+```
+TRƯỚC KHI render lại:                    SAU KHI render lại:
+
+<ul#list>                                 <ul#list>  ← VẪN CÙNG element <ul>
+  └── <li> ← element CŨ                   └── <li> ← element MỚI (khác!)
+        └── <button❌> ← có listener             └── <button❌> ← KHÔNG có listener
+                                                (vì đây là element mới, tạo từ HTML string)
+```
+
+**Minh hỏi:** "Vậy listener cũ ở đâu?"
+
+**Anh Hùng:** "Biến mất! Khi `innerHTML` gán giá trị mới, browser **xóa toàn bộ node con cũ** trong bộ nhớ. Các element cũ (kèm listener) bị garbage collected. Element mới tạo ra từ HTML string — listener không tự động 'chuyển' sang."
+
+```javascript
+// Minh họa: render lại = phá hủy + tạo mới
+const btn1 = document.querySelector(".delete-btn");  // Element cũ
+btn1.addEventListener("click", handleDelete);         // Gán listener
+
+list.innerHTML = "<button class='delete-btn'>❌</button>";  // PHÁ HỦY btn1, tạo btn2
+
+const btn2 = document.querySelector(".delete-btn");  // Element MỚI
+console.log(btn1 === btn2);  // false — KHÁC element!
+
+// btn1 đã bị xóa khỏi DOM, listener cũng mất
+// btn2 là element mới, không có listener → click không hoạt động!
+```
+
+**Kết luận:** Nếu dùng `innerHTML` để render, **KHÔNG THỂ** gán listener cho từng element con — vì mỗi lần render, element cũ bị phá hủy. Phải dùng **Event Delegation** (gán cho cha) hoặc gán lại listener sau mỗi lần render.
+
+---
+
+#### ✅ Cách tốt — Event Delegation (gán 1 lần cho cha)
+
+```javascript
 // ✅ CÁCH TỐT — Event delegation (gán 1 lần cho cha)
 const list = document.querySelector("#todo-list");
 
+// Gán 1 lần duy nhất cho <ul> — cha của tất cả <li>
 list.addEventListener("click", (e) => {
-    // Kiểm tra element nào thực sự được click
+    // e.target = element THỰC SỰ được click (có thể là icon, text, button...)
+    // closest() = tìm element gần nhất khớp selector (kể cả chính nó)
+
     const deleteBtn = e.target.closest(".delete-btn");
     const todoText = e.target.closest(".todo-text");
+    const checkbox = e.target.closest(".check-btn");
 
     if (deleteBtn) {
+        // Click vào nút ❌
         const id = deleteBtn.dataset.id;
         deleteTodo(Number(id));
     }
 
     if (todoText) {
+        // Click vào text todo
         const id = todoText.closest("[data-id]").dataset.id;
         toggleTodo(Number(id));
     }
+
+    if (checkbox) {
+        // Click vào checkbox
+        const id = checkbox.dataset.id;
+        toggleTodo(Number(id));
+    }
 });
-// Event này hoạt động ngay cả với items được thêm ĐỘNG SAU này
+
+// ✅ Lợi ích:
+// 1. CHỈ 1 event listener (tiết kiệm memory)
+// 2. Render lại list → listener vẫn hoạt động (không mất)
+// 3. Thêm todo mới → tự động hoạt động (không cần gán thêm)
+// 4. Code tập trung 1 chỗ → dễ maintain
+```
+
+**Hình dung:** Như ông chủ nhà hàng thuê 1 quản lý ở cửa ra vào. Khách nào cần gì, quản lý tự phân công. Khách mới đến → quản lý tự xử lý. Không cần thuê thêm nhân viên.
+
+---
+
+#### 🔍 `e.target` vs `e.currentTarget` — Hiểu sai phổ biến
+
+```javascript
+list.addEventListener("click", (e) => {
+    console.log("e.target:", e.target);           // Element THỰC SỰ click (button, span, icon...)
+    console.log("e.currentTarget:", e.currentTarget); // Element gắn listener (<ul>)
+
+    // ⚠️ e.target có thể là element CON SÂU NHẤT
+    // Nếu click vào icon <span>❌</span> bên trong button:
+    // e.target = <span>❌</span>  (không phải button!)
+    // → Dùng closest() để tìm element cha đúng ý
+});
+```
+
+**Minh hỏi:** "Nếu em click vào icon ❌ bên trong button, `e.target` là icon hay button?"
+
+**Anh Hùng:** "Là icon — element sâu nhất mà con trỏ chuột chạm vào. Đó là lý do ta dùng `closest('.delete-btn')` — nó tìm element gần nhất có class `.delete-btn`, kể cả element cha. Không có `closest()` → phải kiểm tra `e.target.parentElement` rất rối."
+
+---
+
+#### 🎯 Khi nào dùng Event Delegation?
+
+| Tình huống | Dùng Delegation? | Lý do |
+|---|---|---|
+| List items thêm/xóa động (Todo, cart, search results) | ✅ BẮT BUỘC | Items render lại → mất listeners nếu gán từng cái |
+| Table với hàng trăm dòng | ✅ NÊN | Tiết kiệm memory, performance tốt hơn |
+| Form tĩnh với vài input | ❌ KHÔNG CẦN | Elements không thay đổi, gán trực tiếp đơn giản hơn |
+| Nested menus (dropdown lồng nhau) | ✅ NÊN | Quản lý event phức tạp dễ hơn với delegation |
+| Event cần chặn propagation | ⚠️ CẨN THẬN | `e.stopPropagation()` sẽ phá delegation |
+
+---
+
+#### 💪 Pattern thực tế — Event Delegation với nhiều actions
+
+```javascript
+// Todo App — 1 listener xử lý TẤT CẢ actions
+const list = document.querySelector("#todo-list");
+
+list.addEventListener("click", (e) => {
+    const todoItem = e.target.closest("[data-id]");
+    if (!todoItem) return;  // Click vào vùng trống → bỏ qua
+
+    const id = Number(todoItem.dataset.id);
+
+    // Phân loại action dựa trên element được click
+    switch (true) {
+        case e.target.closest(".delete-btn"):
+            todos = todos.filter(t => t.id !== id);
+            break;
+
+        case e.target.closest(".check-btn"):
+            todos = todos.map(t => t.id === id ? { ...t, done: !t.done } : t);
+            break;
+
+        case e.target.closest(".edit-btn"):
+            openEditModal(id);
+            break;
+
+        case e.target.closest(".todo-text"):
+            toggleTodo(id);
+            break;
+    }
+
+    render();
+});
+
+// ✅ 1 listener xử lý 4 actions khác nhau
+// ✅ Thêm action mới → chỉ thêm case, không cần gán listener mới
+```
+
+---
+
+#### 🐛 Debug Event Delegation — Khi nào nó không hoạt động?
+
+```javascript
+// ❌ LỖI 1: Quên closest() — e.target có thể là element con sâu
+list.addEventListener("click", (e) => {
+    // e.target = <span class="icon">❌</span>  (không phải .delete-btn!)
+    if (e.target.classList.contains("delete-btn")) {  // ❌ Không match!
+        // Không bao giờ chạy
+    }
+});
+
+// ✅ SỬA: Dùng closest()
+if (e.target.closest(".delete-btn")) {  // ✅ Tìm element cha có class
+    // Hoạt động đúng
+}
+
+// ❌ LỖI 2: stopPropagation() phá delegation
+deleteBtn.addEventListener("click", (e) => {
+    e.stopPropagation();  // ❌ Ngăn event bong bóng lên cha
+    // → Listener trên <ul> KHÔNG BAO GIỜ nhận được event này
+});
+
+// ❌ LỖI 3: Gán listener trước khi element tồn tại
+const list = document.querySelector("#todo-list");  // null nếu script chạy trước DOM
+list.addEventListener("click", handler);  // ❌ TypeError: Cannot read properties of null
+
+// ✅ SỬA: Đảm bảo DOM đã load
+document.addEventListener("DOMContentLoaded", () => {
+    const list = document.querySelector("#todo-list");
+    list.addEventListener("click", handler);
+});
+// Hoặc: đặt <script> cuối </body>
 ```
 
 ---

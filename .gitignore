@@ -19,3 +19,9 @@ dist/
 # Audit reports (generated)
 QUALITY_AUDIT_REPORT.md
 UPGRADE_REPORT.md
+
+# PowerPoint files
+*.pptx
+
+# CodingX project (large binary assets)
+CodingX/
