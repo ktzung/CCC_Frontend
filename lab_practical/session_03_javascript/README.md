@@ -6,6 +6,10 @@
 - Nắm vững DOM manipulation và event handling
 - Sử dụng localStorage để persist data
 - Xây dựng form validation với regex
+- Gọi REST API với `fetch()` và xử lý async/await
+- Xây dựng ứng dụng CRUD hoàn chỉnh (Todo App)
+- Quản lý state phức tạp (Shopping Cart)
+- Xử lý loading, error, và pagination
 
 ---
 
@@ -15,10 +19,18 @@
 session_03_javascript/
 ├── README.md              ← File này
 ├── exercises/             ← Đề bài
-│   ├── 01_skill_filter/
-│   ├── 02_lightbox/
-│   ├── 03_form_validation/
-│   └── 04_theme_toggle/
+│   ├── 00_hello_javascript.md     ← Cơ bản: JS cơ bản
+│   ├── 00b_dom_basics.md          ← Cơ bản: DOM cơ bản
+│   ├── 00c_events_basics.md       ← Cơ bản: Events
+│   ├── 00d_dom_mini_projects.md   ← Cơ bản: 5 mini projects
+│   ├── 01_skill_filter.md
+│   ├── 02_lightbox.md
+│   ├── 03_form_validation.md
+│   ├── 04_theme_toggle.md
+│   ├── 05_todo_app_crud.md      ← Nâng cao
+│   ├── 06_movie_search_api.md   ← Nâng cao
+│   ├── 07_shopping_cart.md      ← Nâng cao
+│   └── 08_weather_dashboard.md  ← Nâng cao
 ├── solutions/            ← Solution
 └── projects/
     └── portfolio_js/
@@ -61,6 +73,10 @@ session_03_javascript/
 | `[UI]` | Giao diện | Animations, transitions |
 | `[BUGFIX]` | Sửa lỗi | Fix bugs |
 | `[REFACTOR]` | Cấu trúc lại | Code cleanup |
+| `[API]` | API calls | fetch, async/await, Promise |
+| `[CRUD]` | CRUD operations | Create, Read, Update, Delete |
+| `[ASYNC]` | Async logic | Loading, error handling |
+| `[SEARCH]` | Search/Filter | Debounce, realtime filter |
 
 ### Ví dụ commit messages
 
@@ -89,7 +105,15 @@ git commit -m "[EVENT] click handler"           # không rõ ràng
 | Bài 3.2 (Lightbox) | 4 commits |
 | Bài 3.3 (Form Validation) | 4 commits |
 | Bài 3.4 (Theme Toggle) | 4 commits |
-| **Tổng cộng** | **16 commits** |
+| Bài 3.5 (Todo App CRUD) | 5 commits |
+| Bài 3.6 (Movie Search API) | 5 commits |
+| Bài 3.7 (Shopping Cart) | 5 commits |
+| Bài 0.0 (Hello JavaScript) | 3 commits |
+| Bài 0.1 (DOM Basics) | 3 commits |
+| Bài 0.2 (Events Basics) | 3 commits |
+| Bài 0.3 (Mini Projects) | 5 commits |
+| Bài 3.8 (Weather Dashboard) | 5 commits |
+| **Tổng cộng** | **50 commits** |
 
 ### Workflow commit cho mỗi bài
 
@@ -121,7 +145,97 @@ git commit -m "[DETECTION] Add prefers-color-scheme detection"
 
 ---
 
-## 📝 Bài tập (4 bài)
+## 📝 Bài tập (12 bài — 4 cơ bản + 4 trung bình + 4 nâng cao)
+
+### 🟢 Nhóm 1: Cơ bản — Làm quen JS & DOM
+
+---
+
+### Bài 0.0 — Hello JavaScript (45 phút)
+
+📄 [Đề bài chi tiết →](exercises/00_hello_javascript.md)
+
+**Mục tiêu:** Làm quen với JavaScript cơ bản — biến, kiểu dữ liệu, toán tử, hàm
+
+**Kiến thức:**
+- Khai báo biến: `let`, `const`, `var`
+- Kiểu dữ liệu: `string`, `number`, `boolean`, `null`, `undefined`
+- Template literal, toán tử số học & so sánh
+- Mảng (`Array`), Object, Function cơ bản
+
+**Tóm tắt yêu cầu:**
+- `console.log()` — in ra console
+- Khai báo & kiểm tra kiểu dữ liệu với `typeof`
+- Template literal với backtick `` ` ``
+- Toán tử so sánh: `===` vs `==`
+- Mảng: `push`, `pop`, `forEach`, `includes`
+- Object: truy cập, thêm/sửa thuộc tính
+- Hàm: `function`, arrow function `() => {}`
+
+---
+
+### Bài 0.1 — DOM Basics (30 phút)
+
+📄 [Đề bài chi tiết →](exercises/00b_dom_basics.md)
+
+**Mục tiêu:** Chọn phần tử, thay đổi nội dung và style bằng JavaScript
+
+**Kiến thức:**
+- `getElementById`, `querySelector`, `querySelectorAll`
+- `textContent`, `innerHTML`
+- `classList.add/remove/toggle/contains`
+- `element.style.propertyName` (camelCase)
+- `createElement`, `appendChild`, `remove`
+
+**Tóm tắt yêu cầu:**
+- Chọn phần tử theo ID, class, CSS selector
+- Thay đổi text và HTML bên trong
+- Quản lý CSS class với `classList`
+- Tạo và xóa phần tử DOM động
+- Mini-project: Danh sách sinh viên
+
+---
+
+### Bài 0.2 — Events Basics (30 phút)
+
+📄 [Đề bài chi tiết →](exercises/00c_events_basics.md)
+
+**Mục tiêu:** Lắng nghe và xử lý sự kiện người dùng
+
+**Kiến thức:**
+- `addEventListener('click', callback)`
+- `addEventListener('input', callback)` — realtime
+- `addEventListener('keydown', callback)` — phím tắt
+- `e.preventDefault()` — ngăn form reload
+- Event Delegation với `e.target.closest()`
+
+**Tóm tắt yêu cầu:**
+- Click event: đổi màu, bộ đếm
+- Input event: tìm kiếm realtime, đếm ký tự
+- Keyboard event: hiển thị phím, tag input
+- Form submit: validate + preventDefault
+- Event delegation: gắn 1 listener cho parent
+
+---
+
+### Bài 0.3 — DOM Mini Projects (60 phút)
+
+📄 [Đề bài chi tiết →](exercises/00d_dom_mini_projects.md)
+
+**Mục tiêu:** Áp dụng JS + DOM + Events vào 5 dự án nhỏ hoàn chỉnh
+
+**Danh sách 5 projects:**
+1. **Digital Clock** — đồng hồ thời gian thực (`setInterval`, `Date`)
+2. **Color Palette** — tạo bảng màu ngẫu nhiên (`Math.random`, clipboard API)
+3. **Tip Calculator** — tính tiền boa (`Intl.NumberFormat`, tính toán realtime)
+4. **Password Checker** — kiểm tra độ mạnh mật khẩu (regex, strength bar)
+5. **Accordion FAQ** — mở/đóng câu hỏi (CSS transition, event delegation)
+
+---
+
+### 🔵 Nhóm 2: Trung bình — Portfolio Interactivity
+
+---
 
 ### Bài 3.1 — Skill Filter Animation (30 phút)
 
@@ -197,6 +311,129 @@ git commit -m "[DETECTION] Add prefers-color-scheme detection"
 ```
 
 ---
+
+### Bài 3.4 — Theme Toggle + localStorage (30 phút)
+
+📄 [Đề bài chi tiết →](exercises/04_theme_toggle.md)
+
+---
+
+### 🟠 Nhóm 3: Nâng cao — API, CRUD, State Management
+
+---
+
+### ⭐ Bài 3.5 — Todo App CRUD (45 phút) — NÂNG CAO
+
+📄 [Đề bài chi tiết →](exercises/05_todo_app_crud.md)
+
+**Mục tiêu:** Xây dựng ứng dụng quản lý công việc hoàn chỉnh với CRUD
+
+**Kiến thức mới:**
+- CRUD operations (Create, Read, Update, Delete)
+- Inline editing
+- Array methods nâng cao (`find`, `filter`, `unshift`)
+- `Date.now()` làm unique ID
+
+**Tóm tắt yêu cầu:**
+- Thêm/sửa/xóa todo
+- Checkbox toggle (strikethrough)
+- Inline edit (Enter lưu, Escape hủy)
+- Filter: All / Active / Completed
+- Đếm số việc chưa hoàn thành
+- localStorage persistence
+- Empty state, animation
+
+---
+
+### ⭐ Bài 3.6 — Movie Search với OMDB API (45 phút) — NÂNG CAO
+
+📄 [Đề bài chi tiết →](exercises/06_movie_search_api.md)
+
+**Mục tiêu:** Gọi REST API, xử lý async/await, hiển thị dữ liệu từ API
+
+**Kiến thức mới:**
+- `fetch()` với REST API
+- `async/await` pattern
+- Loading state & error handling
+- Debounce search
+- Modal dynamic content
+
+**Tóm tắt yêu cầu:**
+- Tìm kiếm phim qua OMDB API
+- Movie cards grid với poster
+- Pagination (Previous/Next)
+- Movie detail modal
+- Debounce auto-search (500ms)
+- Favorites vào localStorage
+
+---
+
+### ⭐ Bài 3.7 — Shopping Cart (45 phút) — NÂNG CAO
+
+📄 [Đề bài chi tiết →](exercises/07_shopping_cart.md)
+
+**Mục tiêu:** Quản lý state phức tạp, tính toán giá tiền, giỏ hàng điện tử
+
+**Kiến thức mới:**
+- Complex state management (array of objects)
+- `Array.reduce()` tính tổng
+- `Intl.NumberFormat` format tiền
+- Event delegation trên danh sách động
+- Toast notification
+
+**Tóm tắt yêu cầu:**
+- Hiển thị sản phẩm (grid)
+- Thêm/xóa sản phẩm khỏi cart
+- Tăng/giảm số lượng
+- Tính subtotal, VAT (10%), tổng cộng
+- Cart sidebar slide-in
+- Search sản phẩm theo tên
+- Toast notification
+- localStorage persistence
+
+---
+
+### ⭐ Bài 3.8 — Weather Dashboard (45 phút) — NÂNG CAO
+
+📄 [Đề bài chi tiết →](exercises/08_weather_dashboard.md)
+
+**Mục tiêu:** Gọi API thời tiết, hiển thị dashboard, xử lý nested JSON
+
+**Kiến thức mới:**
+- OpenWeatherMap API
+- `Promise.all()` gọi nhiều API song song
+- `navigator.geolocation`
+- Dynamic CSS background
+- Date/time formatting
+
+**Tóm tắt yêu cầu:**
+- Tìm thời tiết theo thành phố
+- Card thời tiết hiện tại (nhiệt độ, độ ẩm, gió, áp suất)
+- Dự báo 5 ngày
+- Toggle °C ↔ °F
+- Search history (localStorage)
+- Dynamic background theo thời tiết
+- Geolocation (vị trí hiện tại)
+
+---
+
+## 📊 Tổng quan tiến độ
+
+| Nhóm | Bài tập | Thời gian | Độ khó |
+|------|---------|-----------|--------|
+| 🟢 Cơ bản | 0.0 Hello JavaScript | 45 phút | ⭐ |
+| 🟢 Cơ bản | 0.1 DOM Basics | 30 phút | ⭐ |
+| 🟢 Cơ bản | 0.2 Events Basics | 30 phút | ⭐ |
+| 🟢 Cơ bản | 0.3 DOM Mini Projects | 60 phút | ⭐⭐ |
+| 🔵 Trung bình | 3.1 Skill Filter | 30 phút | ⭐⭐ |
+| 🔵 Trung bình | 3.2 Lightbox | 30 phút | ⭐⭐ |
+| 🔵 Trung bình | 3.3 Form Validation | 30 phút | ⭐⭐ |
+| 🔵 Trung bình | 3.4 Theme Toggle | 30 phút | ⭐⭐ |
+| 🟠 Nâng cao | 3.5 Todo App CRUD | 45 phút | ⭐⭐⭐ |
+| 🟠 Nâng cao | 3.6 Movie Search API | 45 phút | ⭐⭐⭐ |
+| 🟠 Nâng cao | 3.7 Shopping Cart | 45 phút | ⭐⭐⭐ |
+| 🟠 Nâng cao | 3.8 Weather Dashboard | 45 phút | ⭐⭐⭐ |
+| **Tổng** | **12 bài** | **~8 giờ** | |
 
 ### Bài 3.4 — Theme Toggle + localStorage (30 phút)
 
