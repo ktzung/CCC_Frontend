@@ -23,6 +23,7 @@ session_03_javascript/
 │   ├── 00b_dom_basics.md          ← Cơ bản: DOM cơ bản
 │   ├── 00c_events_basics.md       ← Cơ bản: Events
 │   ├── 00d_dom_mini_projects.md   ← Cơ bản: 5 mini projects
+│   ├── 00e_student_array_app.md   ← Cơ bản: Array & Quản lý SV
 │   ├── 01_skill_filter.md
 │   ├── 02_lightbox.md
 │   ├── 03_form_validation.md
@@ -112,6 +113,7 @@ git commit -m "[EVENT] click handler"           # không rõ ràng
 | Bài 0.1 (DOM Basics) | 3 commits |
 | Bài 0.2 (Events Basics) | 3 commits |
 | Bài 0.3 (Mini Projects) | 5 commits |
+| Bài 0.4 (Student Array App) | 5 commits |
 | Bài 3.8 (Weather Dashboard) | 5 commits |
 | **Tổng cộng** | **50 commits** |
 
@@ -230,6 +232,29 @@ git commit -m "[DETECTION] Add prefers-color-scheme detection"
 3. **Tip Calculator** — tính tiền boa (`Intl.NumberFormat`, tính toán realtime)
 4. **Password Checker** — kiểm tra độ mạnh mật khẩu (regex, strength bar)
 5. **Accordion FAQ** — mở/đóng câu hỏi (CSS transition, event delegation)
+
+---
+
+### Bài 0.4 — Ứng dụng Quản lý Sinh viên (45 phút)
+
+📄 [Đề bài chi tiết →](exercises/00e_student_array_app.md)
+
+**Mục tiêu:** Khai báo mảng object thủ công, thành thạo các thao tác trên mảng và hiển thị ra giao diện
+
+**Kiến thức:**
+- Khai báo mảng object: `const arr = [{...}, {...}]`
+- Truy cập, duyệt: `forEach`, `for...of`
+- Thêm/xóa: `push`, `pop`, `splice`, `shift`, `unshift`
+- Tìm kiếm/lọc: `find`, `filter`, `includes`, `some`
+- Sắp xếp: `sort()`, thống kê: `reduce()`
+- Hiển thị bảng động, modal thêm/sửa, confirm xóa
+
+**Tóm tắt yêu cầu:**
+- Khai báo mảng 10 sinh viên thủ công (object)
+- Thực hành trên Console: push, pop, splice, find, filter, sort, reduce
+- Ứng dụng hoàn chỉnh: bảng danh sách, tìm kiếm, lọc, sắp xếp
+- Modal thêm/sửa sinh viên, xác nhận xóa
+- Thống kê: tổng SV, giỏi/yếu, điểm TB lớp
 
 ---
 
@@ -425,7 +450,8 @@ git commit -m "[DETECTION] Add prefers-color-scheme detection"
 | 🟢 Cơ bản | 0.1 DOM Basics | 30 phút | ⭐ |
 | 🟢 Cơ bản | 0.2 Events Basics | 30 phút | ⭐ |
 | 🟢 Cơ bản | 0.3 DOM Mini Projects | 60 phút | ⭐⭐ |
-| 🔵 Trung bình | 3.1 Skill Filter | 30 phút | ⭐⭐ |
+| � Cơ bản | 0.4 Student Array App | 45 phút | ⭐⭐ |
+| �🔵 Trung bình | 3.1 Skill Filter | 30 phút | ⭐⭐ |
 | 🔵 Trung bình | 3.2 Lightbox | 30 phút | ⭐⭐ |
 | 🔵 Trung bình | 3.3 Form Validation | 30 phút | ⭐⭐ |
 | 🔵 Trung bình | 3.4 Theme Toggle | 30 phút | ⭐⭐ |
@@ -433,7 +459,7 @@ git commit -m "[DETECTION] Add prefers-color-scheme detection"
 | 🟠 Nâng cao | 3.6 Movie Search API | 45 phút | ⭐⭐⭐ |
 | 🟠 Nâng cao | 3.7 Shopping Cart | 45 phút | ⭐⭐⭐ |
 | 🟠 Nâng cao | 3.8 Weather Dashboard | 45 phút | ⭐⭐⭐ |
-| **Tổng** | **12 bài** | **~8 giờ** | |
+| **Tổng** | **13 bài** | **~9 giờ** | |
 
 ### Bài 3.4 — Theme Toggle + localStorage (30 phút)
 
