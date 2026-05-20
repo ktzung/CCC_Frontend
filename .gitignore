@@ -1,27 +1,43 @@
-# Solutions directories - không commit đáp án
-**/solutions/
+# ============================================================
+# Whitelist: chỉ commit thư mục tuan_* và vài file thiết yếu
+# ============================================================
 
-# System files
+# Ignore TẤT CẢ ở root
+/*
+
+# Cho phép các thư mục bài giảng
+!/tuan_*/
+!/lab_practical/
+!/phieu_bai_tap/
+
+# Cho phép các file cần thiết
+!/.gitignore
+!/README.md
+
+# ============================================================
+# Các rule chung (ẩn file/hệ thống/build)
+# ============================================================
 .DS_Store
 Thumbs.db
 *.swp
 *.swo
-
-# Editor
 .vscode/
 *.code-workspace
-
-# Build
 node_modules/
 dist/
 .cache/
+.venv/
+
+# ============================================================
+# Không commit các loại file cụ thể
+# ============================================================
+
+# PowerPoint (dung lượng lớn)
+*.pptx
+
+# Python scripts (generate scripts, không phải nội dung khóa học)
+*.py
 
 # Audit reports (generated)
 QUALITY_AUDIT_REPORT.md
 UPGRADE_REPORT.md
-
-# PowerPoint files
-*.pptx
-
-# CodingX project (large binary assets)
-CodingX/
