@@ -59,13 +59,13 @@ exercises_v2/
 
 | JavaScript (exercises_v2) | React (exercises_v2) | Mối liên hệ |
 |---------------------------|----------------------|-------------|
-| Tier 1: Biến & Toán tử | Tier 2: JSX | JSX dùng biến JavaScript |
-| Tier 2: Điều kiện & Vòng lặp | Tier 4: Lists | `.map()` trong JSX |
-| Tier 3: Functions | Tier 3: useState | Arrow functions, callbacks |
-| Tier 4: Arrays & Objects | Tier 4: CRUD | Spread, filter, map |
-| Tier 5: DOM cơ bản | Tier 1: Why React | So sánh DOM vs React |
-| Tier 6: Events | Tier 4: Events | onClick, onChange |
-| Tier 7: Notes App | Tier 5: Todo App | Cùng logic, khác cách viết |
+| Tier 1: Biến & Toán tử | Tier 2: JSX Variables | JSX dùng biến JavaScript |
+| Tier 2: Điều kiện & Vòng lặp | Tier 2: Conditional | Ternary, && trong JSX |
+| Tier 3: Functions | Tier 4: useState | Arrow functions, callbacks |
+| Tier 4: Arrays & Objects | Tier 6: Lists & CRUD | Spread, filter, map |
+| Tier 5: DOM cơ bản | Tier 0: First Component | Component thay thế DOM |
+| Tier 6: Events | Tier 5: Events | onClick, onChange |
+| Tier 7: Notes App | Tier 7: Todo App | Cùng logic, khác cách viết |
 
 ---
 
@@ -73,9 +73,9 @@ exercises_v2/
 
 ### Cho giảng viên
 1. Đảm bảo sinh viên đã hoàn thành JavaScript Tier 1-6
-2. Dạy theo thứ tự Tier 1 → 2 → 3 → 4 → 5
+2. Dạy theo thứ tự Tier 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7
 3. Mỗi Tier có "Thử thách" để sinh viên tự làm
-4. Tier 5 là mini project — cho sinh viên tự code trước khi xem lời giải
+4. Tier 7 là mini project — cho sinh viên tự code trước khi xem lời giải
 
 ### Cho sinh viên
 1. Đọc phần "Bối cảnh" để hiểu ngữ cảnh
@@ -85,7 +85,7 @@ exercises_v2/
 
 ---
 
-## 🎯 Mini Project: Todo App (Tier 5)
+## 🎯 Mini Project: Todo App (Tier 7)
 
 Todo App là "bài kiểm tra" cuối cùng — yêu cầu:
 - useState (state management)
@@ -93,11 +93,13 @@ Todo App là "bài kiểm tra" cuối cùng — yêu cầu:
 - Event handling (onClick, onChange, onKeyPress)
 - Conditional rendering
 - Filter logic
+- Component splitting (TodoItem, TodoFilter)
 
-**Sau khi hoàn thành Tier 5, sinh viên đã sẵn sàng học:**
+**Sau khi hoàn thành Tier 7, sinh viên đã sẵn sàng học:**
 - useEffect (side effects)
-- Component composition
-- Props drilling
+- Component lifecycle
+- API calls
+- Context API
 - Context API
 
 ---
