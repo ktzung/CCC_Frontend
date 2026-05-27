@@ -4,6 +4,10 @@
 
 *Thêm state management cho portfolio items. Data sẽ được lưu trong useState và render ra giao diện.*
 
+> 🔗 **Từ Bài 0.0:** Bạn đã dùng `useState` + `.map()` cho Todo List. Cùng pattern đó áp dụng ở đây — nhưng cho danh sách project Portfolio.
+> 🔗 **Từ Bài 0.1:** Các component Header, Hero, Footer đã có. Giờ thêm `ProjectCard` + `useState` cho projects.
+> 🔗 **Tới Bài 0.2:** Ở bài sau, bạn sẽ thêm nút filter category cho cùng danh sách project này.
+
 ---
 
 ## 📋 Requirements

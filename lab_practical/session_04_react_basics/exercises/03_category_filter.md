@@ -4,6 +4,10 @@
 
 *Thêm filter functionality cho portfolio. User click filter button → hiện items thuộc category đó.*
 
+> 🔗 **Từ Bài 0.2:** ProjectCard + danh sách project đã render. Giờ thêm `filter` state + nút bấm để lọc.
+> 🔗 **Từ Bài 0.5:** `CategoryBadge` đã dùng conditional rendering. Giờ áp dụng cùng kỹ thuật cho filter buttons.
+> 🔗 **Tới Bài 0.4:** Bài tiếp theo sẽ quản lý form phức tạp hơn — nhiều input trong 1 state object.
+
 ---
 
 ## 📋 Requirements

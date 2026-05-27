@@ -4,6 +4,10 @@
 
 *Chuyển Portfolio từ HTML/Bootstrap sang React với Vite. Mỗi section sẽ thành một component riêng biệt.*
 
+> 🔗 **Từ Bài 0.6:** Bạn đã tách ShopVN thành 5 components (Navbar, Hero, ProductCard, ProductGrid, Footer). Giờ áp dụng **cùng kỹ năng** cho Portfolio — Header, Hero, About, Skills, Portfolio, Contact, Footer.
+>
+> 🔗 **Tới Bài 0.2:** Các component ở đây sẽ render nội dung tĩnh. Ở bài sau, bạn sẽ thêm `useState` để quản lý data động.
+
 ---
 
 ## 📋 Requirements

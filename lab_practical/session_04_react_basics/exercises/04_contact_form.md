@@ -4,6 +4,10 @@
 
 *Xây dựng contact form với React state. Form sẽ có validation và submit handling.*
 
+> 🔗 **Từ Bài 0.2:** Bạn đã dùng 1 `useState` cho mảng projects. Giờ dùng 1 `useState` cho object chứa nhiều field (name, email, message).
+> 🔗 **Từ Bài 0.3:** Event handlers `onClick` → giờ chuyển sang `onChange` cho input fields.
+> 🔗 **Hoàn thành:** Sau bài này, Portfolio React của bạn đã có đủ: components (0.1), state (0.2), filter (0.3), form (0.4). Chuyển sang Session 5 để thêm React Router + API!
+
 ---
 
 ## 📋 Requirements
