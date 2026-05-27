@@ -1,7 +1,8 @@
 # React Basics Exercises v2 — Học React không bị sốc
 
 > **Cập nhật:** Tháng 5, 2026  
-> **Mục đích:** Dẫn dắt sinh viên từ JavaScript thuần sang React một cách tự nhiên
+> **Mục đích:** Dẫn dắt sinh viên từ JavaScript thuần sang React một cách tự nhiên  
+> **Tư tưởng:** Mỗi Tier chỉ MỘT khái niệm, từ đơn giản đến phức tạp
 
 ---
 
@@ -13,23 +14,26 @@ Bộ exercises cũ có vấn đề:
 - ❌ Bài tập đầu tiên đã phức tạp (Portfolio với nhiều component)
 
 Bộ v2 được thiết kế lại:
-- ✅ Bắt đầu bằng so sánh Vanilla JS vs React (Kết nối Tier 7 JavaScript)
+- ✅ Bắt đầu từ component đơn giản nhất (Tier 0)
 - ✅ Học JSX trước, useState sau
-- ✅ Từng bước một: Setup → JSX → useState → Lists → Todo App
-- ✅ Mỗi Tier có code mẫu + thử thách đơn giản
+- ✅ Từng bước một: Component → JSX → Variables → Split → useState → Events → CRUD → Todo
+- ✅ Mỗi Tier chỉ MỘT khái niệm
 
 ---
 
-## 📚 Cấu trúc bài tập
+## 📚 Cấu trúc bài tập (8 Tiers)
 
 ```
 exercises_v2/
-├── TIER_1_why_react.md        # Tại sao cần React? (So sánh Vanilla vs React)
-├── TIER_2_setup_jsx.md        # Cài đặt React, hiểu JSX
-├── TIER_3_useState_basics.md  # useState cơ bản (đếm số, input, toggle)
-├── TIER_4_lists_events.md     # Render list, thêm/xóa/sửa phần tử
-├── TIER_5_todo_app.md         # Mini Project: Todo App hoàn chỉnh
-└── README.md                  # File này
+├── TIER_0_first_component.md   # Component đầu tiên (làm quen cú pháp)
+├── TIER_1_react_flow.md        # Luồng hoạt động (mount, re-render)
+├── TIER_2_jsx_variables.md     # Biến trong JSX ({}, conditional, list)
+├── TIER_3_component_split.md   # Chia component (tư duy tổ chức UI)
+├── TIER_4_useState_basics.md   # useState (number, string, boolean)
+├── TIER_5_events_basics.md     # Events (click, input, keyboard, form)
+├── TIER_6_lists_crud.md        # Lists & CRUD (thêm, sửa, xóa)
+├── TIER_7_todo_app.md          # Mini Project: Todo App
+└── README.md                   # File này
 ```
 
 ---
@@ -38,13 +42,16 @@ exercises_v2/
 
 | Buổi | Tier | Thời gian | Nội dung |
 |------|------|-----------|----------|
-| 1 | Tier 1 | 25-30 phút | Tại sao cần React? |
-| 2 | Tier 2 | 30-40 phút | Setup & JSX |
-| 3 | Tier 3 | 35-45 phút | useState |
-| 4 | Tier 4 | 40-50 phút | Lists & Events |
-| 5 | Tier 5 | 45-60 phút | Todo App |
+| 1 | Tier 0 | 15-20 phút | Component đầu tiên |
+| 2 | Tier 1 | 20-25 phút | Luồng hoạt động |
+| 3 | Tier 2 | 20-25 phút | Biến trong JSX |
+| 4 | Tier 3 | 25-35 phút | Chia component |
+| 5 | Tier 4 | 30-40 phút | useState |
+| 6 | Tier 5 | 25-35 phút | Events |
+| 7 | Tier 6 | 40-50 phút | Lists & CRUD |
+| 8 | Tier 7 | 45-60 phút | Todo App |
 
-**Tổng thời gian:** ~3 giờ (5 buổi học)
+**Tổng thời gian:** ~4 giờ (8 buổi học)
 
 ---
 
