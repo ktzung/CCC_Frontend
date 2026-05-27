@@ -14,7 +14,7 @@ Bạn là chuyên gia thiết kế bài tập cho người mới bắt đầu.
 NHIỆM VỤ: Thiết kế bộ bài tập cho môn [TÊN MÔN] với yêu cầu:
 
 1. CHIA NHỎ: Mỗi Tier chỉ dạy MỘT khái niệm duy nhất
-   - KHÔNG gộp nhiều概念 vào 1 bài
+   - KHÔNG gộp nhiều khái niệm vào 1 bài
    - Mỗi Tier có thể hiểu độc lập (không cần biết Tier sau)
    - Độ khó tăng dần từ Tier 0 → Tier N
 
@@ -137,9 +137,9 @@ Tier 7: Mini project (trang portfolio)
 Khi thiết kế xong, kiểm tra:
 
 - [ ] Mỗi Tier chỉ có MỘT khái niệm chính?
-- [ ] Tier 0足够 đơn giản cho người chưa biết gì?
+- [ ] Tier 0 đủ đơn giản cho người chưa biết gì?
 - [ ] Mỗi Tier có thể hiểu độc lập?
-- [ ] Độ khó tăng dần, không có bước nhảy太大?
+- [ ] Độ khó tăng dần, không có bước nhảy quá lớn?
 - [ ] Code mẫu chạy được ngay?
 - [ ] Có thử thách để thực hành?
 - [ ] Có checklist tự đánh giá?
@@ -150,7 +150,7 @@ Khi thiết kế xong, kiểm tra:
 ## 🎯 Lợi ích của cách tiếp cận này
 
 ### Cho sinh viên
-- ✅ Không bị sốc khi học概念 mới
+- ✅ Không bị sốc khi học khái niệm mới
 - ✅ Tự tin hơn khi hoàn thành từng Tier
 - ✅ Có thể tự học theo tốc độ riêng
 - ✅ Dễ xác định điểm yếu (Tier nào chưa hiểu?)
