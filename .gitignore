@@ -32,6 +32,9 @@ dist/
 # Không commit các loại file cụ thể
 # ============================================================
 
+# Exercise solutions (không commit đáp án)
+lab_practical/*/solutions/
+
 # PowerPoint (dung lượng lớn)
 *.pptx
 
